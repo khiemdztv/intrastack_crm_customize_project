@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             Contact Tags (Slide 09)
+             10 tag types for relationship categorization
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <record id="tag_aws_partner" model="res.partner.category">
+            <field name="name">AWS Partner</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="tag_azure_partner" model="res.partner.category">
+            <field name="name">Azure Partner</field>
+            <field name="color">2</field>
+        </record>
+
+        <record id="tag_cybersecurity_client" model="res.partner.category">
+            <field name="name">Cybersecurity Client</field>
+            <field name="color">3</field>
+        </record>
+
+        <record id="tag_staffing_buyer" model="res.partner.category">
+            <field name="name">Staffing Buyer</field>
+            <field name="color">4</field>
+        </record>
+
+        <record id="tag_subcontracting_lead" model="res.partner.category">
+            <field name="name">Subcontracting Lead</field>
+            <field name="color">5</field>
+        </record>
+
+        <record id="tag_msp_partner" model="res.partner.category">
+            <field name="name">MSP Partner</field>
+            <field name="color">6</field>
+        </record>
+
+        <record id="tag_prime_contractor" model="res.partner.category">
+            <field name="name">Prime Contractor</field>
+            <field name="color">7</field>
+        </record>
+
+        <record id="tag_candidate" model="res.partner.category">
+            <field name="name">Candidate</field>
+            <field name="color">8</field>
+        </record>
+
+        <record id="tag_vendor" model="res.partner.category">
+            <field name="name">Vendor</field>
+            <field name="color">9</field>
+        </record>
+
+        <record id="tag_recruiter_partner" model="res.partner.category">
+            <field name="name">Recruiter Partner</field>
+            <field name="color">10</field>
+        </record>
+
+    </data>
+</odoo>

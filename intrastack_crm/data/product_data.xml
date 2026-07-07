@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             Service Products for Quotation Templates (Slide 10)
+             These are service-type products used in Sales quotes.
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- Product Category -->
+        <record id="product_category_intrastack" model="product.category">
+            <field name="name">IntraStack Services</field>
+        </record>
+
+        <!-- ─── Staffing Products ──────────────────────────────────────────── -->
+
+        <record id="product_staffing_resource" model="product.template">
+            <field name="name">Staffing Resource — Engineer</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">150.00</field>
+            <field name="standard_price">85.00</field>
+            <field name="uom_id" ref="uom.product_uom_hour"/>
+            <field name="uom_po_id" ref="uom.product_uom_hour"/>
+            <field name="description_sale">Dedicated staffing resource — hourly billing rate. Includes onboarding, skills validation, and placement support.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <record id="product_staffing_senior" model="product.template">
+            <field name="name">Staffing Resource — Senior Engineer</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">200.00</field>
+            <field name="standard_price">120.00</field>
+            <field name="uom_id" ref="uom.product_uom_hour"/>
+            <field name="uom_po_id" ref="uom.product_uom_hour"/>
+            <field name="description_sale">Senior-level staffing resource — hourly billing rate. 5+ years experience, specialized certifications.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <record id="product_staffing_lead" model="product.template">
+            <field name="name">Staffing Resource — Tech Lead</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">250.00</field>
+            <field name="standard_price">150.00</field>
+            <field name="uom_id" ref="uom.product_uom_hour"/>
+            <field name="uom_po_id" ref="uom.product_uom_hour"/>
+            <field name="description_sale">Tech Lead level staffing resource — hourly billing rate. 8+ years experience, team leadership capability.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <!-- ─── Consulting Products ────────────────────────────────────────── -->
+
+        <record id="product_consulting_discovery" model="product.template">
+            <field name="name">Consulting — Discovery &amp; Assessment</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">15000.00</field>
+            <field name="standard_price">8000.00</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+            <field name="description_sale">Technical discovery and assessment phase. Includes current state analysis, gap assessment, and architecture recommendations.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <record id="product_consulting_implementation" model="product.template">
+            <field name="name">Consulting — Implementation Services</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">175.00</field>
+            <field name="standard_price">100.00</field>
+            <field name="uom_id" ref="uom.product_uom_hour"/>
+            <field name="uom_po_id" ref="uom.product_uom_hour"/>
+            <field name="description_sale">Implementation engineering services — T&amp;M hourly rate. Infrastructure setup, migration, and deployment.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <record id="product_consulting_project_mgmt" model="product.template">
+            <field name="name">Consulting — Project Management</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">160.00</field>
+            <field name="standard_price">90.00</field>
+            <field name="uom_id" ref="uom.product_uom_hour"/>
+            <field name="uom_po_id" ref="uom.product_uom_hour"/>
+            <field name="description_sale">Project management and coordination services — T&amp;M hourly rate.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <!-- ─── Managed Services Products ──────────────────────────────────── -->
+
+        <record id="product_managed_monthly" model="product.template">
+            <field name="name">Managed Services — Monthly Recurring</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">8500.00</field>
+            <field name="standard_price">5000.00</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+            <field name="description_sale">Monthly managed services fee. Includes monitoring, maintenance, SLA coverage, and dedicated resource allocation.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <record id="product_managed_onboarding" model="product.template">
+            <field name="name">Managed Services — Onboarding Setup</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">12000.00</field>
+            <field name="standard_price">7000.00</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+            <field name="description_sale">One-time onboarding and setup fee. Includes infrastructure assessment, tool configuration, and team training.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+        <record id="product_managed_addon_hours" model="product.template">
+            <field name="name">Managed Services — Additional Hours</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_intrastack"/>
+            <field name="list_price">140.00</field>
+            <field name="standard_price">80.00</field>
+            <field name="uom_id" ref="uom.product_uom_hour"/>
+            <field name="uom_po_id" ref="uom.product_uom_hour"/>
+            <field name="description_sale">Additional engineering hours beyond monthly allocation — T&amp;M hourly rate.</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+
+    </data>
+</odoo>

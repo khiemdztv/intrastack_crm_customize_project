@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             Automation Rules R1-R4 (Slide 06)
+             Odoo 17 format: ir.actions.server + base.automation
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- ─── R1: New Lead → Qualify within 24 hours ─────────────────────── -->
+
+        <record id="action_r1_qualify_lead" model="ir.actions.server">
+            <field name="name">R1 — Create Qualify Activity</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="state">next_activity</field>
+            <field name="activity_type_id" ref="mail.mail_activity_data_todo"/>
+            <field name="activity_summary">Qualify Lead within 24 hours</field>
+            <field name="activity_note"><![CDATA[
+<p><strong>R1 — Lead Qualification Required</strong></p>
+<p>A new lead/opportunity has been created. Please:</p>
+<ul>
+    <li>Review lead source and contact information</li>
+    <li>Set Deal Classification and Service Category</li>
+    <li>Determine Urgency Flag</li>
+    <li>Schedule discovery call if qualified</li>
+</ul>
+]]></field>
+            <field name="activity_date_deadline_range">1</field>
+            <field name="activity_date_deadline_range_type">days</field>
+            <field name="activity_user_type">specific</field>
+            <field name="activity_user_id" ref="base.user_admin"/>
+        </record>
+
+        <record id="automation_r1_qualify_lead" model="base.automation">
+            <field name="name">R1 — Qualify New Lead (24h)</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="trigger">on_create</field>
+            <field name="action_server_ids" eval="[(4, ref('action_r1_qualify_lead'))]"/>
+            <field name="active">True</field>
+        </record>
+
+        <!-- ─── R2: Stage = New Requirement → Submit candidates in 48h ─────── -->
+
+        <record id="action_r2_submit_candidates" model="ir.actions.server">
+            <field name="name">R2 — Create Submit Candidates Activity</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="state">next_activity</field>
+            <field name="activity_type_id" ref="mail.mail_activity_data_todo"/>
+            <field name="activity_summary">Submit 5 candidates within 48 hours</field>
+            <field name="activity_note"><![CDATA[
+<p><strong>R2 — Candidate Submission Required</strong></p>
+<p>This opportunity entered the "New Requirement" stage. Action required:</p>
+<ul>
+    <li>Review job requirements and candidate criteria</li>
+    <li>Source from internal bench and external networks</li>
+    <li>Screen and shortlist minimum 5 candidates</li>
+    <li>Submit profiles to client with rate cards</li>
+</ul>
+]]></field>
+            <field name="activity_date_deadline_range">2</field>
+            <field name="activity_date_deadline_range_type">days</field>
+            <field name="activity_user_type">specific</field>
+            <field name="activity_user_id" ref="base.user_admin"/>
+        </record>
+
+        <record id="automation_r2_submit_candidates" model="base.automation">
+            <field name="name">R2 — Submit 5 Candidates (48h)</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="trigger">on_write</field>
+            <field name="trigger_field_ids" eval="[(4, ref('crm.field_crm_lead__stage_id'))]"/>
+            <field name="action_server_ids" eval="[(4, ref('action_r2_submit_candidates'))]"/>
+            <field name="filter_domain">[("stage_id.name", "=", "New Requirement")]</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- ─── R3: Stage = Discovery → Prep checklist ────────────────────── -->
+
+        <record id="action_r3_prep_discovery" model="ir.actions.server">
+            <field name="name">R3 — Create Discovery Prep Activity</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="state">next_activity</field>
+            <field name="activity_type_id" ref="mail.mail_activity_data_todo"/>
+            <field name="activity_summary">Prepare discovery checklist + schedule call</field>
+            <field name="activity_note"><![CDATA[
+<p><strong>R3 — Discovery Preparation Required</strong></p>
+<p>This consulting opportunity entered the "Discovery" stage. Please prepare:</p>
+<ul>
+    <li>Research client company, industry, and tech stack</li>
+    <li>Prepare discovery questionnaire</li>
+    <li>Schedule discovery call with stakeholders</li>
+    <li>Identify potential solution approaches</li>
+</ul>
+]]></field>
+            <field name="activity_date_deadline_range">1</field>
+            <field name="activity_date_deadline_range_type">days</field>
+            <field name="activity_user_type">specific</field>
+            <field name="activity_user_id" ref="base.user_admin"/>
+        </record>
+
+        <record id="automation_r3_prep_discovery" model="base.automation">
+            <field name="name">R3 — Prep Discovery Checklist</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="trigger">on_write</field>
+            <field name="trigger_field_ids" eval="[(4, ref('crm.field_crm_lead__stage_id'))]"/>
+            <field name="action_server_ids" eval="[(4, ref('action_r3_prep_discovery'))]"/>
+            <field name="filter_domain">[("stage_id.name", "=", "Discovery")]</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- ─── R4: No stage update > 5 days → Re-engage alert ────────────── -->
+
+        <record id="action_r4_reengage" model="ir.actions.server">
+            <field name="name">R4 — Create Re-engage Activity</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="state">next_activity</field>
+            <field name="activity_type_id" ref="mail.mail_activity_data_todo"/>
+            <field name="activity_summary">⚠️ Re-engage prospect — No activity for 5+ days</field>
+            <field name="activity_note"><![CDATA[
+<p><strong>R4 — Deal Stall Alert</strong></p>
+<p>⚠️ This opportunity has had no stage update for 5+ days. Per IntraStack operating rules:</p>
+<ul>
+    <li>Review the deal status and last activity</li>
+    <li>Reach out to the prospect via email or call</li>
+    <li>Update the opportunity with next steps</li>
+    <li>If deal is dead, move to Lost with reason</li>
+</ul>
+]]></field>
+            <field name="activity_date_deadline_range">1</field>
+            <field name="activity_date_deadline_range_type">days</field>
+            <field name="activity_user_type">specific</field>
+            <field name="activity_user_id" ref="base.user_admin"/>
+        </record>
+
+        <record id="automation_r4_reengage" model="base.automation">
+            <field name="name">R4 — Re-engage Stalled Deal (5 days)</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="trigger">on_time</field>
+            <field name="trg_date_id" ref="crm.field_crm_lead__date_last_stage_update"/>
+            <field name="trg_date_range">5</field>
+            <field name="trg_date_range_type">day</field>
+            <field name="action_server_ids" eval="[(4, ref('action_r4_reengage'))]"/>
+            <field name="filter_domain">[("active", "=", True), ("stage_id.is_won", "=", False)]</field>
+            <field name="active">True</field>
+        </record>
+
+    </data>
+</odoo>

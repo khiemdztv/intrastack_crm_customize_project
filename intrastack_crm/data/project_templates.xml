@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             3 Project Templates (Slide 07)
+             Staffing, Consulting, and Managed Service engagement types.
+             Each template has a structured task list.
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- ─── Staffing Engagement Template ───────────────────────────────── -->
+
+        <record id="project_template_staffing" model="project.project">
+            <field name="name">[TEMPLATE] Staffing Engagement</field>
+            <field name="allow_timesheets">True</field>
+            <field name="active">True</field>
+            <field name="description">Template for staffing engagements. Clone this project when a Staffing deal (P1) is marked Closed Won. Tasks cover the full placement lifecycle.</field>
+        </record>
+
+        <record id="task_staffing_01" model="project.task">
+            <field name="name">Requirement Intake &amp; JD Finalization</field>
+            <field name="project_id" ref="project_template_staffing"/>
+            <field name="sequence">1</field>
+            <field name="description">
+- Review job description with client
+- Confirm required skills, certifications, clearance level
+- Set target start date and contract duration
+- Define interview process and timeline
+            </field>
+        </record>
+
+        <record id="task_staffing_02" model="project.task">
+            <field name="name">Sourcing &amp; Screening</field>
+            <field name="project_id" ref="project_template_staffing"/>
+            <field name="sequence">2</field>
+            <field name="description">
+- Source candidates from bench and external networks
+- Conduct initial phone screens
+- Verify qualifications and availability
+- Prepare shortlist of 3-5 candidates
+            </field>
+        </record>
+
+        <record id="task_staffing_03" model="project.task">
+            <field name="name">Client Submission &amp; Interviews</field>
+            <field name="project_id" ref="project_template_staffing"/>
+            <field name="sequence">3</field>
+            <field name="description">
+- Submit candidate profiles to client
+- Schedule and coordinate interviews
+- Collect client feedback after each round
+- Manage candidate communication
+            </field>
+        </record>
+
+        <record id="task_staffing_04" model="project.task">
+            <field name="name">Offer &amp; Placement</field>
+            <field name="project_id" ref="project_template_staffing"/>
+            <field name="sequence">4</field>
+            <field name="description">
+- Negotiate offer terms with candidate and client
+- Process background check and onboarding paperwork
+- Confirm start date and logistics
+- Set up billing in Odoo Sales
+            </field>
+        </record>
+
+        <record id="task_staffing_05" model="project.task">
+            <field name="name">Onboarding &amp; First Week Check-in</field>
+            <field name="project_id" ref="project_template_staffing"/>
+            <field name="sequence">5</field>
+            <field name="description">
+- Ensure resource has all access and equipment
+- Conduct Day 1 check-in with client and resource
+- Schedule weekly check-ins for first month
+- Set up timesheet tracking in Odoo
+            </field>
+        </record>
+
+        <!-- ─── Consulting Engagement Template ─────────────────────────────── -->
+
+        <record id="project_template_consulting" model="project.project">
+            <field name="name">[TEMPLATE] Consulting Engagement</field>
+            <field name="allow_timesheets">True</field>
+            <field name="active">True</field>
+            <field name="description">Template for consulting engagements. Clone this project when a Consulting deal (P2) is marked Closed Won. Tasks follow the delivery lifecycle from architecture through handover.</field>
+        </record>
+
+        <record id="task_consulting_01" model="project.task">
+            <field name="name">Architecture Design &amp; Planning</field>
+            <field name="project_id" ref="project_template_consulting"/>
+            <field name="sequence">1</field>
+            <field name="description">
+- Review SOW deliverables and acceptance criteria
+- Design technical architecture and solution approach
+- Create project timeline and milestones
+- Set up project collaboration tools and access
+            </field>
+        </record>
+
+        <record id="task_consulting_02" model="project.task">
+            <field name="name">Infrastructure Setup</field>
+            <field name="project_id" ref="project_template_consulting"/>
+            <field name="sequence">2</field>
+            <field name="description">
+- Provision cloud infrastructure per architecture design
+- Configure networking, security groups, IAM
+- Set up CI/CD pipelines and deployment automation
+- Document infrastructure setup procedures
+            </field>
+        </record>
+
+        <record id="task_consulting_03" model="project.task">
+            <field name="name">Migration / Implementation Execution</field>
+            <field name="project_id" ref="project_template_consulting"/>
+            <field name="sequence">3</field>
+            <field name="description">
+- Execute migration or implementation plan
+- Perform data migration and validation
+- Configure application services and integrations
+- Daily progress tracking and blockers resolution
+            </field>
+        </record>
+
+        <record id="task_consulting_04" model="project.task">
+            <field name="name">Validation &amp; Testing</field>
+            <field name="project_id" ref="project_template_consulting"/>
+            <field name="sequence">4</field>
+            <field name="description">
+- Execute UAT test plan with client
+- Performance and load testing
+- Security review and vulnerability assessment
+- Fix defects and re-validate
+            </field>
+        </record>
+
+        <record id="task_consulting_05" model="project.task">
+            <field name="name">Handover &amp; Documentation</field>
+            <field name="project_id" ref="project_template_consulting"/>
+            <field name="sequence">5</field>
+            <field name="description">
+- Create operations runbook and documentation
+- Conduct knowledge transfer sessions with client team
+- Provide training on new systems and processes
+- Formal project sign-off and warranty period kickoff
+            </field>
+        </record>
+
+        <!-- ─── Managed Service Engagement Template ────────────────────────── -->
+
+        <record id="project_template_managed_service" model="project.project">
+            <field name="name">[TEMPLATE] Managed Service Engagement</field>
+            <field name="allow_timesheets">True</field>
+            <field name="active">True</field>
+            <field name="description">Template for managed service engagements. Clone this project when a Managed Services deal (P4) is marked Active Service. Tasks cover the service lifecycle.</field>
+        </record>
+
+        <record id="task_managed_01" model="project.task">
+            <field name="name">Service Design &amp; SLA Definition</field>
+            <field name="project_id" ref="project_template_managed_service"/>
+            <field name="sequence">1</field>
+            <field name="description">
+- Define service scope and boundaries
+- Set SLA targets (uptime, response time, resolution time)
+- Identify monitoring and alerting requirements
+- Create escalation matrix
+            </field>
+        </record>
+
+        <record id="task_managed_02" model="project.task">
+            <field name="name">Client Onboarding</field>
+            <field name="project_id" ref="project_template_managed_service"/>
+            <field name="sequence">2</field>
+            <field name="description">
+- Gain access to client infrastructure
+- Set up monitoring and alerting tools
+- Document current state of all managed systems
+- Introduce dedicated support team to client
+            </field>
+        </record>
+
+        <record id="task_managed_03" model="project.task">
+            <field name="name">Monitoring &amp; Tooling Configuration</field>
+            <field name="project_id" ref="project_template_managed_service"/>
+            <field name="sequence">3</field>
+            <field name="description">
+- Configure monitoring dashboards
+- Set up automated alerting and incident creation
+- Implement backup and disaster recovery procedures
+- Verify all SLA measurement tools are operational
+            </field>
+        </record>
+
+        <record id="task_managed_04" model="project.task">
+            <field name="name">Go-Live &amp; Steady State Operations</field>
+            <field name="project_id" ref="project_template_managed_service"/>
+            <field name="sequence">4</field>
+            <field name="description">
+- Transition to managed operations
+- Begin SLA tracking and reporting
+- Establish regular operational review cadence
+- Monthly service reports to client
+            </field>
+        </record>
+
+        <record id="task_managed_05" model="project.task">
+            <field name="name">Renewal Planning &amp; Optimization</field>
+            <field name="project_id" ref="project_template_managed_service"/>
+            <field name="sequence">5</field>
+            <field name="description">
+- Quarterly business review with client
+- Identify optimization opportunities
+- Prepare renewal proposal (60 days before expiry)
+- Plan scope adjustments for next contract period
+            </field>
+        </record>
+
+    </data>
+</odoo>

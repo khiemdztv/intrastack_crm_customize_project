@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             Demo Opportunities — 20 deals across 4 pipelines
+             Distributed across stages with realistic revenue values
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- ─── P1 — STAFFING PIPELINE (6 deals) ──────────────────────────── -->
+
+        <record id="demo_opp_p1_01" model="crm.lead">
+            <field name="name">NovaTech — Senior Cloud Architect (AWS)</field>
+            <field name="partner_id" ref="demo_client_01"/>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="stage_id" ref="stage_p1_04_interviews"/>
+            <field name="expected_revenue">312000</field>
+            <field name="probability">60</field>
+            <field name="x_deal_classification">staffing</field>
+            <field name="x_service_category">cloud</field>
+            <field name="x_urgency_flag">immediate</field>
+            <field name="x_source_tracking">linkedin</field>
+            <field name="x_expected_value">312000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">NovaTech needs a Senior Cloud Architect for AWS migration project. 12-month contract, $150/hr bill rate. Interviews scheduled with 2 candidates this week.</field>
+        </record>
+
+        <record id="demo_opp_p1_02" model="crm.lead">
+            <field name="name">Apex Federal — 3x DevOps Engineers (Cleared)</field>
+            <field name="partner_id" ref="demo_client_02"/>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="stage_id" ref="stage_p1_02_sourcing"/>
+            <field name="expected_revenue">936000</field>
+            <field name="probability">30</field>
+            <field name="x_deal_classification">staffing</field>
+            <field name="x_service_category">devops</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">prime_contractor</field>
+            <field name="x_expected_value">936000</field>
+            <field name="x_decision_maker">False</field>
+            <field name="type">opportunity</field>
+            <field name="description">Apex Federal needs 3 cleared DevOps engineers for DoD program. 12-month contracts at $160/hr each. Sourcing from cleared talent pool.</field>
+        </record>
+
+        <record id="demo_opp_p1_03" model="crm.lead">
+            <field name="name">Meridian Health — Cybersecurity Analyst</field>
+            <field name="partner_id" ref="demo_client_03"/>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="stage_id" ref="stage_p1_06_closed_won"/>
+            <field name="expected_revenue">270000</field>
+            <field name="probability">100</field>
+            <field name="x_deal_classification">staffing</field>
+            <field name="x_service_category">cybersecurity</field>
+            <field name="x_urgency_flag">immediate</field>
+            <field name="x_source_tracking">referral</field>
+            <field name="x_expected_value">270000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">CLOSED WON. Sarah Mitchell placed as Cybersecurity Analyst. 12-month contract, $165/hr. Active billing started.</field>
+        </record>
+
+        <record id="demo_opp_p1_04" model="crm.lead">
+            <field name="name">NovaTech — ML Engineer (AI/ML Team)</field>
+            <field name="partner_id" ref="demo_client_01"/>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="stage_id" ref="stage_p1_03_submitted"/>
+            <field name="expected_revenue">405000</field>
+            <field name="probability">40</field>
+            <field name="x_deal_classification">staffing</field>
+            <field name="x_service_category">ai_ml</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">linkedin</field>
+            <field name="x_expected_value">405000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">NovaTech expanding AI team. Need ML Engineer with PyTorch/SageMaker experience. Lisa Tran profile submitted, awaiting feedback.</field>
+        </record>
+
+        <record id="demo_opp_p1_05" model="crm.lead">
+            <field name="name">Apex Federal — Data Engineer (TS/SCI)</field>
+            <field name="partner_id" ref="demo_client_02"/>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="stage_id" ref="stage_p1_01_new_requirement"/>
+            <field name="expected_revenue">384000</field>
+            <field name="probability">10</field>
+            <field name="x_deal_classification">staffing</field>
+            <field name="x_service_category">data_engineering</field>
+            <field name="x_urgency_flag">long_term</field>
+            <field name="x_source_tracking">prime_contractor</field>
+            <field name="x_expected_value">384000</field>
+            <field name="x_decision_maker">False</field>
+            <field name="type">opportunity</field>
+            <field name="description">New requirement from Apex Federal. TS/SCI cleared Data Engineer for classified program. Start date Q3.</field>
+        </record>
+
+        <record id="demo_opp_p1_06" model="crm.lead">
+            <field name="name">Meridian Health — 2x Cloud Engineers</field>
+            <field name="partner_id" ref="demo_client_03"/>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="stage_id" ref="stage_p1_07_active_billing"/>
+            <field name="expected_revenue">576000</field>
+            <field name="probability">100</field>
+            <field name="x_deal_classification">staffing</field>
+            <field name="x_service_category">cloud</field>
+            <field name="x_urgency_flag">immediate</field>
+            <field name="x_source_tracking">referral</field>
+            <field name="x_expected_value">576000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">ACTIVE BILLING. Two cloud engineers on 12-month contracts. Timesheets flowing, next invoice due Friday.</field>
+        </record>
+
+        <!-- ─── P2 — CONSULTING PIPELINE (5 deals) ────────────────────────── -->
+
+        <record id="demo_opp_p2_01" model="crm.lead">
+            <field name="name">NovaTech — AWS to Azure Migration</field>
+            <field name="partner_id" ref="demo_client_01"/>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="stage_id" ref="stage_p2_04_proposal"/>
+            <field name="expected_revenue">185000</field>
+            <field name="probability">50</field>
+            <field name="x_deal_classification">consulting</field>
+            <field name="x_service_category">cloud</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">linkedin</field>
+            <field name="x_expected_value">185000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">Cloud migration project — moving 40+ workloads from AWS to Azure. SOW submitted for $185K including discovery, implementation, and testing.</field>
+        </record>
+
+        <record id="demo_opp_p2_02" model="crm.lead">
+            <field name="name">Meridian Health — HIPAA Cloud Security Audit</field>
+            <field name="partner_id" ref="demo_client_03"/>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="stage_id" ref="stage_p2_01_discovery"/>
+            <field name="expected_revenue">75000</field>
+            <field name="probability">20</field>
+            <field name="x_deal_classification">consulting</field>
+            <field name="x_service_category">cybersecurity</field>
+            <field name="x_urgency_flag">immediate</field>
+            <field name="x_source_tracking">referral</field>
+            <field name="x_expected_value">75000</field>
+            <field name="x_decision_maker">False</field>
+            <field name="type">opportunity</field>
+            <field name="description">HIPAA compliance security audit and remediation. Discovery call scheduled for next week.</field>
+        </record>
+
+        <record id="demo_opp_p2_03" model="crm.lead">
+            <field name="name">CloudBridge MSP — DevOps Pipeline Modernization</field>
+            <field name="partner_id" ref="demo_msp_01"/>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="stage_id" ref="stage_p2_06_closed_won"/>
+            <field name="expected_revenue">120000</field>
+            <field name="probability">100</field>
+            <field name="x_deal_classification">consulting</field>
+            <field name="x_service_category">devops</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">msp_outreach</field>
+            <field name="x_expected_value">120000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">CLOSED WON. CI/CD pipeline modernization for CloudBridge's client portfolio. Kubernetes + ArgoCD implementation. Project kicked off.</field>
+        </record>
+
+        <record id="demo_opp_p2_04" model="crm.lead">
+            <field name="name">Apex Federal — Zero Trust Architecture Design</field>
+            <field name="partner_id" ref="demo_client_02"/>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="stage_id" ref="stage_p2_03_solution_design"/>
+            <field name="expected_revenue">250000</field>
+            <field name="probability">40</field>
+            <field name="x_deal_classification">consulting</field>
+            <field name="x_service_category">cybersecurity</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">prime_contractor</field>
+            <field name="x_expected_value">250000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">Zero Trust architecture design and implementation for Apex Federal's enterprise network. Solution design phase — architecture review meeting next Tuesday.</field>
+        </record>
+
+        <record id="demo_opp_p2_05" model="crm.lead">
+            <field name="name">SilverLine IT — Data Lake Implementation</field>
+            <field name="partner_id" ref="demo_msp_02"/>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="stage_id" ref="stage_p2_05_negotiation"/>
+            <field name="expected_revenue">165000</field>
+            <field name="probability">70</field>
+            <field name="x_deal_classification">consulting</field>
+            <field name="x_service_category">data_engineering</field>
+            <field name="x_urgency_flag">immediate</field>
+            <field name="x_source_tracking">msp_outreach</field>
+            <field name="x_expected_value">165000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">Azure Data Lake implementation for SilverLine's financial services clients. Negotiating final terms — expected close within 2 weeks.</field>
+        </record>
+
+        <!-- ─── P3 — SUBCONTRACTING PIPELINE (4 deals) ────────────────────── -->
+
+        <record id="demo_opp_p3_01" model="crm.lead">
+            <field name="name">Titan Defense — Cybersecurity Subcontract</field>
+            <field name="partner_id" ref="demo_prime_01"/>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="stage_id" ref="stage_p3_03_capability_review"/>
+            <field name="expected_revenue">450000</field>
+            <field name="probability">35</field>
+            <field name="x_deal_classification">subcontracting</field>
+            <field name="x_service_category">cybersecurity</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">prime_contractor</field>
+            <field name="x_expected_value">450000</field>
+            <field name="x_decision_maker">False</field>
+            <field name="type">opportunity</field>
+            <field name="description">Subcontracting opportunity under Titan Defense prime for DoD cybersecurity program. Capability review in progress — technical deep-dive scheduled.</field>
+        </record>
+
+        <record id="demo_opp_p3_02" model="crm.lead">
+            <field name="name">Sentinel Gov — Cloud Engineering Team</field>
+            <field name="partner_id" ref="demo_prime_02"/>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="stage_id" ref="stage_p3_01_outreach"/>
+            <field name="expected_revenue">720000</field>
+            <field name="probability">10</field>
+            <field name="x_deal_classification">subcontracting</field>
+            <field name="x_service_category">cloud</field>
+            <field name="x_urgency_flag">long_term</field>
+            <field name="x_source_tracking">vendor_portal</field>
+            <field name="x_expected_value">720000</field>
+            <field name="x_decision_maker">False</field>
+            <field name="type">opportunity</field>
+            <field name="description">Sentinel Gov looking for cloud engineering subcontractor. Initial outreach — responded to RFI on vendor portal.</field>
+        </record>
+
+        <record id="demo_opp_p3_03" model="crm.lead">
+            <field name="name">Titan Defense — DevOps Support (Active)</field>
+            <field name="partner_id" ref="demo_prime_01"/>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="stage_id" ref="stage_p3_05_active_engagement"/>
+            <field name="expected_revenue">360000</field>
+            <field name="probability">100</field>
+            <field name="x_deal_classification">subcontracting</field>
+            <field name="x_service_category">devops</field>
+            <field name="x_urgency_flag">immediate</field>
+            <field name="x_source_tracking">prime_contractor</field>
+            <field name="x_expected_value">360000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">ACTIVE ENGAGEMENT. 2 DevOps engineers supporting Titan Defense DoD program. 12-month base period with 2 option years.</field>
+        </record>
+
+        <record id="demo_opp_p3_04" model="crm.lead">
+            <field name="name">Sentinel Gov — AI/ML Data Science Subcontract</field>
+            <field name="partner_id" ref="demo_prime_02"/>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="stage_id" ref="stage_p3_02_vendor_qualification"/>
+            <field name="expected_revenue">540000</field>
+            <field name="probability">20</field>
+            <field name="x_deal_classification">subcontracting</field>
+            <field name="x_service_category">ai_ml</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">prime_contractor</field>
+            <field name="x_expected_value">540000</field>
+            <field name="x_decision_maker">False</field>
+            <field name="type">opportunity</field>
+            <field name="description">Vendor qualification for AI/ML data science program under Sentinel Gov. Submitted capability statement and past performances.</field>
+        </record>
+
+        <!-- ─── P4 — MANAGED SERVICES PIPELINE (5 deals) ──────────────────── -->
+
+        <record id="demo_opp_p4_01" model="crm.lead">
+            <field name="name">Meridian Health — Cloud Managed Services</field>
+            <field name="partner_id" ref="demo_client_03"/>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="stage_id" ref="stage_p4_03_proposal"/>
+            <field name="expected_revenue">102000</field>
+            <field name="probability">50</field>
+            <field name="x_deal_classification">managed_services</field>
+            <field name="x_service_category">cloud</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">referral</field>
+            <field name="x_expected_value">102000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">12-month managed services contract for Meridian Health cloud infrastructure. $8,500/month MRR. Proposal submitted for review.</field>
+        </record>
+
+        <record id="demo_opp_p4_02" model="crm.lead">
+            <field name="name">CloudBridge MSP — Infrastructure Monitoring</field>
+            <field name="partner_id" ref="demo_msp_01"/>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="stage_id" ref="stage_p4_05_active_service"/>
+            <field name="expected_revenue">144000</field>
+            <field name="probability">100</field>
+            <field name="x_deal_classification">managed_services</field>
+            <field name="x_service_category">cloud</field>
+            <field name="x_urgency_flag">immediate</field>
+            <field name="x_source_tracking">msp_outreach</field>
+            <field name="x_expected_value">144000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">ACTIVE SERVICE. 24/7 infrastructure monitoring and incident response for CloudBridge. $12,000/month MRR. SLA: 99.5% uptime.</field>
+        </record>
+
+        <record id="demo_opp_p4_03" model="crm.lead">
+            <field name="name">NovaTech — Security Operations (SOC-as-a-Service)</field>
+            <field name="partner_id" ref="demo_client_01"/>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="stage_id" ref="stage_p4_02_assessment"/>
+            <field name="expected_revenue">180000</field>
+            <field name="probability">25</field>
+            <field name="x_deal_classification">managed_services</field>
+            <field name="x_service_category">cybersecurity</field>
+            <field name="x_urgency_flag">short_term</field>
+            <field name="x_source_tracking">linkedin</field>
+            <field name="x_expected_value">180000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">SOC-as-a-Service offering for NovaTech. Currently assessing their security infrastructure and SIEM requirements.</field>
+        </record>
+
+        <record id="demo_opp_p4_04" model="crm.lead">
+            <field name="name">SilverLine IT — Azure Managed Services</field>
+            <field name="partner_id" ref="demo_msp_02"/>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="stage_id" ref="stage_p4_04_contract"/>
+            <field name="expected_revenue">96000</field>
+            <field name="probability">75</field>
+            <field name="x_deal_classification">managed_services</field>
+            <field name="x_service_category">cloud</field>
+            <field name="x_urgency_flag">immediate</field>
+            <field name="x_source_tracking">msp_outreach</field>
+            <field name="x_expected_value">96000</field>
+            <field name="x_decision_maker">True</field>
+            <field name="type">opportunity</field>
+            <field name="description">Azure managed services for SilverLine IT's financial services clients. Contract stage — legal review in progress. $8,000/month.</field>
+        </record>
+
+        <record id="demo_opp_p4_05" model="crm.lead">
+            <field name="name">Apex Federal — DevSecOps Managed Service</field>
+            <field name="partner_id" ref="demo_client_02"/>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="stage_id" ref="stage_p4_01_qualified_lead"/>
+            <field name="expected_revenue">216000</field>
+            <field name="probability">10</field>
+            <field name="x_deal_classification">managed_services</field>
+            <field name="x_service_category">devops</field>
+            <field name="x_urgency_flag">long_term</field>
+            <field name="x_source_tracking">prime_contractor</field>
+            <field name="x_expected_value">216000</field>
+            <field name="x_decision_maker">False</field>
+            <field name="type">opportunity</field>
+            <field name="description">DevSecOps managed service for Apex Federal's cloud environment. Qualified lead — initial discovery scheduled next month.</field>
+        </record>
+
+    </data>
+</odoo>

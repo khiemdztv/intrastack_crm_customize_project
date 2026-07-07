@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IntraStack CRM Platform — Project Execution Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+/* ============================================
+   IntraStack CRM Platform — Presentation Styles
+   Premium dark theme with glassmorphism
+   ============================================ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.7);
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(99, 102, 241, 0.3);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-indigo: #818cf8;
+  --accent-blue: #60a5fa;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-rose: #fb7185;
+  --accent-purple: #a78bfa;
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-accent: linear-gradient(135deg, #818cf8 0%, #60a5fa 100%);
+  --gradient-warm: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  --gradient-emerald: linear-gradient(135deg, #34d399 0%, #059669 100%);
+  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(59,130,246,0.05) 0%, transparent 50%);
+  z-index: 0; pointer-events: none;
+}
+
+/* Progress Bar */
+.progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--gradient-accent); z-index: 1000; transition: width 0.4s ease; box-shadow: 0 0 10px rgba(129,140,248,0.5); }
+
+/* Slide Counter */
+.slide-counter { position: fixed; bottom: 24px; right: 32px; font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); z-index: 100; letter-spacing: 0.05em; }
+
+/* Notes Toggle */
+.notes-toggle { position: fixed; bottom: 20px; left: 32px; background: var(--bg-glass); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 10px; border-radius: 10px; cursor: pointer; z-index: 100; transition: all 0.3s ease; backdrop-filter: blur(8px); }
+.notes-toggle:hover { color: var(--accent-indigo); border-color: var(--border-accent); }
+.notes-toggle.active { color: var(--accent-indigo); border-color: var(--accent-indigo); background: rgba(99,102,241,0.15); }
+
+/* Nav Arrows */
+.nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); background: var(--bg-glass); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 12px; border-radius: 12px; cursor: pointer; z-index: 100; transition: all 0.3s ease; backdrop-filter: blur(8px); opacity: 0; }
+.nav-arrow:hover { color: var(--text-primary); border-color: var(--border-accent); background: rgba(99,102,241,0.1); transform: translateY(-50%) scale(1.1); }
+body:hover .nav-arrow { opacity: 1; }
+.nav-prev { left: 20px; }
+.nav-next { right: 20px; }
+
+/* Slides Container */
+.slides-container { position: relative; width: 100%; height: 100vh; z-index: 1; }
+
+/* SLIDE — CRITICAL: all hidden by default, only .active is shown */
+.slide {
+  position: absolute; inset: 0;
+  display: none;           /* HIDDEN by default */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px 80px;
+  overflow-y: auto;
+}
+.slide.active {
+  display: flex;          /* SHOWN when active */
+  animation: slideFadeIn 0.35s ease both;
+}
+@keyframes slideFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.slide-content { max-width: 1100px; width: 100%; }
+
+/* Slide Header */
+.slide-header { margin-bottom: 36px; }
+.slide-number { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--accent-indigo); letter-spacing: 0.1em; display: block; margin-bottom: 8px; }
+.slide-header h2 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; background: var(--gradient-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.15; }
+.slide-subtitle { font-size: 1.05rem; color: var(--text-secondary); margin-top: 6px; }
+
+/* Title Slide */
+.title-slide { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.title-badge { display: inline-block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.2em; color: var(--accent-indigo); background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.25); padding: 8px 20px; border-radius: 100px; }
+.title-main { font-size: 4.5rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; }
+.title-accent { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.title-sub { font-size: 1.15rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6; }
+.title-meta { display: flex; align-items: center; gap: 24px; margin-top: 16px; padding: 16px 32px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 16px; backdrop-filter: blur(12px); }
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.meta-value { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.meta-divider { width: 1px; height: 32px; background: var(--border-subtle); }
+.title-cta { margin-top: 12px; font-size: 13px; color: var(--text-muted); animation: pulseSoft 2s ease-in-out infinite; }
+.title-cta kbd { display: inline-block; padding: 2px 8px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 4px; font-family: var(--font-mono); font-size: 12px; }
+@keyframes pulseSoft { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+/* Two Column */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.col-title { font-size: 1rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* Check List */
+.check-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.check-list li { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text-secondary); padding: 10px 14px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 10px; }
+.check-list li::before { content: '✓'; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.check-list li.done::before { background: var(--gradient-emerald); color: #fff; }
+
+/* Status Dots */
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.status-dot.done { background: var(--accent-emerald); box-shadow: 0 0 8px rgba(52,211,153,0.4); }
+.status-dot.vision { background: var(--accent-indigo); box-shadow: 0 0 8px rgba(129,140,248,0.4); }
+
+/* Vision Card */
+.vision-card { padding: 20px; background: var(--bg-glass); border: 1px solid var(--border-accent); border-radius: 14px; margin-bottom: 16px; }
+.vision-quote { font-size: 1.1rem; font-weight: 600; color: var(--accent-amber); margin-bottom: 8px; }
+.vision-desc { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 16px; }
+.flow-chain { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 0.8rem; font-weight: 500; }
+.flow-chain span:not(.arrow) { padding: 4px 10px; background: rgba(99,102,241,0.15); border-radius: 6px; color: var(--accent-blue); }
+.flow-chain .arrow { color: var(--text-muted); font-size: 0.9rem; }
+.tech-stack { display: flex; gap: 8px; flex-wrap: wrap; }
+.tech-tag { font-family: var(--font-mono); font-size: 11px; padding: 4px 10px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 6px; color: var(--text-muted); }
+
+/* Team Grid */
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.team-card { padding: 20px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 14px; display: flex; gap: 14px; transition: all 0.3s ease; }
+.team-card:hover { border-color: var(--border-accent); transform: translateY(-2px); box-shadow: var(--shadow-glow); }
+.team-card.primary { grid-column: 1 / -1; border-color: var(--border-accent); background: rgba(99,102,241,0.05); }
+.team-card.support { padding: 14px 18px; }
+.team-avatar { width: 44px; height: 44px; border-radius: 12px; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; flex-shrink: 0; }
+.team-avatar.sm { width: 36px; height: 36px; font-size: 13px; border-radius: 10px; }
+.team-info h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.team-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; background: var(--bg-glass); color: var(--text-muted); }
+.team-tag.lead { background: rgba(99,102,241,0.2); color: var(--accent-indigo); }
+.team-tag.colead { background: rgba(96,165,250,0.2); color: var(--accent-blue); }
+.team-tag.dev { background: rgba(52,211,153,0.2); color: var(--accent-emerald); }
+.team-info ul { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.team-info ul li { font-size: 0.82rem; color: var(--text-secondary); padding-left: 12px; position: relative; }
+.team-info ul li::before { content: '›'; position: absolute; left: 0; color: var(--accent-indigo); font-weight: 600; }
+.team-info p { font-size: 0.82rem; color: var(--text-secondary); }
+
+/* Deliverables Grid */
+.deliverables-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.deliverable-card { padding: 18px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 12px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+.deliverable-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.deliverable-card[data-week="1"]::before { background: var(--gradient-accent); }
+.deliverable-card[data-week="2"]::before { background: var(--gradient-emerald); }
+.deliverable-card[data-week="3"]::before { background: linear-gradient(135deg, var(--accent-amber), #f97316); }
+.deliverable-card[data-week="4"]::before { background: var(--gradient-warm); }
+.deliverable-card:hover { transform: translateY(-2px); border-color: var(--border-accent); box-shadow: var(--shadow-glow); }
+.del-num { font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px; }
+.deliverable-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+.deliverable-card p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 10px; }
+.del-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; }
+.del-owner { color: var(--accent-blue); font-weight: 500; }
+.del-week { color: var(--text-muted); font-family: var(--font-mono); font-size: 11px; }
+
+/* Pipeline Grid */
+.pipeline-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
+.pipeline-card { padding: 20px; border-radius: 14px; border: 1px solid var(--border-subtle); background: var(--bg-glass); transition: all 0.3s ease; }
+.pipeline-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-glow); }
+.pipeline-card.p1 { border-left: 3px solid var(--accent-blue); }
+.pipeline-card.p2 { border-left: 3px solid var(--accent-emerald); }
+.pipeline-card.p3 { border-left: 3px solid var(--accent-purple); }
+.pipeline-card.p4 { border-left: 3px solid var(--accent-amber); }
+.pipe-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.pipe-label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em; }
+.p1 .pipe-label { background: rgba(96,165,250,0.2); color: var(--accent-blue); }
+.p2 .pipe-label { background: rgba(52,211,153,0.2); color: var(--accent-emerald); }
+.p3 .pipe-label { background: rgba(167,139,250,0.2); color: var(--accent-purple); }
+.p4 .pipe-label { background: rgba(251,191,36,0.2); color: var(--accent-amber); }
+.pipe-header h4 { font-size: 1.05rem; font-weight: 700; }
+.pipe-value { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px; }
+.pipe-stages { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.pipe-stages span { font-size: 0.7rem; padding: 3px 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; color: var(--text-muted); font-weight: 500; }
+.pipe-count { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); text-align: right; }
+.pipeline-total { text-align: center; font-size: 0.9rem; color: var(--text-secondary); padding: 12px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 10px; }
+
+/* Rule Cards */
+.rule-card { display: flex; gap: 12px; padding: 14px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 10px; margin-bottom: 10px; align-items: flex-start; }
+.rule-card:hover { border-color: var(--border-accent); }
+.rule-id { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: rgba(99,102,241,0.2); color: var(--accent-indigo); flex-shrink: 0; }
+.rule-id.r4 { background: rgba(251,113,133,0.2); color: var(--accent-rose); }
+.rule-card strong { font-size: 0.85rem; display: block; margin-bottom: 2px; }
+.rule-card p { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* Critical Rules */
+.critical-rule { display: flex; gap: 12px; padding: 14px; background: rgba(251,113,133,0.04); border: 1px solid rgba(251,113,133,0.15); border-radius: 10px; margin-bottom: 10px; align-items: flex-start; }
+.cr-num { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: rgba(251,113,133,0.2); color: var(--accent-rose); flex-shrink: 0; }
+.critical-rule strong { font-size: 0.85rem; display: block; margin-bottom: 2px; color: var(--accent-rose); }
+.critical-rule p { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* Timeline */
+.timeline { display: flex; flex-direction: column; gap: 10px; }
+.timeline-row { display: grid; grid-template-columns: 160px 1fr 160px; gap: 16px; align-items: center; padding: 16px 20px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 12px; }
+.timeline-row:hover { border-color: var(--border-accent); }
+.timeline-row.highlight { border-color: var(--accent-emerald); background: rgba(52,211,153,0.05); }
+.timeline-row.phase2 { border-style: dashed; opacity: 0.7; }
+.tl-week { display: flex; flex-direction: column; gap: 2px; }
+.tl-label { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent-indigo); letter-spacing: 0.05em; }
+.tl-focus { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+.tl-tasks { display: flex; gap: 8px; flex-wrap: wrap; }
+.tl-task { font-size: 0.78rem; padding: 5px 12px; border-radius: 6px; font-weight: 500; }
+.tl-task.steve { background: rgba(99,102,241,0.15); color: var(--accent-indigo); }
+.tl-task.arian { background: rgba(96,165,250,0.15); color: var(--accent-blue); }
+.tl-task.rishit { background: rgba(52,211,153,0.15); color: var(--accent-emerald); }
+.tl-tasks.phase2-list span { font-size: 0.75rem; padding: 4px 10px; background: rgba(167,139,250,0.1); color: var(--accent-purple); border-radius: 4px; }
+.tl-check { font-size: 0.78rem; color: var(--text-muted); text-align: right; }
+.tl-check.signoff { color: var(--accent-emerald); font-weight: 700; }
+
+/* Criteria Grid */
+.criteria-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.criteria-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 10px; font-size: 0.88rem; color: var(--text-secondary); }
+.criteria-item:hover { border-color: var(--border-accent); color: var(--text-primary); }
+.criteria-check { font-size: 1.1rem; color: var(--accent-indigo); flex-shrink: 0; }
+.criteria-note { text-align: center; font-size: 0.85rem; color: var(--accent-amber); font-weight: 600; padding: 10px; background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.15); border-radius: 8px; }
+
+/* Risk Table */
+.risk-table { display: flex; flex-direction: column; gap: 8px; }
+.risk-row { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 16px; padding: 16px 20px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 10px; align-items: center; font-size: 0.88rem; }
+.risk-row.header { background: transparent; border: none; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 8px 20px; }
+.risk-row strong { display: block; margin-bottom: 2px; font-size: 0.9rem; }
+.risk-row em { font-style: normal; font-size: 0.78rem; color: var(--text-muted); }
+.risk-row span:last-child { font-size: 0.82rem; color: var(--text-secondary); }
+.risk-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-align: center; }
+.risk-badge.high { background: rgba(251,113,133,0.2); color: var(--accent-rose); }
+.risk-badge.medium { background: rgba(251,191,36,0.2); color: var(--accent-amber); }
+.risk-badge.low { background: rgba(52,211,153,0.2); color: var(--accent-emerald); }
+
+/* Communication Grid */
+.comm-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.comm-card { padding: 24px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 14px; transition: all 0.3s ease; }
+.comm-card:hover { border-color: var(--border-accent); transform: translateY(-2px); }
+.comm-card.highlight-card { border-color: var(--accent-emerald); background: rgba(52,211,153,0.05); }
+.comm-freq { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--accent-indigo); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.highlight-card .comm-freq { color: var(--accent-emerald); }
+.comm-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.comm-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px; }
+.comm-who { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+/* Decision Cards */
+.decision-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.decision-card { padding: 28px; background: var(--bg-glass); border: 1px solid var(--border-accent); border-radius: 16px; }
+.decision-num { width: 32px; height: 32px; border-radius: 8px; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; margin-bottom: 14px; }
+.decision-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
+.decision-card > p { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 14px; }
+.decision-compare { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.compare-item { flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 10px; text-align: center; }
+.compare-label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
+.compare-value { display: block; font-size: 1.4rem; font-weight: 800; color: var(--accent-amber); font-family: var(--font-mono); }
+.compare-vs { font-weight: 700; color: var(--text-muted); }
+.decision-highlight { padding: 14px; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 10px; text-align: center; font-size: 0.95rem; font-weight: 600; color: var(--accent-amber); margin-bottom: 14px; }
+.decision-rec { font-size: 0.82rem; color: var(--text-secondary); }
+.decision-rec strong { color: var(--accent-emerald); }
+
+/* Closing Slide */
+.closing-slide { gap: 24px; }
+.closing-summary { display: flex; flex-direction: column; gap: 10px; max-width: 400px; }
+.closing-item { display: flex; align-items: center; gap: 12px; font-size: 1rem; color: var(--text-secondary); padding: 10px 20px; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: 10px; }
+.closing-icon { font-size: 1.1rem; }
+.closing-cta { margin-top: 10px; }
+.closing-question { font-size: 1.2rem; font-weight: 600; color: var(--accent-indigo); }
+
+/* Speaker Notes */
+.speaker-notes { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(17,24,39,0.97); border-top: 1px solid var(--border-accent); padding: 16px 32px; transform: translateY(100%); transition: transform 0.3s ease; z-index: 200; backdrop-filter: blur(20px); max-height: 200px; overflow-y: auto; }
+.speaker-notes h4 { font-size: 12px; font-weight: 600; color: var(--accent-indigo); margin-bottom: 8px; }
+.speaker-notes p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; font-style: italic; max-width: 900px; }
+body.notes-visible .slide.active .speaker-notes { transform: translateY(0); }
+body.notes-visible .slide { padding-bottom: 220px; }
+
+/* Staggered fade-in animations */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.slide.active .deliverable-card, .slide.active .pipeline-card, .slide.active .team-card,
+.slide.active .rule-card, .slide.active .critical-rule, .slide.active .timeline-row,
+.slide.active .criteria-item, .slide.active .risk-row:not(.header), .slide.active .comm-card,
+.slide.active .decision-card, .slide.active .closing-item, .slide.active .check-list li { animation: fadeInUp 0.4s ease both; }
+
+.slide.active *:nth-child(1) { animation-delay: 0.03s; }
+.slide.active *:nth-child(2) { animation-delay: 0.06s; }
+.slide.active *:nth-child(3) { animation-delay: 0.09s; }
+.slide.active *:nth-child(4) { animation-delay: 0.12s; }
+.slide.active *:nth-child(5) { animation-delay: 0.15s; }
+.slide.active *:nth-child(6) { animation-delay: 0.18s; }
+.slide.active *:nth-child(7) { animation-delay: 0.21s; }
+.slide.active *:nth-child(8) { animation-delay: 0.24s; }
+.slide.active *:nth-child(9) { animation-delay: 0.27s; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .slide { padding: 40px 24px 60px; }
+  .title-main { font-size: 3rem; }
+  .slide-header h2 { font-size: 1.8rem; }
+  .two-col, .deliverables-grid, .pipeline-grid, .comm-grid, .decision-cards, .criteria-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .team-card.primary { grid-column: 1; }
+  .timeline-row { grid-template-columns: 1fr; gap: 8px; }
+  .tl-check { text-align: left; }
+  .risk-row { grid-template-columns: 1fr; gap: 8px; }
+  .risk-row.header { display: none; }
+}
+  </style>
+</head>
+<body>
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+  <!-- Slide Counter -->
+  <div class="slide-counter" id="slideCounter">1 / 12</div>
+  <!-- Speaker Notes Toggle -->
+  <button class="notes-toggle" id="notesToggle" title="Toggle Speaker Notes (N)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+  </button>
+  <!-- Nav Arrows -->
+  <button class="nav-arrow nav-prev" id="prevBtn" title="Previous (←)">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="nav-arrow nav-next" id="nextBtn" title="Next (→)">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <!-- ==================== SLIDES ==================== -->
+  <div class="slides-container" id="slidesContainer">
+
+    <!-- SLIDE 0: Title -->
+    <section class="slide active" data-slide="0">
+      <div class="slide-content title-slide">
+        <div class="title-badge">PROJECT EXECUTION PLAN</div>
+        <h1 class="title-main">IntraStack<br><span class="title-accent">CRM Platform</span></h1>
+        <p class="title-sub">Odoo Community Edition — Revenue + Staffing + Delivery Control Tower</p>
+        <div class="title-meta">
+          <div class="meta-item"><span class="meta-label">Prepared by</span><span class="meta-value">Steve (Gia Khiem Do)</span></div>
+          <div class="meta-divider"></div>
+          <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Tech Lead</span></div>
+          <div class="meta-divider"></div>
+          <div class="meta-item"><span class="meta-label">Version</span><span class="meta-value">v1.0 Draft</span></div>
+        </div>
+        <div class="title-cta">Press <kbd>→</kbd> or click to begin</div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Hi Stefan, Luan — thank you for the time. Tonight I'll walk you through our execution plan for the Odoo CRM platform. I'll cover: what's already done, our Phase 1 plan, who owns what, the timeline, and risks. This should take about 15 minutes, then I'd love your feedback."</p></div>
+    </section>
+
+    <!-- SLIDE 1: Platform Status -->
+    <section class="slide" data-slide="1">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">01</span><h2>Platform Status</h2><p class="slide-subtitle">We're not starting from zero</p></div>
+        <div class="two-col">
+          <div class="col">
+            <h3 class="col-title"><span class="status-dot done"></span>Infrastructure — Complete</h3>
+            <ul class="check-list">
+              <li class="done">Odoo 17 Community deployed (Docker)</li>
+              <li class="done">crm.intrastack.com — DNS + Nginx live</li>
+              <li class="done">SSL/HTTPS active via Certbot</li>
+              <li class="done">All core modules activated</li>
+              <li class="done">Team access granted (all members)</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 class="col-title"><span class="status-dot vision"></span>Platform Vision</h3>
+            <div class="vision-card">
+              <p class="vision-quote">"Odoo is <strong>NOT</strong> your CRM."</p>
+              <p class="vision-desc">It is your <strong>Revenue + Staffing + Delivery</strong> Control Tower</p>
+              <div class="flow-chain"><span>Leads</span><span class="arrow">→</span><span>Deals</span><span class="arrow">→</span><span>Staffing</span><span class="arrow">→</span><span>Delivery</span><span class="arrow">→</span><span>Invoicing</span><span class="arrow">→</span><span>Renewals</span></div>
+            </div>
+            <div class="tech-stack"><span class="tech-tag">Odoo 17</span><span class="tech-tag">Docker</span><span class="tech-tag">PostgreSQL 15</span><span class="tech-tag">Nginx</span><span class="tech-tag">Certbot</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Before I get into the plan — the infrastructure is already live. Odoo 17 is deployed on Docker, SSL is active, everyone has access. The key mindset: this is not just a CRM — it's our full revenue-to-delivery control tower. Every module connects — from leads through delivery to invoicing."</p></div>
+    </section>
+
+    <!-- SLIDE 2: Team -->
+    <section class="slide" data-slide="2">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">02</span><h2>Team & Ownership</h2><p class="slide-subtitle">Every person has a clear lane</p></div>
+        <div class="team-grid">
+          <div class="team-card primary"><div class="team-avatar">S</div><div class="team-info"><h4>Steve <span class="team-tag lead">Tech Lead</span></h4><ul><li>4 CRM Pipelines & stage config</li><li>Automation rules (R1–R4)</li><li>Sales quote engine</li><li>CEO Dashboard</li><li>Overall platform ownership</li></ul></div></div>
+          <div class="team-card"><div class="team-avatar">A</div><div class="team-info"><h4>Arian <span class="team-tag colead">Co-Lead</span></h4><ul><li>Contacts & Tagging strategy</li><li>Project & Delivery module</li><li>Asia timezone coverage</li><li>UAT support</li></ul></div></div>
+          <div class="team-card"><div class="team-avatar">R</div><div class="team-info"><h4>Rishit <span class="team-tag dev">Developer</span></h4><ul><li>6 Custom fields configuration</li><li>Timesheets + Employee module</li><li>Timesheet approval workflow</li><li>Technical support</li></ul></div></div>
+          <div class="team-card support"><div class="team-avatar sm">PM</div><div class="team-info"><h4>Auspicious <span class="team-tag">PM</span></h4><p>Sprint tracking & reporting</p></div></div>
+          <div class="team-card support"><div class="team-avatar sm">BA</div><div class="team-info"><h4>Luan <span class="team-tag">BA/PM</span></h4><p>Requirements review & sign-off</p></div></div>
+          <div class="team-card support"><div class="team-avatar sm">👑</div><div class="team-info"><h4>Stefan <span class="team-tag">Owner</span></h4><p>Final approvals & escalation</p></div></div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Three engineers full-time. I own the core CRM configuration — pipelines, automation, sales engine, and dashboard. Arian handles contacts and project delivery, and covers Asia timezone. Rishit handles custom fields and timesheets. PM and BA support from Auspicious and Luan. Everyone has clear ownership — no overlap, no gaps."</p></div>
+    </section>
+
+    <!-- SLIDE 3: Phase 1 Scope -->
+    <section class="slide" data-slide="3">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">03</span><h2>Phase 1 Scope</h2><p class="slide-subtitle">9 deliverables · 4 weeks · No-code config only</p></div>
+        <div class="deliverables-grid">
+          <div class="deliverable-card" data-week="1"><span class="del-num">01</span><h4>4 CRM Pipelines</h4><p>26 total stages across 4 independent Sales Teams</p><div class="del-meta"><span class="del-owner">Steve</span><span class="del-week">Week 1</span></div></div>
+          <div class="deliverable-card" data-week="1"><span class="del-num">02</span><h4>6 Custom Fields</h4><p>All mandatory on every opportunity form</p><div class="del-meta"><span class="del-owner">Rishit</span><span class="del-week">Week 1</span></div></div>
+          <div class="deliverable-card" data-week="1"><span class="del-num">03</span><h4>Contacts + 10 Tags</h4><p>Unified relationship database with tagging strategy</p><div class="del-meta"><span class="del-owner">Arian</span><span class="del-week">Week 1</span></div></div>
+          <div class="deliverable-card" data-week="2"><span class="del-num">04</span><h4>4 Automation Rules</h4><p>R1–R4 Activity-based triggers</p><div class="del-meta"><span class="del-owner">Steve</span><span class="del-week">Week 2</span></div></div>
+          <div class="deliverable-card" data-week="2"><span class="del-num">05</span><h4>3 Project Templates</h4><p>Staffing, Consulting, Managed Service</p><div class="del-meta"><span class="del-owner">Arian</span><span class="del-week">Week 2</span></div></div>
+          <div class="deliverable-card" data-week="2"><span class="del-num">06</span><h4>Timesheets Setup</h4><p>Linked to Projects + Employees from Day 1</p><div class="del-meta"><span class="del-owner">Rishit</span><span class="del-week">Week 2</span></div></div>
+          <div class="deliverable-card" data-week="3"><span class="del-num">07</span><h4>3 Quote Templates</h4><p>Rate Card, SOW, Managed Services Contract</p><div class="del-meta"><span class="del-owner">Steve</span><span class="del-week">Week 3</span></div></div>
+          <div class="deliverable-card" data-week="3"><span class="del-num">08</span><h4>CEO Dashboard</h4><p>7 saved views for management KPIs</p><div class="del-meta"><span class="del-owner">Steve</span><span class="del-week">Week 3</span></div></div>
+          <div class="deliverable-card" data-week="4"><span class="del-num">09</span><h4>Team Training</h4><p>2-hour live session + recorded walkthrough</p><div class="del-meta"><span class="del-owner">Steve</span><span class="del-week">Week 4</span></div></div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Phase 1 is pure no-code Odoo configuration. Nine deliverables across 4 weeks. Week 1 is foundation — pipelines, fields, contacts. Week 2 — automation and project templates. Week 3 — sales engine and dashboard. Week 4 — training and UAT. Everything is mapped directly from the CRM Platform document."</p></div>
+    </section>
+
+    <!-- SLIDE 4: Pipelines -->
+    <section class="slide" data-slide="4">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">04</span><h2>4 Revenue Pipelines</h2><p class="slide-subtitle">Never one generic CRM — 4 streams, 4 strategies</p></div>
+        <div class="pipeline-grid">
+          <div class="pipeline-card p1"><div class="pipe-header"><span class="pipe-label">P1</span><h4>Staffing</h4></div><p class="pipe-value">Fast Cash Flow</p><div class="pipe-stages"><span>New Req</span><span>Sourcing</span><span>Submitted</span><span>Interviews</span><span>Offer</span><span>Closed Won</span><span>Active Billing</span><span>Renewal</span></div><div class="pipe-count">8 stages</div></div>
+          <div class="pipeline-card p2"><div class="pipe-header"><span class="pipe-label">P2</span><h4>Consulting</h4></div><p class="pipe-value">Highest Margin</p><div class="pipe-stages"><span>Discovery</span><span>Qualification</span><span>Solution Design</span><span>Proposal</span><span>Negotiation</span><span>Closed Won</span><span>Delivery</span></div><div class="pipe-count">7 stages</div></div>
+          <div class="pipeline-card p3"><div class="pipe-header"><span class="pipe-label">P3</span><h4>Subcontracting</h4></div><p class="pipe-value">Partner Network</p><div class="pipe-stages"><span>Outreach</span><span>Vendor Qual</span><span>Capability Review</span><span>Approved</span><span>Active</span></div><div class="pipe-count">5 stages</div></div>
+          <div class="pipeline-card p4"><div class="pipe-header"><span class="pipe-label">P4</span><h4>Managed Services</h4></div><p class="pipe-value">Recurring MRR</p><div class="pipe-stages"><span>Qualified Lead</span><span>Assessment</span><span>Proposal</span><span>Contract</span><span>Active Service</span><span>Renewal</span></div><div class="pipe-count">6 stages</div></div>
+        </div>
+        <div class="pipeline-total">Total: <strong>26 stages</strong> across <strong>4 independent pipelines</strong> — each is a separate Odoo Sales Team</div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"As defined in your platform document — four independent pipelines. Staffing for fast revenue, Consulting for high margin, Subcontracting for partner network, Managed Services for recurring MRR. Each pipeline is its own Sales Team in Odoo with dedicated Kanban stages. No mixing, no confusion. Total 26 stages."</p></div>
+    </section>
+
+    <!-- SLIDE 5: Automation & Rules -->
+    <section class="slide" data-slide="5">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">05</span><h2>Automation & Operating Rules</h2><p class="slide-subtitle">Community Edition workaround + Non-negotiable rules</p></div>
+        <div class="two-col">
+          <div class="col">
+            <h3 class="col-title">Activity-Based Automation</h3>
+            <div class="rule-card"><span class="rule-id">R1</span><div><strong>New lead created</strong><p>→ "Qualify Lead within 24 hours"</p></div></div>
+            <div class="rule-card"><span class="rule-id">R2</span><div><strong>Stage = New Requirement (P1)</strong><p>→ "Submit 5 candidates in 48 hours"</p></div></div>
+            <div class="rule-card"><span class="rule-id">R3</span><div><strong>Stage = Discovery (P2)</strong><p>→ "Prep checklist + schedule call"</p></div></div>
+            <div class="rule-card"><span class="rule-id r4">R4</span><div><strong>No activity > 5 days</strong><p>→ "Re-engage prospect" alert to Manager</p></div></div>
+          </div>
+          <div class="col">
+            <h3 class="col-title">4 Non-Negotiable Rules</h3>
+            <div class="critical-rule"><span class="cr-num">01</span><div><strong>Everything Enters CRM First</strong><p>No Excel, no Notion, no sticky notes. Zero exceptions.</p></div></div>
+            <div class="critical-rule"><span class="cr-num">02</span><div><strong>No Deal Exists Outside Odoo</strong><p>Email/spreadsheet tracking = system failure → escalate.</p></div></div>
+            <div class="critical-rule"><span class="cr-num">03</span><div><strong>Every Opportunity: 4 Fields</strong><p>Owner + Value + Stage + Next Action — always.</p></div></div>
+            <div class="critical-rule"><span class="cr-num">04</span><div><strong>No Inactive Deals > 7 Days</strong><p>Auto-alert fired, reviewed in next standup.</p></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Since we're on Community Edition, we don't have enterprise automation. We use Odoo's Activity system instead — four rules that keep the team accountable. And four non-negotiable operating rules from your platform document. These are enforced from day one. One thing I want to confirm: the automation triggers at 5 days, but the operating rule says 7 days — should we align these?"</p></div>
+    </section>
+
+    <!-- SLIDE 6: Timeline -->
+    <section class="slide" data-slide="6">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">06</span><h2>Sprint Timeline</h2><p class="slide-subtitle">4-week sprints to Phase 1 done — Phase 2 starts Month 2</p></div>
+        <div class="timeline">
+          <div class="timeline-row"><div class="tl-week"><span class="tl-label">WEEK 1</span><span class="tl-focus">Foundation</span></div><div class="tl-tasks"><div class="tl-task steve">Pipelines + stages</div><div class="tl-task arian">Contacts + tags</div><div class="tl-task rishit">6 Custom fields</div></div><div class="tl-check">Kickoff meeting</div></div>
+          <div class="timeline-row"><div class="tl-week"><span class="tl-label">WEEK 2</span><span class="tl-focus">Automation</span></div><div class="tl-tasks"><div class="tl-task steve">Rules R1–R4</div><div class="tl-task arian">3 Project templates</div><div class="tl-task rishit">Timesheets setup</div></div><div class="tl-check">Mid-sprint check-in</div></div>
+          <div class="timeline-row"><div class="tl-week"><span class="tl-label">WEEK 3</span><span class="tl-focus">Sales + KPIs</span></div><div class="tl-tasks"><div class="tl-task steve">Quote engine + Dashboard</div><div class="tl-task arian">Portal config + UAT</div><div class="tl-task rishit">Approval workflow</div></div><div class="tl-check">Review w/ Luan</div></div>
+          <div class="timeline-row highlight"><div class="tl-week"><span class="tl-label">WEEK 4</span><span class="tl-focus">UAT + Launch</span></div><div class="tl-tasks"><div class="tl-task steve">Training + bug fixes</div><div class="tl-task arian">E2E pipeline testing</div><div class="tl-task rishit">Timesheet + invoice UAT</div></div><div class="tl-check signoff">★ Phase 1 Sign-off</div></div>
+          <div class="timeline-row phase2"><div class="tl-week"><span class="tl-label">MONTH 2+</span><span class="tl-focus">Phase 2</span></div><div class="tl-tasks phase2-list"><span>Email Automation</span><span>AI Lead Scoring</span><span>ATS Integration</span><span>Invoice Automation</span><span>Subcontractor Portal</span></div><div class="tl-check">Scoped after sign-off</div></div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Four weekly sprints. Each week has a clear focus and parallel workstreams for all three engineers. We target Phase 1 sign-off at end of Week 4 — that's when we do a live demo for you and Luan. Phase 2 starts Month 2 with development-level work. I want to scope Phase 2 priorities with you after Phase 1 is complete."</p></div>
+    </section>
+
+    <!-- SLIDE 7: Acceptance Criteria -->
+    <section class="slide" data-slide="7">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">07</span><h2>Phase 1 Acceptance Criteria</h2><p class="slide-subtitle">11 pass/fail conditions — this is how we define "done"</p></div>
+        <div class="criteria-grid">
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>4 CRM pipelines live with correct stage definitions</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>6 custom fields present and required on every opportunity</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>Contacts module with 10 tag types applied</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>Automation rules R1–R4 tested and verified</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>3 project templates created (Staffing, Consulting, MSC)</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>Timesheets linked to Projects + Employees — verified</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>3 Sales quote templates functional</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>CEO Dashboard: 7 saved views accessible</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>Team training session completed</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>SSL (HTTPS) active on crm.intrastack.com</span></div>
+          <div class="criteria-item"><span class="criteria-check">☐</span><span>5+ test deals across all 4 pipelines — end-to-end verified</span></div>
+        </div>
+        <div class="criteria-note">All 11 criteria must pass before Phase 1 sign-off meeting</div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Eleven acceptance criteria — all must pass before we call Phase 1 done. This gives you a clear, measurable checklist to evaluate our delivery. No ambiguity. At the sign-off meeting in Week 4, we'll walk through each item live in the system."</p></div>
+    </section>
+
+    <!-- SLIDE 8: Risks -->
+    <section class="slide" data-slide="8">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">08</span><h2>Risks & Mitigation</h2><p class="slide-subtitle">Identified upfront — here's how we handle them</p></div>
+        <div class="risk-table">
+          <div class="risk-row header"><span>Risk</span><span>Impact</span><span>Mitigation</span></div>
+          <div class="risk-row high"><span><strong>Scope creep</strong><em>Phase 2 & 3 in same 3-month window</em></span><span class="risk-badge high">HIGH</span><span>Phase 1 first. Scope Phase 2 after sign-off.</span></div>
+          <div class="risk-row high"><span><strong>VPS memory pressure</strong><em>Swap usage at 83% before go-live</em></span><span class="risk-badge high">HIGH</span><span>Monitor with htop. Recommend RAM upgrade.</span></div>
+          <div class="risk-row medium"><span><strong>Odoo learning curve</strong><em>Team unfamiliar with the platform</em></span><span class="risk-badge medium">MED</span><span>Steve leads all config. Daily async standups.</span></div>
+          <div class="risk-row low"><span><strong>Timezone gap</strong><em>Steve (Asia) vs Arian/Rishit</em></span><span class="risk-badge low">LOW</span><span>Arian = co-lead. Telegram daily updates.</span></div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Four key risks. The biggest: scope creep — three phases in three months is aggressive. My recommendation: let's nail Phase 1 first, then scope Phase 2 with clear priorities. Second: our VPS is at 83% swap. I'd recommend upgrading RAM before go-live."</p></div>
+    </section>
+
+    <!-- SLIDE 9: Communication -->
+    <section class="slide" data-slide="9">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">09</span><h2>Communication Plan</h2><p class="slide-subtitle">You'll never be in the dark</p></div>
+        <div class="comm-grid">
+          <div class="comm-card"><div class="comm-freq">Daily</div><h4>Async Standup</h4><p>Telegram: Done / Doing / Blocked</p><div class="comm-who">Steve, Arian, Rishit</div></div>
+          <div class="comm-card"><div class="comm-freq">Weekly</div><h4>Sprint Review</h4><p>Video call — demo progress, review blockers</p><div class="comm-who">Full team + Auspicious</div></div>
+          <div class="comm-card"><div class="comm-freq">Bi-weekly</div><h4>Stakeholder Update</h4><p>Written summary with % completion per task</p><div class="comm-who">Auspicious → Stefan & Luan</div></div>
+          <div class="comm-card highlight-card"><div class="comm-freq">Week 4</div><h4>Phase 1 Sign-off</h4><p>Live demo of full platform + formal sign-off</p><div class="comm-who">All team + Stefan + Luan</div></div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Communication is structured at every level. Daily async standups on Telegram, weekly Friday demos with the full team, bi-weekly written reports to you and Luan. You'll have full visibility."</p></div>
+    </section>
+
+    <!-- SLIDE 10: Decisions -->
+    <section class="slide" data-slide="10">
+      <div class="slide-content">
+        <div class="slide-header"><span class="slide-number">10</span><h2>Decisions Needed</h2><p class="slide-subtitle">Two items that need your input</p></div>
+        <div class="decision-cards">
+          <div class="decision-card"><div class="decision-num">1</div><h3>Stale Deal Threshold</h3><p>The CRM Platform document specifies two different values:</p><div class="decision-compare"><div class="compare-item"><span class="compare-label">Automation Rule (R4)</span><span class="compare-value">5 days</span></div><div class="compare-vs">vs</div><div class="compare-item"><span class="compare-label">Operating Rule #04</span><span class="compare-value">7 days</span></div></div><p class="decision-rec"><strong>Recommendation:</strong> 5 days for alert, 7 days for escalation</p></div>
+          <div class="decision-card"><div class="decision-num">2</div><h3>VPS Resource Upgrade</h3><p>Current server is at <strong>83% swap usage</strong> before any production load.</p><div class="decision-highlight">Should we upgrade VPS RAM before go-live?</div><p class="decision-rec"><strong>Recommendation:</strong> Yes — prevent performance issues under real load</p></div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"Two items I need your decision on. First: the stale deal threshold — your document mentions both 5 and 7 days. My recommendation: 5 days for automation alert, 7 days for management escalation. Second: VPS is at 83% swap with no production load. I strongly recommend upgrading RAM before go-live."</p></div>
+    </section>
+
+    <!-- SLIDE 11: Closing -->
+    <section class="slide" data-slide="11">
+      <div class="slide-content title-slide closing-slide">
+        <div class="title-badge">SUMMARY</div>
+        <h1 class="title-main">Ready to<br><span class="title-accent">Execute</span></h1>
+        <div class="closing-summary">
+          <div class="closing-item"><span class="closing-icon">✅</span><span>Infrastructure live & ready</span></div>
+          <div class="closing-item"><span class="closing-icon">👥</span><span>3 engineers · clear ownership</span></div>
+          <div class="closing-item"><span class="closing-icon">📋</span><span>9 deliverables · 4-week sprints</span></div>
+          <div class="closing-item"><span class="closing-icon">✓</span><span>11 acceptance criteria defined</span></div>
+          <div class="closing-item"><span class="closing-icon">🛡️</span><span>Risks identified & mitigated</span></div>
+        </div>
+        <div class="closing-cta"><p class="closing-question">Questions & Feedback?</p></div>
+        <div class="title-meta">
+          <div class="meta-item"><span class="meta-label">Document</span><span class="meta-value">Execution Plan v1.0</span></div>
+          <div class="meta-divider"></div>
+          <div class="meta-item"><span class="meta-label">Status</span><span class="meta-value">Draft — For Review</span></div>
+        </div>
+      </div>
+      <div class="speaker-notes"><h4>🎤 Speaker Notes</h4><p>"To wrap up: infrastructure is ready, the team has clear ownership, Phase 1 is 9 deliverables in 4 weekly sprints with 11 measurable acceptance criteria. Risks are identified with mitigation plans. I'm confident we can deliver Phase 1 on time. I'm open to any questions or feedback you have. Thank you."</p></div>
+    </section>
+
+  </div>
+
+  <script>
+  (function(){
+    var slides = document.querySelectorAll('.slide');
+    var bar = document.getElementById('progressBar');
+    var counter = document.getElementById('slideCounter');
+    var notesBtn = document.getElementById('notesToggle');
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    var cur = 0;
+    var total = slides.length;
+
+    function show(n) {
+      if (n < 0 || n >= total || n === cur) return;
+      slides[cur].classList.remove('active');
+      cur = n;
+      slides[cur].classList.add('active');
+      bar.style.width = ((cur+1)/total*100)+'%';
+      counter.textContent = (cur+1)+' / '+total;
+      prevBtn.style.visibility = cur===0?'hidden':'visible';
+      nextBtn.style.visibility = cur===total-1?'hidden':'visible';
+    }
+
+    // init
+    bar.style.width = (1/total*100)+'%';
+    counter.textContent = '1 / '+total;
+    prevBtn.style.visibility = 'hidden';
+
+    document.addEventListener('keydown', function(e){
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(cur+1);}
+      else if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();show(cur-1);}
+      else if(e.key==='Home'){e.preventDefault();show(0);}
+      else if(e.key==='End'){e.preventDefault();show(total-1);}
+      else if(e.key==='n'||e.key==='N'){document.body.classList.toggle('notes-visible');notesBtn.classList.toggle('active');}
+      else if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+    });
+
+    prevBtn.onclick=function(e){e.stopPropagation();show(cur-1);};
+    nextBtn.onclick=function(e){e.stopPropagation();show(cur+1);};
+    notesBtn.onclick=function(){document.body.classList.toggle('notes-visible');notesBtn.classList.toggle('active');};
+
+    var tx=0,ty=0;
+    document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+    document.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50){dx<0?show(cur+1):show(cur-1);}},{passive:true});
+  })();
+  </script>
+</body>
+</html>

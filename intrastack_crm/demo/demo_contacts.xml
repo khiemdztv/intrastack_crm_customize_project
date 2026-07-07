@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             Demo Contacts — 18 contacts across all entity types
+             Realistic tech industry companies and professionals
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- ─── CLIENT COMPANIES ───────────────────────────────────────────── -->
+
+        <record id="demo_client_01" model="res.partner">
+            <field name="name">NovaTech Solutions Inc.</field>
+            <field name="company_type">company</field>
+            <field name="email">procurement@novatech-solutions.com</field>
+            <field name="phone">+1 (703) 555-0142</field>
+            <field name="street">1800 Tysons Blvd, Suite 400</field>
+            <field name="city">McLean</field>
+            <field name="zip">22102</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="website">https://novatech-solutions.com</field>
+            <field name="category_id" eval="[(6, 0, [ref('tag_staffing_buyer'), ref('tag_cybersecurity_client')])]"/>
+            <field name="comment">Enterprise cybersecurity client. Fortune 500. Annual IT budget $12M+. Key decision maker: VP of Engineering.</field>
+        </record>
+
+        <record id="demo_client_02" model="res.partner">
+            <field name="name">Apex Federal Systems</field>
+            <field name="company_type">company</field>
+            <field name="email">contracts@apexfederal.com</field>
+            <field name="phone">+1 (571) 555-0198</field>
+            <field name="street">11955 Freedom Dr</field>
+            <field name="city">Reston</field>
+            <field name="zip">20190</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="website">https://apexfederal.com</field>
+            <field name="category_id" eval="[(6, 0, [ref('tag_staffing_buyer')])]"/>
+            <field name="comment">Federal government contractor. Cleared facility. Needs cleared DevOps and Cloud engineers.</field>
+        </record>
+
+        <record id="demo_client_03" model="res.partner">
+            <field name="name">Meridian Health Technologies</field>
+            <field name="company_type">company</field>
+            <field name="email">it-procurement@meridianhealth.io</field>
+            <field name="phone">+1 (312) 555-0267</field>
+            <field name="street">233 S Wacker Dr</field>
+            <field name="city">Chicago</field>
+            <field name="zip">60606</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="website">https://meridianhealth.io</field>
+            <field name="category_id" eval="[(6, 0, [ref('tag_cybersecurity_client')])]"/>
+            <field name="comment">Healthcare IT company. HIPAA compliance requirements. Looking for cloud migration and managed services.</field>
+        </record>
+
+        <!-- ─── MSP PARTNERS ──────────────────────────────────────────────── -->
+
+        <record id="demo_msp_01" model="res.partner">
+            <field name="name">CloudBridge MSP</field>
+            <field name="company_type">company</field>
+            <field name="email">partnerships@cloudbridge-msp.com</field>
+            <field name="phone">+1 (408) 555-0334</field>
+            <field name="city">San Jose</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="category_id" eval="[(6, 0, [ref('tag_msp_partner'), ref('tag_aws_partner')])]"/>
+            <field name="comment">AWS Advanced Consulting Partner. Specializes in cloud managed services for mid-market companies.</field>
+        </record>
+
+        <record id="demo_msp_02" model="res.partner">
+            <field name="name">SilverLine IT Services</field>
+            <field name="company_type">company</field>
+            <field name="email">alliances@silverline-it.com</field>
+            <field name="phone">+1 (214) 555-0411</field>
+            <field name="city">Dallas</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="category_id" eval="[(6, 0, [ref('tag_msp_partner'), ref('tag_azure_partner')])]"/>
+            <field name="comment">Azure Gold Partner. Managed Services provider focused on financial services sector.</field>
+        </record>
+
+        <!-- ─── PRIME CONTRACTORS ─────────────────────────────────────────── -->
+
+        <record id="demo_prime_01" model="res.partner">
+            <field name="name">Titan Defense Technologies</field>
+            <field name="company_type">company</field>
+            <field name="email">subcontracting@titandefense.com</field>
+            <field name="phone">+1 (703) 555-0523</field>
+            <field name="city">Arlington</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="category_id" eval="[(6, 0, [ref('tag_prime_contractor'), ref('tag_subcontracting_lead')])]"/>
+            <field name="comment">Tier 1 Federal prime contractor. $500M+ annual revenue. Active subcontracting opportunities in DoD space.</field>
+        </record>
+
+        <record id="demo_prime_02" model="res.partner">
+            <field name="name">Sentinel Gov Solutions</field>
+            <field name="company_type">company</field>
+            <field name="email">vendors@sentinelgov.com</field>
+            <field name="phone">+1 (202) 555-0645</field>
+            <field name="city">Washington</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="category_id" eval="[(6, 0, [ref('tag_prime_contractor')])]"/>
+            <field name="comment">Federal prime. GSA Schedule holder. Looking for cybersecurity subcontractors.</field>
+        </record>
+
+        <!-- ─── CANDIDATES (Talent Pool) ──────────────────────────────────── -->
+
+        <record id="demo_candidate_01" model="res.partner">
+            <field name="name">James Chen</field>
+            <field name="company_type">person</field>
+            <field name="email">james.chen.dev@gmail.com</field>
+            <field name="phone">+1 (650) 555-0712</field>
+            <field name="city">San Francisco</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="function">Senior Cloud Architect</field>
+            <field name="category_id" eval="[(6, 0, [ref('tag_candidate'), ref('tag_aws_partner')])]"/>
+            <field name="comment">8 YoE. AWS Solutions Architect Pro certified. Available immediately. Target rate: $185/hr. Clearance: Secret.</field>
+        </record>
+
+        <record id="demo_candidate_02" model="res.partner">
+            <field name="name">Sarah Mitchell</field>
+            <field name="company_type">person</field>
+            <field name="email">s.mitchell.cyber@protonmail.com</field>
+            <field name="phone">+1 (571) 555-0834</field>
+            <field name="city">Fairfax</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="function">Cybersecurity Engineer</field>
+            <field name="category_id" eval="[(6, 0, [ref('tag_candidate')])]"/>
+            <field name="comment">6 YoE. CISSP, CEH certified. Specializes in cloud security and compliance. Available in 2 weeks. Rate: $165/hr.</field>
+        </record>
+
+        <record id="demo_candidate_03" model="res.partner">
+            <field name="name">Raj Patel</field>
+            <field name="company_type">person</field>
+            <field name="email">raj.patel.devops@outlook.com</field>
+            <field name="phone">+1 (469) 555-0956</field>
+            <field name="city">Austin</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="function">DevOps Engineer</field>
+            <field name="category_id" eval="[(6, 0, [ref('tag_candidate'), ref('tag_azure_partner')])]"/>
+            <field name="comment">5 YoE. Kubernetes, Terraform, Azure DevOps. Available immediately. Rate: $140/hr. No clearance.</field>
+        </record>
+
+        <record id="demo_candidate_04" model="res.partner">
+            <field name="name">Lisa Tran</field>
+            <field name="company_type">person</field>
+            <field name="email">lisa.tran.ml@gmail.com</field>
+            <field name="phone">+1 (206) 555-1078</field>
+            <field name="city">Seattle</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="function">ML Engineer</field>
+            <field name="category_id" eval="[(6, 0, [ref('tag_candidate'), ref('tag_aws_partner')])]"/>
+            <field name="comment">7 YoE. PyTorch, SageMaker, MLOps. PhD candidate. Available in 4 weeks. Rate: $195/hr.</field>
+        </record>
+
+        <!-- ─── VENDORS ───────────────────────────────────────────────────── -->
+
+        <record id="demo_vendor_01" model="res.partner">
+            <field name="name">DataForge Analytics</field>
+            <field name="company_type">company</field>
+            <field name="email">sales@dataforge.io</field>
+            <field name="phone">+1 (415) 555-1190</field>
+            <field name="city">San Francisco</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="category_id" eval="[(6, 0, [ref('tag_vendor')])]"/>
+            <field name="comment">Data analytics tooling vendor. Provides BI dashboards and data pipeline solutions.</field>
+        </record>
+
+        <!-- ─── RECRUITER PARTNERS ────────────────────────────────────────── -->
+
+        <record id="demo_recruiter_01" model="res.partner">
+            <field name="name">TechTalent Recruiting Group</field>
+            <field name="company_type">company</field>
+            <field name="email">partnerships@techtalent-recruiting.com</field>
+            <field name="phone">+1 (703) 555-1234</field>
+            <field name="city">Vienna</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="category_id" eval="[(6, 0, [ref('tag_recruiter_partner')])]"/>
+            <field name="comment">External recruiting partner. Specializes in cleared IT talent for government sector. 15% placement fee.</field>
+        </record>
+
+        <record id="demo_recruiter_02" model="res.partner">
+            <field name="name">StackHire Solutions</field>
+            <field name="company_type">company</field>
+            <field name="email">team@stackhire.co</field>
+            <field name="phone">+1 (512) 555-1367</field>
+            <field name="city">Austin</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="category_id" eval="[(6, 0, [ref('tag_recruiter_partner')])]"/>
+            <field name="comment">Tech recruiting partner. Focus on DevOps, Cloud, and AI/ML roles. 12% placement fee.</field>
+        </record>
+
+        <!-- ─── CONTACT PERSONS (linked to companies) ─────────────────────── -->
+
+        <record id="demo_contact_person_01" model="res.partner">
+            <field name="name">Michael Torres</field>
+            <field name="company_type">person</field>
+            <field name="parent_id" ref="demo_client_01"/>
+            <field name="email">m.torres@novatech-solutions.com</field>
+            <field name="phone">+1 (703) 555-0143</field>
+            <field name="function">VP of Engineering</field>
+            <field name="comment">Primary decision maker for staffing and consulting engagements. Budget authority up to $500K.</field>
+        </record>
+
+        <record id="demo_contact_person_02" model="res.partner">
+            <field name="name">Jennifer Walsh</field>
+            <field name="company_type">person</field>
+            <field name="parent_id" ref="demo_client_02"/>
+            <field name="email">j.walsh@apexfederal.com</field>
+            <field name="phone">+1 (571) 555-0199</field>
+            <field name="function">Director of IT Operations</field>
+            <field name="comment">Procurement contact for cleared personnel. Manages staffing vendor relationships.</field>
+        </record>
+
+    </data>
+</odoo>

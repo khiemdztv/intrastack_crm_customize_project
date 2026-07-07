@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             3 Sales Quotation Templates (Slide 10)
+             Rate Card, SOW, and Managed Services Contract
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- Template 1: Staffing Rate Card -->
+        <record id="sale_template_staffing_rate_card" model="sale.order.template">
+            <field name="name">Staffing Rate Card</field>
+            <field name="note"><![CDATA[
+<h3>Terms & Conditions — Staffing Rate Card</h3>
+<p><strong>Billing:</strong> Weekly invoicing based on approved timesheets.<br/>
+<strong>Payment Terms:</strong> Net 30 from invoice date.<br/>
+<strong>Notice Period:</strong> 2 weeks written notice for contract termination.<br/>
+<strong>Replacement Guarantee:</strong> Free replacement within first 30 days if resource is not a fit.<br/>
+<strong>Overtime:</strong> Billed at 1.5x standard rate for hours exceeding 40/week.</p>
+            ]]></field>
+            <field name="number_of_days">30</field>
+            <field name="require_signature">True</field>
+            <field name="require_payment">False</field>
+        </record>
+
+        <record id="sale_template_line_staffing_1" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_staffing_rate_card"/>
+            <field name="name">Engineer — Standard Rate (per hour)</field>
+            <field name="product_id" ref="product_staffing_resource"/>
+            <field name="product_uom_qty">160</field>
+            <field name="product_uom_id" ref="uom.product_uom_hour"/>
+        </record>
+
+        <record id="sale_template_line_staffing_2" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_staffing_rate_card"/>
+            <field name="name">Senior Engineer — Standard Rate (per hour)</field>
+            <field name="product_id" ref="product_staffing_senior"/>
+            <field name="product_uom_qty">160</field>
+            <field name="product_uom_id" ref="uom.product_uom_hour"/>
+        </record>
+
+        <record id="sale_template_line_staffing_3" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_staffing_rate_card"/>
+            <field name="name">Tech Lead — Standard Rate (per hour)</field>
+            <field name="product_id" ref="product_staffing_lead"/>
+            <field name="product_uom_qty">160</field>
+            <field name="product_uom_id" ref="uom.product_uom_hour"/>
+        </record>
+
+        <!-- Template 2: Consulting SOW -->
+        <record id="sale_template_consulting_sow" model="sale.order.template">
+            <field name="name">Consulting SOW (Statement of Work)</field>
+            <field name="note"><![CDATA[
+<h3>Statement of Work — Terms & Conditions</h3>
+<p><strong>Scope:</strong> Services limited to deliverables listed above. Change requests require written approval and revised pricing.<br/>
+<strong>Acceptance Criteria:</strong> Client has 5 business days to review each deliverable. No response = acceptance.<br/>
+<strong>Payment:</strong> Milestone-based for fixed-fee items. T&M billed monthly on approved timesheets.<br/>
+<strong>Payment Terms:</strong> Net 30 from invoice date.<br/>
+<strong>IP Ownership:</strong> All deliverables become client property upon final payment.<br/>
+<strong>Warranty:</strong> 30-day defect warranty on all deliverables post-acceptance.</p>
+            ]]></field>
+            <field name="number_of_days">45</field>
+            <field name="require_signature">True</field>
+            <field name="require_payment">False</field>
+        </record>
+
+        <record id="sale_template_line_sow_1" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_consulting_sow"/>
+            <field name="name">Discovery &amp; Assessment Phase (fixed fee)</field>
+            <field name="product_id" ref="product_consulting_discovery"/>
+            <field name="product_uom_qty">1</field>
+            <field name="product_uom_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="sale_template_line_sow_2" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_consulting_sow"/>
+            <field name="name">Implementation Engineering (T&amp;M, estimated hours)</field>
+            <field name="product_id" ref="product_consulting_implementation"/>
+            <field name="product_uom_qty">200</field>
+            <field name="product_uom_id" ref="uom.product_uom_hour"/>
+        </record>
+
+        <record id="sale_template_line_sow_3" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_consulting_sow"/>
+            <field name="name">Project Management (T&amp;M, estimated hours)</field>
+            <field name="product_id" ref="product_consulting_project_mgmt"/>
+            <field name="product_uom_qty">80</field>
+            <field name="product_uom_id" ref="uom.product_uom_hour"/>
+        </record>
+
+        <!-- Template 3: Managed Services Contract -->
+        <record id="sale_template_managed_services" model="sale.order.template">
+            <field name="name">Managed Services Contract</field>
+            <field name="note"><![CDATA[
+<h3>Managed Services Contract — Terms & Conditions</h3>
+<p><strong>Service Scope:</strong> As defined in the service description above. Includes monitoring, maintenance, and incident response per agreed SLAs.<br/>
+<strong>SLA Targets:</strong> 99.5% uptime guarantee. P1 response within 1 hour, P2 within 4 hours, P3 within 1 business day.<br/>
+<strong>Billing:</strong> Monthly recurring fee, invoiced on the 1st of each month. Additional hours billed separately.<br/>
+<strong>Payment Terms:</strong> Net 15 for monthly recurring, Net 30 for additional hours.<br/>
+<strong>Contract Term:</strong> 12-month minimum with auto-renewal. 60-day notice required for non-renewal.<br/>
+<strong>Escalation:</strong> Dedicated account manager. Escalation to management within 24 hours for unresolved P1 issues.</p>
+            ]]></field>
+            <field name="number_of_days">60</field>
+            <field name="require_signature">True</field>
+            <field name="require_payment">False</field>
+        </record>
+
+        <record id="sale_template_line_msc_1" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_managed_services"/>
+            <field name="name">Onboarding &amp; Setup (one-time)</field>
+            <field name="product_id" ref="product_managed_onboarding"/>
+            <field name="product_uom_qty">1</field>
+            <field name="product_uom_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="sale_template_line_msc_2" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_managed_services"/>
+            <field name="name">Monthly Managed Services Fee (per month)</field>
+            <field name="product_id" ref="product_managed_monthly"/>
+            <field name="product_uom_qty">12</field>
+            <field name="product_uom_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="sale_template_line_msc_3" model="sale.order.template.line">
+            <field name="sale_order_template_id" ref="sale_template_managed_services"/>
+            <field name="name">Additional Engineering Hours (estimated overage pool)</field>
+            <field name="product_id" ref="product_managed_addon_hours"/>
+            <field name="product_uom_qty">40</field>
+            <field name="product_uom_id" ref="uom.product_uom_hour"/>
+        </record>
+
+    </data>
+</odoo>

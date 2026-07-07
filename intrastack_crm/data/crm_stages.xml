@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             CRM Pipeline Stages (Slide 04)
+             26 total stages across 4 independent Sales Teams.
+             Each stage is assigned to exactly ONE Sales Team.
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- ─── P1 — Staffing Pipeline (8 stages) ─────────────────────────── -->
+
+        <record id="stage_p1_01_new_requirement" model="crm.stage">
+            <field name="name">New Requirement</field>
+            <field name="sequence">1</field>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">New staffing requirement received. Qualify the opportunity and identify key resource needs.</field>
+        </record>
+
+        <record id="stage_p1_02_sourcing" model="crm.stage">
+            <field name="name">Sourcing</field>
+            <field name="sequence">2</field>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Actively sourcing candidates from talent pool. Target: 5 candidates within 48 hours.</field>
+        </record>
+
+        <record id="stage_p1_03_submitted" model="crm.stage">
+            <field name="name">Submitted</field>
+            <field name="sequence">3</field>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Candidate profiles submitted to client for review.</field>
+        </record>
+
+        <record id="stage_p1_04_interviews" model="crm.stage">
+            <field name="name">Interviews</field>
+            <field name="sequence">4</field>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Client is interviewing submitted candidates.</field>
+        </record>
+
+        <record id="stage_p1_05_offer" model="crm.stage">
+            <field name="name">Offer</field>
+            <field name="sequence">5</field>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Offer extended to candidate. Negotiating terms.</field>
+        </record>
+
+        <record id="stage_p1_06_closed_won" model="crm.stage">
+            <field name="name">Closed Won</field>
+            <field name="sequence">6</field>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="is_won">True</field>
+            <field name="fold">False</field>
+            <field name="requirements">Deal closed. Create project and begin onboarding.</field>
+        </record>
+
+        <record id="stage_p1_07_active_billing" model="crm.stage">
+            <field name="name">Active Billing</field>
+            <field name="sequence">7</field>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="is_won">True</field>
+            <field name="fold">False</field>
+            <field name="requirements">Placement active. Timesheets and invoicing in progress.</field>
+        </record>
+
+        <record id="stage_p1_08_renewal" model="crm.stage">
+            <field name="name">Renewal</field>
+            <field name="sequence">8</field>
+            <field name="team_id" ref="team_p1_staffing"/>
+            <field name="is_won">True</field>
+            <field name="fold">True</field>
+            <field name="requirements">Contract up for renewal. Discuss extension with client.</field>
+        </record>
+
+        <!-- ─── P2 — Consulting Pipeline (7 stages) ───────────────────────── -->
+
+        <record id="stage_p2_01_discovery" model="crm.stage">
+            <field name="name">Discovery</field>
+            <field name="sequence">10</field>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Initial discovery meeting. Understand client pain points and goals.</field>
+        </record>
+
+        <record id="stage_p2_02_qualification" model="crm.stage">
+            <field name="name">Qualification</field>
+            <field name="sequence">11</field>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Qualify opportunity: budget, authority, need, timeline (BANT).</field>
+        </record>
+
+        <record id="stage_p2_03_solution_design" model="crm.stage">
+            <field name="name">Solution Design</field>
+            <field name="sequence">12</field>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Design technical solution and architecture. Prepare deliverables list.</field>
+        </record>
+
+        <record id="stage_p2_04_proposal" model="crm.stage">
+            <field name="name">Proposal</field>
+            <field name="sequence">13</field>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">SOW submitted to client for review. Include milestones and pricing.</field>
+        </record>
+
+        <record id="stage_p2_05_negotiation" model="crm.stage">
+            <field name="name">Negotiation</field>
+            <field name="sequence">14</field>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Negotiating terms, pricing, and contract details.</field>
+        </record>
+
+        <record id="stage_p2_06_closed_won" model="crm.stage">
+            <field name="name">Closed Won</field>
+            <field name="sequence">15</field>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="is_won">True</field>
+            <field name="fold">False</field>
+            <field name="requirements">Contract signed. Create project and assign team.</field>
+        </record>
+
+        <record id="stage_p2_07_delivery" model="crm.stage">
+            <field name="name">Delivery</field>
+            <field name="sequence">16</field>
+            <field name="team_id" ref="team_p2_consulting"/>
+            <field name="is_won">True</field>
+            <field name="fold">True</field>
+            <field name="requirements">Project in delivery. Track via Project module.</field>
+        </record>
+
+        <!-- ─── P3 — Subcontracting Pipeline (5 stages) ───────────────────── -->
+
+        <record id="stage_p3_01_outreach" model="crm.stage">
+            <field name="name">Outreach</field>
+            <field name="sequence">20</field>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Initial outreach to potential subcontracting partners.</field>
+        </record>
+
+        <record id="stage_p3_02_vendor_qualification" model="crm.stage">
+            <field name="name">Vendor Qualification</field>
+            <field name="sequence">21</field>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Evaluate vendor capabilities, certifications, and track record.</field>
+        </record>
+
+        <record id="stage_p3_03_capability_review" model="crm.stage">
+            <field name="name">Capability Review</field>
+            <field name="sequence">22</field>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Deep-dive technical capability assessment.</field>
+        </record>
+
+        <record id="stage_p3_04_approved_vendor" model="crm.stage">
+            <field name="name">Approved Vendor</field>
+            <field name="sequence">23</field>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="is_won">True</field>
+            <field name="fold">False</field>
+            <field name="requirements">Vendor approved. Ready for active engagements.</field>
+        </record>
+
+        <record id="stage_p3_05_active_engagement" model="crm.stage">
+            <field name="name">Active Engagement</field>
+            <field name="sequence">24</field>
+            <field name="team_id" ref="team_p3_subcontracting"/>
+            <field name="is_won">True</field>
+            <field name="fold">False</field>
+            <field name="requirements">Actively working together on projects.</field>
+        </record>
+
+        <!-- ─── P4 — Managed Services Pipeline (6 stages) ─────────────────── -->
+
+        <record id="stage_p4_01_qualified_lead" model="crm.stage">
+            <field name="name">Qualified Lead</field>
+            <field name="sequence">30</field>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Lead qualified for managed services engagement.</field>
+        </record>
+
+        <record id="stage_p4_02_assessment" model="crm.stage">
+            <field name="name">Assessment</field>
+            <field name="sequence">31</field>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Assessing client infrastructure and service requirements.</field>
+        </record>
+
+        <record id="stage_p4_03_proposal" model="crm.stage">
+            <field name="name">Proposal</field>
+            <field name="sequence">32</field>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Service proposal with SLAs, pricing, and scope submitted.</field>
+        </record>
+
+        <record id="stage_p4_04_contract" model="crm.stage">
+            <field name="name">Contract</field>
+            <field name="sequence">33</field>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="is_won">False</field>
+            <field name="fold">False</field>
+            <field name="requirements">Contract negotiation and signing phase.</field>
+        </record>
+
+        <record id="stage_p4_05_active_service" model="crm.stage">
+            <field name="name">Active Service</field>
+            <field name="sequence">34</field>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="is_won">True</field>
+            <field name="fold">False</field>
+            <field name="requirements">Service is live. Monitor SLAs and customer satisfaction.</field>
+        </record>
+
+        <record id="stage_p4_06_renewal" model="crm.stage">
+            <field name="name">Renewal</field>
+            <field name="sequence">35</field>
+            <field name="team_id" ref="team_p4_managed_services"/>
+            <field name="is_won">True</field>
+            <field name="fold">True</field>
+            <field name="requirements">Contract renewal period. Discuss scope adjustments and pricing.</field>
+        </record>
+
+    </data>
+</odoo>

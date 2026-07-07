@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ══════════════════════════════════════════════════════════════════════
+         CRM Lead Form View — Add 6 Custom Fields
+         Extends the standard CRM opportunity form to include IntraStack fields.
+         ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_crm_lead_form_intrastack" model="ir.ui.view">
+        <field name="name">crm.lead.form.intrastack</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Add IntraStack custom fields group before the notebook -->
+            <xpath expr="//notebook" position="before">
+                <group string="IntraStack Deal Info" name="intrastack_info">
+                    <group>
+                        <field name="x_deal_classification"/>
+                        <field name="x_service_category"/>
+                        <field name="x_urgency_flag"/>
+                    </group>
+                    <group>
+                        <field name="x_source_tracking"/>
+                        <field name="x_expected_value"/>
+                        <field name="x_decision_maker"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

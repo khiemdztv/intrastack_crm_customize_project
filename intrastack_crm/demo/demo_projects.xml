@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             Demo Projects — Created from Won Deals
+             Shows the CRM → Project flow in action
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- ─── Project 1: Staffing — Cybersecurity Analyst Placement ──────── -->
+
+        <record id="demo_project_staffing_01" model="project.project">
+            <field name="name">Meridian Health — Cybersecurity Analyst Placement</field>
+            <field name="partner_id" ref="demo_client_03"/>
+            <field name="allow_timesheets">True</field>
+            <field name="description">Staffing engagement from deal: Meridian Health — Cybersecurity Analyst. Sarah Mitchell placed. Contract: 12 months, $165/hr.</field>
+        </record>
+
+        <record id="demo_project_task_s1_01" model="project.task">
+            <field name="name">Requirement Intake &amp; JD Finalization</field>
+            <field name="project_id" ref="demo_project_staffing_01"/>
+            <field name="sequence">1</field>
+            <field name="stage_id" ref="project.project_stage_2"/>
+            <field name="description">JD finalized. HIPAA compliance experience required. Clearance: N/A.</field>
+        </record>
+
+        <record id="demo_project_task_s1_02" model="project.task">
+            <field name="name">Sourcing &amp; Screening</field>
+            <field name="project_id" ref="demo_project_staffing_01"/>
+            <field name="sequence">2</field>
+            <field name="stage_id" ref="project.project_stage_2"/>
+            <field name="description">5 candidates sourced. Sarah Mitchell shortlisted after phone screen.</field>
+        </record>
+
+        <record id="demo_project_task_s1_03" model="project.task">
+            <field name="name">Client Submission &amp; Interviews</field>
+            <field name="project_id" ref="demo_project_staffing_01"/>
+            <field name="sequence">3</field>
+            <field name="stage_id" ref="project.project_stage_2"/>
+            <field name="description">Sarah interviewed. Client feedback: Strong hire recommendation.</field>
+        </record>
+
+        <record id="demo_project_task_s1_04" model="project.task">
+            <field name="name">Offer &amp; Placement</field>
+            <field name="project_id" ref="demo_project_staffing_01"/>
+            <field name="sequence">4</field>
+            <field name="stage_id" ref="project.project_stage_2"/>
+            <field name="description">Offer accepted. Background check passed. Start date confirmed.</field>
+        </record>
+
+        <record id="demo_project_task_s1_05" model="project.task">
+            <field name="name">Onboarding &amp; First Week Check-in</field>
+            <field name="project_id" ref="demo_project_staffing_01"/>
+            <field name="sequence">5</field>
+            <field name="stage_id" ref="project.project_stage_1"/>
+            <field name="description">Onboarding in progress. Day 1 check-in completed. Weekly check-ins scheduled.</field>
+        </record>
+
+        <!-- ─── Project 2: Consulting — DevOps Pipeline Modernization ──────── -->
+
+        <record id="demo_project_consulting_01" model="project.project">
+            <field name="name">CloudBridge — DevOps Pipeline Modernization</field>
+            <field name="partner_id" ref="demo_msp_01"/>
+            <field name="allow_timesheets">True</field>
+            <field name="description">Consulting engagement from deal: CloudBridge MSP — DevOps Pipeline Modernization. Kubernetes + ArgoCD implementation. Contract value: $120K.</field>
+        </record>
+
+        <record id="demo_project_task_c1_01" model="project.task">
+            <field name="name">Architecture Design &amp; Planning</field>
+            <field name="project_id" ref="demo_project_consulting_01"/>
+            <field name="sequence">1</field>
+            <field name="stage_id" ref="project.project_stage_2"/>
+            <field name="description">K8s architecture designed. CI/CD pipeline specs completed. 3-month timeline confirmed.</field>
+        </record>
+
+        <record id="demo_project_task_c1_02" model="project.task">
+            <field name="name">Infrastructure Setup — Kubernetes Cluster</field>
+            <field name="project_id" ref="demo_project_consulting_01"/>
+            <field name="sequence">2</field>
+            <field name="stage_id" ref="project.project_stage_1"/>
+            <field name="description">Setting up EKS clusters across dev, staging, and production. In progress — 60% complete.</field>
+        </record>
+
+        <record id="demo_project_task_c1_03" model="project.task">
+            <field name="name">CI/CD Pipeline Implementation (ArgoCD)</field>
+            <field name="project_id" ref="demo_project_consulting_01"/>
+            <field name="sequence">3</field>
+            <field name="stage_id" ref="project.project_stage_0"/>
+            <field name="description">ArgoCD GitOps deployment. Pending infrastructure setup completion.</field>
+        </record>
+
+        <record id="demo_project_task_c1_04" model="project.task">
+            <field name="name">Testing &amp; Validation</field>
+            <field name="project_id" ref="demo_project_consulting_01"/>
+            <field name="sequence">4</field>
+            <field name="stage_id" ref="project.project_stage_0"/>
+            <field name="description">UAT plan prepared. Load testing scripts ready. Pending implementation completion.</field>
+        </record>
+
+        <record id="demo_project_task_c1_05" model="project.task">
+            <field name="name">Handover &amp; Documentation</field>
+            <field name="project_id" ref="demo_project_consulting_01"/>
+            <field name="sequence">5</field>
+            <field name="stage_id" ref="project.project_stage_0"/>
+            <field name="description">Runbook template prepared. Knowledge transfer sessions to be scheduled after UAT.</field>
+        </record>
+
+        <!-- ─── Project 3: Managed Service — CloudBridge Monitoring ─────────── -->
+
+        <record id="demo_project_managed_01" model="project.project">
+            <field name="name">CloudBridge — Infrastructure Monitoring (Active)</field>
+            <field name="partner_id" ref="demo_msp_01"/>
+            <field name="allow_timesheets">True</field>
+            <field name="description">Managed service engagement. 24/7 infrastructure monitoring and incident response. $12,000/month MRR. Active since Month 1.</field>
+        </record>
+
+        <record id="demo_project_task_m1_01" model="project.task">
+            <field name="name">Service Design &amp; SLA Definition</field>
+            <field name="project_id" ref="demo_project_managed_01"/>
+            <field name="sequence">1</field>
+            <field name="stage_id" ref="project.project_stage_2"/>
+            <field name="description">SLAs defined: 99.5% uptime, P1 response 1h, P2 response 4h. Escalation matrix documented.</field>
+        </record>
+
+        <record id="demo_project_task_m1_02" model="project.task">
+            <field name="name">Client Onboarding</field>
+            <field name="project_id" ref="demo_project_managed_01"/>
+            <field name="sequence">2</field>
+            <field name="stage_id" ref="project.project_stage_2"/>
+            <field name="description">Access provisioned. All 12 AWS accounts connected to monitoring. Runbook created.</field>
+        </record>
+
+        <record id="demo_project_task_m1_03" model="project.task">
+            <field name="name">Monitoring &amp; Tooling Configuration</field>
+            <field name="project_id" ref="demo_project_managed_01"/>
+            <field name="sequence">3</field>
+            <field name="stage_id" ref="project.project_stage_2"/>
+            <field name="description">CloudWatch + Datadog configured. 47 alerts active. PagerDuty integration live.</field>
+        </record>
+
+        <record id="demo_project_task_m1_04" model="project.task">
+            <field name="name">Steady State Operations</field>
+            <field name="project_id" ref="demo_project_managed_01"/>
+            <field name="sequence">4</field>
+            <field name="stage_id" ref="project.project_stage_1"/>
+            <field name="description">Active monitoring. Last month SLA: 99.87% uptime. 3 P2 incidents resolved. Monthly report sent.</field>
+        </record>
+
+        <record id="demo_project_task_m1_05" model="project.task">
+            <field name="name">Renewal Planning (Q4)</field>
+            <field name="project_id" ref="demo_project_managed_01"/>
+            <field name="sequence">5</field>
+            <field name="stage_id" ref="project.project_stage_0"/>
+            <field name="description">Contract renewal due Q4. Plan to propose 15% scope expansion based on new workloads added.</field>
+        </record>
+
+    </data>
+</odoo>

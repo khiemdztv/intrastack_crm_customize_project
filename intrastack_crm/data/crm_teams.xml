@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             4 CRM Sales Teams / Pipelines (Slide 04)
+             Each pipeline is an independent Sales Team with its own stages.
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- P1 — Staffing Pipeline -->
+        <record id="team_p1_staffing" model="crm.team">
+            <field name="name">P1 — Staffing</field>
+            <field name="use_opportunities">True</field>
+            <field name="use_leads">True</field>
+            <field name="sequence">1</field>
+            <field name="color">1</field>
+        </record>
+
+        <!-- P2 — Consulting Pipeline -->
+        <record id="team_p2_consulting" model="crm.team">
+            <field name="name">P2 — Consulting</field>
+            <field name="use_opportunities">True</field>
+            <field name="use_leads">True</field>
+            <field name="sequence">2</field>
+            <field name="color">2</field>
+        </record>
+
+        <!-- P3 — Subcontracting Pipeline -->
+        <record id="team_p3_subcontracting" model="crm.team">
+            <field name="name">P3 — Subcontracting</field>
+            <field name="use_opportunities">True</field>
+            <field name="use_leads">True</field>
+            <field name="sequence">3</field>
+            <field name="color">3</field>
+        </record>
+
+        <!-- P4 — Managed Services Pipeline -->
+        <record id="team_p4_managed_services" model="crm.team">
+            <field name="name">P4 — Managed Services</field>
+            <field name="use_opportunities">True</field>
+            <field name="use_leads">True</field>
+            <field name="sequence">4</field>
+            <field name="color">4</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         4 Pipeline Menu Actions
+         Each action opens the CRM kanban with the correct team context
+         so that team-specific stages are displayed properly.
+         ══════════════════════════════════════════════════════════════════ -->
+
+    <!-- ─── P1 — Staffing Pipeline ──────────────────────────────────── -->
+    <record id="action_crm_pipeline_p1" model="ir.actions.act_window">
+        <field name="name">P1 — Staffing Pipeline</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph,calendar,activity</field>
+        <field name="context" eval="{'default_team_id': ref('team_p1_staffing'), 'default_type': 'opportunity', 'search_default_team_id': ref('team_p1_staffing')}"/>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Staffing opportunity</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_crm_pipeline_p1"
+        name="P1 — Staffing"
+        parent="crm.crm_menu_root"
+        action="action_crm_pipeline_p1"
+        sequence="5"/>
+
+    <!-- ─── P2 — Consulting Pipeline ────────────────────────────────── -->
+    <record id="action_crm_pipeline_p2" model="ir.actions.act_window">
+        <field name="name">P2 — Consulting Pipeline</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph,calendar,activity</field>
+        <field name="context" eval="{'default_team_id': ref('team_p2_consulting'), 'default_type': 'opportunity', 'search_default_team_id': ref('team_p2_consulting')}"/>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Consulting opportunity</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_crm_pipeline_p2"
+        name="P2 — Consulting"
+        parent="crm.crm_menu_root"
+        action="action_crm_pipeline_p2"
+        sequence="6"/>
+
+    <!-- ─── P3 — Subcontracting Pipeline ────────────────────────────── -->
+    <record id="action_crm_pipeline_p3" model="ir.actions.act_window">
+        <field name="name">P3 — Subcontracting Pipeline</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph,calendar,activity</field>
+        <field name="context" eval="{'default_team_id': ref('team_p3_subcontracting'), 'default_type': 'opportunity', 'search_default_team_id': ref('team_p3_subcontracting')}"/>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Subcontracting opportunity</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_crm_pipeline_p3"
+        name="P3 — Subcontracting"
+        parent="crm.crm_menu_root"
+        action="action_crm_pipeline_p3"
+        sequence="7"/>
+
+    <!-- ─── P4 — Managed Services Pipeline ──────────────────────────── -->
+    <record id="action_crm_pipeline_p4" model="ir.actions.act_window">
+        <field name="name">P4 — Managed Services Pipeline</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph,calendar,activity</field>
+        <field name="context" eval="{'default_team_id': ref('team_p4_managed_services'), 'default_type': 'opportunity', 'search_default_team_id': ref('team_p4_managed_services')}"/>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Managed Services opportunity</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_crm_pipeline_p4"
+        name="P4 — Managed Services"
+        parent="crm.crm_menu_root"
+        action="action_crm_pipeline_p4"
+        sequence="8"/>
+
+</odoo>
