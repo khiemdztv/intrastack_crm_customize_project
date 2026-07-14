@@ -1,6 +1,6 @@
 # IntraStack CRM Customization (Odoo 17)
 
-## Overview
+## Overview.
 This repository contains a comprehensive custom Odoo 17 Enterprise Resource Planning (ERP) and Customer Relationship Management (CRM) module developed for IntraStack Solutions. The module extends standard Odoo functionalities to support complex, multi-faceted business operations including staffing, consulting, subcontracting, and managed services.
 
 ## Core Capabilities
