@@ -21,33 +21,113 @@ Current module release: `17.0.2.2.0`
 - Automated follow-up activities and management filters.
 - Production-safe Docker Compose deployment with database and filestore backup.
 
-## End-To-End Workflows
+## Workflow and Process Charts
+
+### Platform Operating Model
+
+```mermaid
+flowchart TD
+    A["Customer / Company"] --> B["Contacts and Decision Makers"]
+    B --> C["Lead / Opportunity"]
+    C --> D{"Deal Classification"}
+
+    D -->|Staffing| P1["P1 Staffing"]
+    D -->|Consulting| P2["P2 Consulting"]
+    D -->|Subcontracting| P3["P3 Subcontracting"]
+    D -->|Managed Services| P4["P4 Managed Services"]
+
+    P1 --> E["Quotation / SOW"]
+    P2 --> E
+    P3 --> E
+    P4 --> E
+
+    E --> F{"Sales Order confirmed?"}
+    F -->|No| E
+    F -->|Yes| G["Delivery Project or Placement"]
+    G --> H["Tasks, Timesheets and Billing"]
+    H --> I["Reporting, Renewal or Closure"]
+
+    classDef source fill:#e8f1fb,stroke:#3b6ea8,color:#16324f;
+    classDef route fill:#fff4d6,stroke:#b7791f,color:#5f3b00;
+    classDef delivery fill:#e8f7ef,stroke:#2f855a,color:#174d35;
+    class A,B,C source;
+    class D,F route;
+    class G,H,I delivery;
+```
 
 ### Consulting and Cloud Transformation
 
-```text
-Customer and Contacts
-  -> Consulting Opportunity
-  -> Discovery
-  -> Qualification
-  -> Solution Design
-  -> SOW Quotation
-  -> Confirmed Sales Order
-  -> Delivery Project
-  -> Tasks and Timesheets
+```mermaid
+flowchart TD
+    A["Customer and Contacts"] --> B["Consulting Opportunity"]
+    B --> C["Discovery"]
+    C --> D{"Qualified?"}
+    D -->|No| C
+    D -->|Yes| E["Technical Assessment"]
+    E --> F["Solution Design"]
+    F --> G["Proposal / SOW"]
+    G --> H{"Customer approval?"}
+    H -->|Revise| F
+    H -->|Approved| I["Quotation"]
+    I --> J["Confirmed Sales Order"]
+    J --> K["Delivery Project"]
+    K --> L["Tasks and Milestones"]
+    L --> M["Timesheets and Delivery Control"]
+    M --> N["Close or Renew"]
 ```
 
-### Staffing
+### Staffing Delivery
 
-```text
-Customer and Staffing Opportunity
-  -> Staffing Requirement
-  -> Candidate Submission
-  -> Interview
-  -> Offer
-  -> Placement Approval
-  -> Active Placement
-  -> Project and Billing Operations
+```mermaid
+flowchart TD
+    A["Customer and Staffing Opportunity"] --> B["Staffing Requirement"]
+    B --> C["Assign Recruiter and Start Sourcing"]
+    C --> D["Candidate Submission"]
+    D --> E{"Client shortlisted candidate?"}
+    E -->|No| C
+    E -->|Yes| F["Interview Schedule"]
+    F --> G["Interview Feedback"]
+    G --> H{"Candidate selected?"}
+    H -->|No| C
+    H -->|Yes| I["Offer and Commercial Terms"]
+    I --> J["Placement Approval"]
+    J --> K{"Approved?"}
+    K -->|Changes required| I
+    K -->|Yes| L["Confirmed Placement"]
+    L --> M["Active Placement"]
+    M --> N["Project, Timesheets and Billing"]
+    N --> O["Complete, Extend or Renew"]
+```
+
+### Employee Account Activation
+
+```mermaid
+flowchart TD
+    A["Create Employee"] --> B["Enter Work Email"]
+    B --> C["Select IntraStack Role"]
+    C --> D{"Required data complete?"}
+    D -->|No| B
+    D -->|Yes| E["Activate Internal User"]
+    E --> F["Role Groups Assigned"]
+    F --> G["Invitation / Password Setup"]
+    G --> H["Employee Login"]
+    H --> I["CRM, Sales, Staffing or Project Access"]
+```
+
+### CSV/XLSX Import Process
+
+```mermaid
+flowchart TD
+    A["Open the Odoo Import screen"] --> B["Download IntraStack Template"]
+    B --> C["Fill Records and External IDs"]
+    C --> D["Upload CSV or XLSX"]
+    D --> E["Map Fields"]
+    E --> F["Run Test"]
+    F --> G{"Validation successful?"}
+    G -->|No| H["Correct File or Mapping"]
+    H --> D
+    G -->|Yes| I["Import Records"]
+    I --> J["Verify Counts, Owners and Relationships"]
 ```
 
 ## CRM Pipelines
