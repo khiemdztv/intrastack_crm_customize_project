@@ -1,11 +1,9 @@
-from odoo import models, fields, api
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
-
-    # ── Custom Fields (Slide 05) ──────────────────────────────────────────────
-    # All 6 fields are mandatory on every CRM opportunity record.
 
     x_deal_classification = fields.Selection(
         string='Deal Classification',
@@ -15,7 +13,6 @@ class CrmLead(models.Model):
             ('subcontracting', 'Subcontracting'),
             ('managed_services', 'Managed Services'),
         ],
-        required=True,
         tracking=True,
         help='Primary business line classification for this deal.',
     )
@@ -30,7 +27,6 @@ class CrmLead(models.Model):
             ('data_engineering', 'Data Engineering'),
             ('app_modernization', 'App Modernization'),
         ],
-        required=True,
         tracking=True,
         help='Technology domain for this engagement.',
     )
@@ -42,7 +38,6 @@ class CrmLead(models.Model):
             ('short_term', 'Short-term (30-90 days)'),
             ('long_term', 'Long-term (90+ days)'),
         ],
-        required=True,
         tracking=True,
         help='Expected timeline for deal closure.',
     )
@@ -55,18 +50,22 @@ class CrmLead(models.Model):
             ('prime_contractor', 'Prime Contractor'),
             ('referral', 'Referral'),
             ('vendor_portal', 'Vendor Portal'),
+            ('website', 'Website'),
+            ('email', 'Email'),
+            ('other', 'Other'),
         ],
-        required=True,
         tracking=True,
         help='Lead acquisition channel.',
     )
 
+    # Keep the BRD field name while using Odoo's native revenue field as the
+    # single source of truth for forecasts, reports, imports, and quotations.
     x_expected_value = fields.Monetary(
-        string='Expected Value ($)',
+        string='Expected Value',
+        related='expected_revenue',
         currency_field='company_currency',
-        required=True,
-        tracking=True,
-        help='Estimated total deal value in USD.',
+        readonly=False,
+        store=True,
     )
 
     x_decision_maker = fields.Boolean(
@@ -76,7 +75,6 @@ class CrmLead(models.Model):
         help='Check if the primary contact is the decision maker.',
     )
 
-    # ── Auto-assign pipeline based on Deal Classification ──────────────────
     CLASSIFICATION_TEAM_MAP = {
         'staffing': 'intrastack_crm.team_p1_staffing',
         'consulting': 'intrastack_crm.team_p2_consulting',
@@ -84,23 +82,97 @@ class CrmLead(models.Model):
         'managed_services': 'intrastack_crm.team_p4_managed_services',
     }
 
+    def _team_for_classification(self, classification):
+        xml_id = self.CLASSIFICATION_TEAM_MAP.get(classification)
+        return self.env.ref(xml_id, raise_if_not_found=False) if xml_id else False
+
+    def _first_stage_for_team(self, team):
+        if not team:
+            return self.env['crm.stage']
+        return self.env['crm.stage'].search(
+            [('team_id', '=', team.id)],
+            order='sequence, id',
+            limit=1,
+        )
+
+    def _prepare_pipeline_values(self, values):
+        values = dict(values)
+        classification = values.get('x_deal_classification')
+        if not classification:
+            return values
+
+        team = self._team_for_classification(classification)
+        if not team:
+            return values
+
+        values['team_id'] = team.id
+        stage = self.env['crm.stage'].browse(values.get('stage_id')).exists()
+        if not stage or stage.team_id != team:
+            first_stage = self._first_stage_for_team(team)
+            values['stage_id'] = first_stage.id if first_stage else False
+        return values
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        prepared_vals = [self._prepare_pipeline_values(vals) for vals in vals_list]
+        return super().create(prepared_vals)
+
+    def write(self, values):
+        if 'x_deal_classification' not in values:
+            return super().write(values)
+
+        for lead in self:
+            prepared_values = lead._prepare_pipeline_values(values)
+            super(CrmLead, lead).write(prepared_values)
+        return True
+
     @api.onchange('x_deal_classification')
     def _onchange_deal_classification(self):
-        """Auto-assign Sales Team + first stage when Deal Classification is selected."""
-        if not self.x_deal_classification:
-            return
-        xml_id = self.CLASSIFICATION_TEAM_MAP.get(self.x_deal_classification)
-        if not xml_id:
-            return
-        team = self.env.ref(xml_id, raise_if_not_found=False)
-        if team:
-            self.team_id = team
-            # Find the first (lowest sequence) stage for this team
-            first_stage = self.env['crm.stage'].search(
-                [('team_id', '=', team.id)],
-                order='sequence asc',
-                limit=1,
-            )
-            if first_stage:
-                self.stage_id = first_stage
+        for lead in self:
+            team = lead._team_for_classification(lead.x_deal_classification)
+            if team:
+                lead.team_id = team
+                lead.stage_id = lead._first_stage_for_team(team)
 
+    @api.constrains(
+        'type',
+        'stage_id',
+        'partner_id',
+        'user_id',
+        'expected_revenue',
+        'x_deal_classification',
+        'x_service_category',
+        'x_urgency_flag',
+        'x_source_tracking',
+    )
+    def _check_won_deal_readiness(self):
+        labels = {
+            'partner_id': _('Customer'),
+            'user_id': _('Salesperson'),
+            'x_deal_classification': _('Deal Classification'),
+            'x_service_category': _('Service Category'),
+            'x_urgency_flag': _('Urgency Flag'),
+            'x_source_tracking': _('Source Tracking'),
+        }
+        for lead in self.filtered(lambda item: item.type == 'opportunity' and item.stage_id.is_won):
+            missing = [label for field_name, label in labels.items() if not lead[field_name]]
+            if lead.expected_revenue <= 0:
+                missing.append(_('Expected Revenue'))
+            if missing:
+                raise ValidationError(_(
+                    'The opportunity cannot be marked won until these fields are completed: %s',
+                    ', '.join(missing),
+                ))
+
+    @api.constrains('x_deal_classification', 'team_id', 'stage_id')
+    def _check_pipeline_consistency(self):
+        for lead in self.filtered('x_deal_classification'):
+            expected_team = lead._team_for_classification(lead.x_deal_classification)
+            if expected_team and lead.team_id != expected_team:
+                raise ValidationError(_(
+                    'Deal Classification and Sales Team must use the same IntraStack pipeline.'
+                ))
+            if lead.stage_id.team_id and lead.stage_id.team_id != lead.team_id:
+                raise ValidationError(_(
+                    'The selected stage does not belong to the opportunity Sales Team.'
+                ))

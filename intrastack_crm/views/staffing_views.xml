@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- CRM opportunity smart button -->
+    <record id="view_crm_lead_form_staffing_requirements" model="ir.ui.view">
+        <field name="name">crm.lead.form.staffing.requirements</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_view_staffing_requirements"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-users"
+                    invisible="type != 'opportunity'">
+                    <field name="staffing_requirement_count" widget="statinfo" string="Staffing"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Requirement views -->
+    <record id="view_staffing_requirement_tree" model="ir.ui.view">
+        <field name="name">intrastack.staffing.requirement.tree</field>
+        <field name="model">intrastack.staffing.requirement</field>
+        <field name="arch" type="xml">
+            <tree
+                string="Staffing Requirements"
+                decoration-success="state == 'filled'"
+                decoration-muted="state == 'cancelled'"
+                decoration-warning="state == 'on_hold'">
+                <field name="name"/>
+                <field name="job_title"/>
+                <field name="partner_id"/>
+                <field name="lead_id" optional="hide"/>
+                <field name="state" widget="badge"/>
+                <field name="positions"/>
+                <field name="filled_positions"/>
+                <field name="open_positions"/>
+                <field name="target_fill_date"/>
+                <field name="recruiter_id"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="bill_rate" widget="monetary" optional="hide"/>
+                <field name="margin_percent" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_staffing_requirement_kanban" model="ir.ui.view">
+        <field name="name">intrastack.staffing.requirement.kanban</field>
+        <field name="model">intrastack.staffing.requirement</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="job_title"/>
+                <field name="partner_id"/>
+                <field name="target_fill_date"/>
+                <field name="filled_positions"/>
+                <field name="positions"/>
+                <field name="recruiter_id"/>
+                <field name="margin_percent"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="text-muted">
+                                        <field name="job_title"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt8">
+                                <field name="partner_id"/>
+                            </div>
+                            <div class="mt8 d-flex justify-content-between">
+                                <span>
+                                    <i class="fa fa-users me-1" title="Filled positions"/>
+                                    <field name="filled_positions"/> / <field name="positions"/>
+                                </span>
+                                <span>
+                                    <field name="target_fill_date"/>
+                                </span>
+                            </div>
+                            <div class="mt8 text-muted">
+                                <i class="fa fa-user me-1" title="Recruiter"/>
+                                <field name="recruiter_id"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_staffing_requirement_form" model="ir.ui.view">
+        <field name="name">intrastack.staffing.requirement.form</field>
+        <field name="model">intrastack.staffing.requirement</field>
+        <field name="arch" type="xml">
+            <form string="Staffing Requirement">
+                <header>
+                    <button name="action_open" type="object" string="Open" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_start_sourcing" type="object" string="Start Sourcing" class="oe_highlight" invisible="state not in ['open', 'draft']"/>
+                    <button name="action_start_interview" type="object" string="Move to Interview" invisible="state not in ['sourcing', 'open']"/>
+                    <button name="action_start_offer" type="object" string="Move to Offer" invisible="state not in ['interview', 'sourcing']"/>
+                    <button name="action_hold" type="object" string="Put On Hold" invisible="state in ['filled', 'cancelled', 'on_hold']"/>
+                    <button name="action_cancel" type="object" string="Cancel" confirm="Cancel this requirement and stop active sourcing?" invisible="state == 'cancelled'"/>
+                    <button name="action_reopen" type="object" string="Reopen" class="oe_highlight" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,sourcing,interview,offer,filled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="submission_count" widget="statinfo" string="Submissions"/>
+                        </button>
+                        <button name="action_view_interviews" type="object" class="oe_stat_button" icon="fa-comments">
+                            <field name="interview_count" widget="statinfo" string="Interviews"/>
+                        </button>
+                        <button name="action_view_placements" type="object" class="oe_stat_button" icon="fa-check-circle">
+                            <field name="placement_count" widget="statinfo" string="Placements"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" text="Cancelled" bg_color="bg-danger" invisible="state != 'cancelled'"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="e.g. Senior Cloud Architect Requirement"/></h1>
+                    </div>
+                    <group>
+                        <group string="Customer">
+                            <field name="lead_id"/>
+                            <field name="partner_id"/>
+                            <field name="contact_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Ownership">
+                            <field name="recruiter_id"/>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="positions"/>
+                            <field name="filled_positions" readonly="1"/>
+                            <field name="open_positions" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Role and Engagement">
+                        <group>
+                            <field name="job_title"/>
+                            <field name="engagement_type"/>
+                            <field name="billing_unit"/>
+                            <field name="work_arrangement"/>
+                        </group>
+                        <group>
+                            <field name="location"/>
+                            <field name="start_date"/>
+                            <field name="target_fill_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                    <group string="Commercial Targets">
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="bill_rate"/>
+                            <field name="cost_rate"/>
+                        </group>
+                        <group>
+                            <field name="margin_amount" readonly="1"/>
+                            <field name="margin_percent" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Role Specification">
+                            <field name="skills" placeholder="Required technologies, certifications and clearance..."/>
+                            <field name="description" placeholder="Describe the role, responsibilities and acceptance criteria..."/>
+                        </page>
+                        <page string="Candidate Submissions">
+                            <field name="submission_ids" context="{'default_requirement_id': id}" readonly="state in ['filled', 'cancelled']">
+                                <tree>
+                                    <field name="candidate_id"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="source"/>
+                                    <field name="recruiter_id"/>
+                                    <field name="submitted_on"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="proposed_bill_rate"/>
+                                    <field name="proposed_cost_rate"/>
+                                    <field name="margin_percent"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Placements">
+                            <field name="placement_ids">
+                                <tree create="false" delete="false">
+                                    <field name="candidate_id"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="contract_reference"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="bill_rate"/>
+                                    <field name="cost_rate"/>
+                                    <field name="margin_percent"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Internal Notes">
+                            <field name="notes" placeholder="Internal recruiter notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_staffing_requirement_search" model="ir.ui.view">
+        <field name="name">intrastack.staffing.requirement.search</field>
+        <field name="model">intrastack.staffing.requirement</field>
+        <field name="arch" type="xml">
+            <search string="Staffing Requirements">
+                <field name="name"/>
+                <field name="job_title"/>
+                <field name="partner_id"/>
+                <field name="lead_id"/>
+                <field name="recruiter_id"/>
+                <field name="state"/>
+                <filter name="active_requirements" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="open_requirements" string="Open" domain="[('state', 'not in', ['filled', 'cancelled'])]"/>
+                <filter name="urgent_fill" string="Due in 30 Days" domain="[('target_fill_date', '&gt;=', context_today()), ('target_fill_date', '&lt;=', (context_today() + relativedelta(days=30)).strftime('%Y-%m-%d')), ('state', 'not in', ['filled', 'cancelled'])]"/>
+                <separator/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_recruiter" string="Recruiter" context="{'group_by': 'recruiter_id'}"/>
+                <filter name="group_customer" string="Customer" context="{'group_by': 'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Candidate submission views -->
+    <record id="view_staffing_submission_tree" model="ir.ui.view">
+        <field name="name">intrastack.staffing.submission.tree</field>
+        <field name="model">intrastack.staffing.submission</field>
+        <field name="arch" type="xml">
+            <tree string="Candidate Submissions" decoration-success="state == 'accepted'" decoration-danger="state in ['rejected', 'withdrawn']">
+                <field name="name"/>
+                <field name="candidate_id"/>
+                <field name="requirement_id"/>
+                <field name="customer_id"/>
+                <field name="state" widget="badge"/>
+                <field name="source"/>
+                <field name="recruiter_id"/>
+                <field name="submitted_on"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="proposed_bill_rate"/>
+                <field name="proposed_cost_rate"/>
+                <field name="margin_percent"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_staffing_submission_form" model="ir.ui.view">
+        <field name="name">intrastack.staffing.submission.form</field>
+        <field name="model">intrastack.staffing.submission</field>
+        <field name="arch" type="xml">
+            <form string="Candidate Submission">
+                <header>
+                    <button name="action_start_screening" type="object" string="Start Screening" class="oe_highlight" invisible="state != 'sourcing'"/>
+                    <button name="action_submit" type="object" string="Submit to Client" class="oe_highlight" invisible="state not in ['screening', 'sourcing']"/>
+                    <button name="action_move_to_interview" type="object" string="Move to Interview" invisible="state not in ['submitted', 'screening']"/>
+                    <button name="action_move_to_offer" type="object" string="Move to Offer" invisible="state != 'interview'"/>
+                    <button name="action_accept" type="object" string="Accept Candidate" class="oe_highlight" invisible="state != 'offer'"/>
+                    <button name="action_reject" type="object" string="Reject" confirm="Reject this candidate submission?" invisible="state in ['rejected', 'withdrawn', 'accepted']"/>
+                    <button name="action_withdraw" type="object" string="Withdraw" confirm="Withdraw this candidate submission?" invisible="state in ['rejected', 'withdrawn', 'accepted']"/>
+                    <button name="action_reopen" type="object" string="Reopen" class="oe_highlight" invisible="state not in ['rejected', 'withdrawn']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="sourcing,screening,submitted,interview,offer,accepted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_interviews" type="object" class="oe_stat_button" icon="fa-comments">
+                            <field name="interview_count" widget="statinfo" string="Interviews"/>
+                        </button>
+                        <button name="action_view_placements" type="object" class="oe_stat_button" icon="fa-check-circle">
+                            <field name="placement_count" widget="statinfo" string="Placements"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Candidate and Requirement">
+                            <field name="candidate_id"/>
+                            <field name="requirement_id"/>
+                            <field name="customer_id" readonly="1"/>
+                            <field name="lead_id" readonly="1"/>
+                        </group>
+                        <group string="Ownership">
+                            <field name="recruiter_id"/>
+                            <field name="source"/>
+                            <field name="vendor_id" invisible="source != 'vendor'" required="source == 'vendor'"/>
+                            <field name="submitted_on"/>
+                            <field name="availability_date"/>
+                        </group>
+                    </group>
+                    <group string="Commercial Proposal">
+                        <field name="currency_id" invisible="1"/>
+                        <field name="proposed_bill_rate"/>
+                        <field name="proposed_cost_rate"/>
+                        <field name="margin_amount" readonly="1"/>
+                        <field name="margin_percent" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Screening">
+                            <field name="screening_summary" placeholder="Screening notes, skills validation and availability..."/>
+                        </page>
+                        <page string="Resume / CV">
+                            <field name="resume_file" filename="resume_filename" widget="binary"/>
+                            <field name="resume_filename" invisible="1"/>
+                        </page>
+                        <page string="Internal Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_staffing_submission_search" model="ir.ui.view">
+        <field name="name">intrastack.staffing.submission.search</field>
+        <field name="model">intrastack.staffing.submission</field>
+        <field name="arch" type="xml">
+            <search string="Candidate Submissions">
+                <field name="name"/>
+                <field name="candidate_id"/>
+                <field name="requirement_id"/>
+                <field name="customer_id"/>
+                <field name="recruiter_id"/>
+                <field name="state"/>
+                <filter name="active_candidates" string="Active" domain="[('active', '=', True), ('state', 'not in', ['rejected', 'withdrawn'])]"/>
+                <filter name="awaiting_client" string="Awaiting Client" domain="[('state', '=', 'submitted')]"/>
+                <filter name="accepted" string="Accepted" domain="[('state', '=', 'accepted')]"/>
+                <separator/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_recruiter" string="Recruiter" context="{'group_by': 'recruiter_id'}"/>
+                <filter name="group_requirement" string="Requirement" context="{'group_by': 'requirement_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Interview views -->
+    <record id="view_staffing_interview_tree" model="ir.ui.view">
+        <field name="name">intrastack.staffing.interview.tree</field>
+        <field name="model">intrastack.staffing.interview</field>
+        <field name="arch" type="xml">
+            <tree string="Interviews" decoration-success="state == 'completed'" decoration-muted="state in ['cancelled', 'no_show']">
+                <field name="start_datetime"/>
+                <field name="end_datetime" optional="hide"/>
+                <field name="candidate_id"/>
+                <field name="requirement_id"/>
+                <field name="customer_id"/>
+                <field name="interview_type"/>
+                <field name="mode"/>
+                <field name="state" widget="badge"/>
+                <field name="outcome"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_staffing_interview_calendar" model="ir.ui.view">
+        <field name="name">intrastack.staffing.interview.calendar</field>
+        <field name="model">intrastack.staffing.interview</field>
+        <field name="arch" type="xml">
+            <calendar string="Interview Schedule" date_start="start_datetime" date_stop="end_datetime" color="requirement_id" mode="week">
+                <field name="candidate_id"/>
+                <field name="requirement_id"/>
+                <field name="interview_type"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_staffing_interview_form" model="ir.ui.view">
+        <field name="name">intrastack.staffing.interview.form</field>
+        <field name="model">intrastack.staffing.interview</field>
+        <field name="arch" type="xml">
+            <form string="Staffing Interview">
+                <header>
+                    <button name="action_complete" type="object" string="Complete Interview" class="oe_highlight" invisible="state != 'scheduled'"/>
+                    <button name="action_no_show" type="object" string="No Show" invisible="state != 'scheduled'"/>
+                    <button name="action_cancel" type="object" string="Cancel" confirm="Cancel this interview?" invisible="state in ['completed', 'cancelled']"/>
+                    <button name="action_reschedule" type="object" string="Reschedule" invisible="state not in ['cancelled', 'no_show']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="scheduled,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Interview">
+                            <field name="requirement_id"/>
+                            <field name="submission_id"/>
+                            <field name="candidate_id" readonly="1"/>
+                            <field name="customer_id" readonly="1"/>
+                            <field name="interview_type"/>
+                            <field name="mode"/>
+                        </group>
+                        <group string="Schedule">
+                            <field name="start_datetime"/>
+                            <field name="duration_hours"/>
+                            <field name="end_datetime" readonly="1"/>
+                            <field name="meeting_link" invisible="mode != 'video'"/>
+                            <field name="location" invisible="mode != 'onsite'"/>
+                        </group>
+                    </group>
+                    <group string="Participants">
+                        <field name="interviewer_ids" widget="many2many_tags"/>
+                        <field name="client_interviewer_id"/>
+                    </group>
+                    <group string="Outcome">
+                        <field name="outcome"/>
+                        <field name="feedback" placeholder="Record structured feedback and next steps..."/>
+                    </group>
+                    <field name="notes" placeholder="Internal notes..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_staffing_interview_search" model="ir.ui.view">
+        <field name="name">intrastack.staffing.interview.search</field>
+        <field name="model">intrastack.staffing.interview</field>
+        <field name="arch" type="xml">
+            <search string="Interviews">
+                <field name="candidate_id"/>
+                <field name="requirement_id"/>
+                <field name="customer_id"/>
+                <field name="interview_type"/>
+                <field name="state"/>
+                <field name="outcome"/>
+                <filter name="upcoming" string="Upcoming" domain="[('state', '=', 'scheduled')]"/>
+                <filter name="needs_feedback" string="Needs Feedback" domain="[('state', '=', 'scheduled'), ('start_datetime', '&lt;', context_today())]"/>
+                <separator/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_type" string="Interview Round" context="{'group_by': 'interview_type'}"/>
+                <filter name="group_requirement" string="Requirement" context="{'group_by': 'requirement_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Placement views -->
+    <record id="view_staffing_placement_tree" model="ir.ui.view">
+        <field name="name">intrastack.staffing.placement.tree</field>
+        <field name="model">intrastack.staffing.placement</field>
+        <field name="arch" type="xml">
+            <tree string="Staffing Placements" decoration-success="state in ['confirmed', 'active']" decoration-muted="state in ['completed', 'cancelled']">
+                <field name="name"/>
+                <field name="candidate_id"/>
+                <field name="customer_id"/>
+                <field name="requirement_id"/>
+                <field name="state" widget="badge"/>
+                <field name="contract_reference"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="bill_rate"/>
+                <field name="cost_rate"/>
+                <field name="margin_percent"/>
+                <field name="manager_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_staffing_placement_form" model="ir.ui.view">
+        <field name="name">intrastack.staffing.placement.form</field>
+        <field name="model">intrastack.staffing.placement</field>
+        <field name="arch" type="xml">
+            <form string="Staffing Placement">
+                <header>
+                    <button name="action_submit_for_approval" type="object" string="Submit for Approval" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_confirm" type="object" string="Confirm Placement" class="oe_highlight" invisible="state not in ['draft', 'pending_approval']"/>
+                    <button name="action_activate" type="object" string="Start Placement" class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <button name="action_complete" type="object" string="Complete" invisible="state != 'active'"/>
+                    <button name="action_cancel" type="object" string="Cancel" confirm="Cancel this placement?" invisible="state in ['completed', 'cancelled']"/>
+                    <button name="action_reopen" type="object" string="Reopen" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending_approval,confirmed,active,completed"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" text="Cancelled" bg_color="bg-danger" invisible="state != 'cancelled'"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Placement">
+                            <field name="requirement_id"/>
+                            <field name="submission_id"/>
+                            <field name="candidate_id" readonly="1"/>
+                            <field name="customer_id" readonly="1"/>
+                            <field name="lead_id" readonly="1"/>
+                        </group>
+                        <group string="Contract">
+                            <field name="contract_reference"/>
+                            <field name="customer_po"/>
+                            <field name="manager_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                    <group string="Commercial Terms">
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="billing_unit"/>
+                            <field name="bill_rate"/>
+                            <field name="cost_rate"/>
+                            <field name="hours_per_week" invisible="billing_unit != 'hour'"/>
+                        </group>
+                        <group>
+                            <field name="margin_amount" readonly="1"/>
+                            <field name="margin_percent" readonly="1"/>
+                            <field name="weekly_revenue" readonly="1"/>
+                            <field name="weekly_margin" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Delivery Links">
+                        <field name="sale_order_id"/>
+                        <field name="project_id"/>
+                    </group>
+                    <field name="notes" placeholder="Contract, onboarding and delivery notes..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_staffing_placement_search" model="ir.ui.view">
+        <field name="name">intrastack.staffing.placement.search</field>
+        <field name="model">intrastack.staffing.placement</field>
+        <field name="arch" type="xml">
+            <search string="Staffing Placements">
+                <field name="name"/>
+                <field name="candidate_id"/>
+                <field name="customer_id"/>
+                <field name="requirement_id"/>
+                <field name="contract_reference"/>
+                <field name="manager_id"/>
+                <field name="state"/>
+                <filter name="active_placements" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="confirmed_placements" string="Confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter name="renewals" string="Ending in 30 Days" domain="[('end_date', '&gt;=', context_today()), ('end_date', '&lt;=', (context_today() + relativedelta(days=30)).strftime('%Y-%m-%d')), ('state', 'in', ['confirmed', 'active'])]"/>
+                <separator/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_customer" string="Customer" context="{'group_by': 'customer_id'}"/>
+                <filter name="group_manager" string="Manager" context="{'group_by': 'manager_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Window actions -->
+    <record id="action_staffing_requirement" model="ir.actions.act_window">
+        <field name="name">Staffing Requirements</field>
+        <field name="res_model">intrastack.staffing.requirement</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph,activity</field>
+        <field name="search_view_id" ref="view_staffing_requirement_search"/>
+        <field name="context">{'search_default_active_requirements': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a staffing requirement</p>
+            <p>Define the role, customer, target dates and commercial rates before sourcing candidates.</p>
+        </field>
+    </record>
+
+    <record id="action_staffing_submission" model="ir.actions.act_window">
+        <field name="name">Candidate Submissions</field>
+        <field name="res_model">intrastack.staffing.submission</field>
+        <field name="view_mode">tree,form,activity</field>
+        <field name="search_view_id" ref="view_staffing_submission_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Submit a candidate</p>
+            <p>Track screening, client submission, interview, offer and acceptance from one record.</p>
+        </field>
+    </record>
+
+    <record id="action_staffing_interview" model="ir.actions.act_window">
+        <field name="name">Interview Schedule</field>
+        <field name="res_model">intrastack.staffing.interview</field>
+        <field name="view_mode">calendar,tree,form,activity</field>
+        <field name="search_view_id" ref="view_staffing_interview_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Schedule an interview</p>
+            <p>Capture interview participants, feedback and the hiring outcome.</p>
+        </field>
+    </record>
+
+    <record id="action_staffing_placement" model="ir.actions.act_window">
+        <field name="name">Staffing Placements</field>
+        <field name="res_model">intrastack.staffing.placement</field>
+        <field name="view_mode">tree,form,pivot,graph,activity</field>
+        <field name="search_view_id" ref="view_staffing_placement_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Confirm a placement</p>
+            <p>Record contract references, rates, margin and delivery links for each placed consultant.</p>
+        </field>
+    </record>
+
+    <!-- Staffing workspace menu -->
+    <menuitem id="menu_staffing_operations_root"
+        name="Staffing Operations"
+        parent="crm.crm_menu_root"
+        sequence="20"
+        groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_staffing_requirements"
+        name="Requirements"
+        parent="menu_staffing_operations_root"
+        action="action_staffing_requirement"
+        sequence="10"
+        groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_staffing_submissions"
+        name="Candidate Submissions"
+        parent="menu_staffing_operations_root"
+        action="action_staffing_submission"
+        sequence="20"
+        groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_staffing_interviews"
+        name="Interview Schedule"
+        parent="menu_staffing_operations_root"
+        action="action_staffing_interview"
+        sequence="30"
+        groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_staffing_placements"
+        name="Placements"
+        parent="menu_staffing_operations_root"
+        action="action_staffing_placement"
+        sequence="40"
+        groups="sales_team.group_sale_salesman"/>
+</odoo>

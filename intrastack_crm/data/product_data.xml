@@ -14,7 +14,7 @@
 
         <!-- ─── Staffing Products ──────────────────────────────────────────── -->
 
-        <record id="product_staffing_resource" model="product.template">
+        <record id="product_staffing_resource" model="product.product">
             <field name="name">Staffing Resource — Engineer</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>
@@ -27,7 +27,7 @@
             <field name="purchase_ok">False</field>
         </record>
 
-        <record id="product_staffing_senior" model="product.template">
+        <record id="product_staffing_senior" model="product.product">
             <field name="name">Staffing Resource — Senior Engineer</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>
@@ -40,7 +40,7 @@
             <field name="purchase_ok">False</field>
         </record>
 
-        <record id="product_staffing_lead" model="product.template">
+        <record id="product_staffing_lead" model="product.product">
             <field name="name">Staffing Resource — Tech Lead</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>
@@ -55,7 +55,7 @@
 
         <!-- ─── Consulting Products ────────────────────────────────────────── -->
 
-        <record id="product_consulting_discovery" model="product.template">
+        <record id="product_consulting_discovery" model="product.product">
             <field name="name">Consulting — Discovery &amp; Assessment</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>
@@ -68,7 +68,7 @@
             <field name="purchase_ok">False</field>
         </record>
 
-        <record id="product_consulting_implementation" model="product.template">
+        <record id="product_consulting_implementation" model="product.product">
             <field name="name">Consulting — Implementation Services</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>
@@ -81,7 +81,7 @@
             <field name="purchase_ok">False</field>
         </record>
 
-        <record id="product_consulting_project_mgmt" model="product.template">
+        <record id="product_consulting_project_mgmt" model="product.product">
             <field name="name">Consulting — Project Management</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>
@@ -96,7 +96,7 @@
 
         <!-- ─── Managed Services Products ──────────────────────────────────── -->
 
-        <record id="product_managed_monthly" model="product.template">
+        <record id="product_managed_monthly" model="product.product">
             <field name="name">Managed Services — Monthly Recurring</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>
@@ -109,7 +109,7 @@
             <field name="purchase_ok">False</field>
         </record>
 
-        <record id="product_managed_onboarding" model="product.template">
+        <record id="product_managed_onboarding" model="product.product">
             <field name="name">Managed Services — Onboarding Setup</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>
@@ -122,7 +122,7 @@
             <field name="purchase_ok">False</field>
         </record>
 
-        <record id="product_managed_addon_hours" model="product.template">
+        <record id="product_managed_addon_hours" model="product.product">
             <field name="name">Managed Services — Additional Hours</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_intrastack"/>

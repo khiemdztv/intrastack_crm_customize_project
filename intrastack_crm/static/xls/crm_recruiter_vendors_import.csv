@@ -1,0 +1,2 @@
+External ID,Name,Is a Company,Email,Phone,Website Link,Street,City,Zip,Country/Code,Tags/External ID
+intrastack_import.vendor_talentbridge,TalentBridge Recruiting,TRUE,operations@talentbridge.example,+84 28 5555 0301,https://talentbridge.example,50 Vendor Road,Ho Chi Minh City,700000,VN,"intrastack_crm.tag_vendor,intrastack_crm.tag_recruiter_partner"

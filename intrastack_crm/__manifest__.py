@@ -1,51 +1,60 @@
 {
     'name': 'IntraStack CRM Platform',
-    'version': '17.0.1.0.0',
+    'version': '17.0.2.2.0',
     'category': 'Sales/CRM',
-    'summary': 'Complete CRM configuration for IntraStack Solutions — 4 pipelines, custom fields, automation, dashboard',
+    'summary': 'Integrated CRM, sales, staffing and delivery workflows for IntraStack Solutions',
     'description': """
-IntraStack CRM Platform Module
-===============================
+IntraStack CRM Platform
+=======================
 
-This module configures the complete IntraStack CRM platform on Odoo 17 Community Edition:
+This module configures IntraStack's CRM platform on Odoo 17 Community Edition.
 
-**Phase 1 — Foundation:**
-- 4 CRM Pipelines (Staffing, Consulting, Subcontracting, Managed Services) with 26 stages
-- 6 Custom Fields on every opportunity (Deal Classification, Service Category, Urgency, Source, Value, Decision Maker)
-- 10 Contact Tags for relationship categorization
-- 4 Automation Rules (R1-R4) using Activity system
-- 3 Project Templates (Staffing, Consulting, Managed Service engagements)
-- 3 Sales Quotation Templates (Rate Card, SOW, MSC)
-- 7 CEO Dashboard saved filter views
+Capabilities
+------------
 
-**Demo Data:**
-- 15+ sample contacts across all entity types
-- 20+ sample opportunities across 4 pipelines
-- 5+ sample projects with tasks
-    """,
+* Four routed CRM pipelines: Staffing, Consulting, Subcontracting and Managed Services.
+* Customer/contact integration and import-compatible opportunity fields.
+* Quotation templates, contract dates and CRM-to-project traceability.
+* Staffing requirements, candidate submissions, interviews and placements.
+* Employee internal-user activation with operational role bundles.
+* Automation activities, project templates and CEO saved filters.
+
+Optional demo data is available for non-production databases. Production
+installation must use ``--without-demo=all``.
+""",
     'author': 'IntraStack Solutions',
     'website': 'https://crm.intrastack.com',
     'license': 'LGPL-3',
     'depends': [
         'crm',
         'sale_management',
+        'sale_crm',
+        'sale_project',
+        'sale_timesheet',
         'project',
         'hr_timesheet',
+        'auth_signup',
         'contacts',
         'base_automation',
     ],
     'data': [
-        # Views
-        'views/crm_lead_views.xml',
-        'views/pipeline_menus.xml',
-        # Data — order matters!
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        # Data order matters.
         'data/contact_tags.xml',
         'data/crm_teams.xml',
         'data/crm_stages.xml',
         'data/product_data.xml',
-        'data/sale_templates.xml',
         'data/project_templates.xml',
+        'data/service_tracking.xml',
+        'data/sale_templates.xml',
         'data/automation_rules.xml',
+        'data/ceo_dashboard_filters.xml',
+        'views/crm_lead_views.xml',
+        'views/crm_delivery_views.xml',
+        'views/staffing_views.xml',
+        'views/hr_employee_views.xml',
+        'views/pipeline_menus.xml',
     ],
     'demo': [
         'demo/demo_contacts.xml',
@@ -55,5 +64,5 @@ This module configures the complete IntraStack CRM platform on Odoo 17 Community
     'installable': True,
     'application': True,
     'auto_install': False,
-    'images': ['static/description/icon.png'],
+    'images': [],
 }

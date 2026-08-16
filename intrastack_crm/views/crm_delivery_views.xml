@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- CRM opportunity: contract dates, commercial links and delivery action. -->
+    <record id="view_crm_lead_form_intrastack_delivery" model="ir.ui.view">
+        <field name="name">crm.lead.form.intrastack.delivery</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_set_won_rainbowman']" position="before">
+                <button name="action_create_intrastack_quotation"
+                        string="Create Ready Quotation"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="type == 'lead' or not partner_id"/>
+                <button name="action_create_intrastack_delivery_project"
+                        string="Create Delivery Project"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="type == 'lead' or not intrastack_can_create_delivery_project"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_intrastack_delivery_project"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-cubes"
+                        invisible="intrastack_delivery_project_count == 0">
+                    <field name="intrastack_delivery_project_count" widget="statinfo" string="Delivery Project"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//notebook" position="before">
+                <group string="Contract &amp; Delivery" name="intrastack_contract_delivery">
+                    <group>
+                        <field name="intrastack_contract_start_date"/>
+                        <field name="intrastack_contract_end_date"/>
+                        <field name="intrastack_contract_renewal_date"/>
+                    </group>
+                    <group>
+                        <field name="intrastack_primary_order_id"
+                               options="{'no_create': True}"
+                               readonly="1"/>
+                        <field name="intrastack_delivery_project_id"
+                               options="{'no_create': True}"
+                               readonly="1"/>
+                        <field name="intrastack_delivery_project_count" invisible="1"/>
+                        <field name="intrastack_has_confirmed_order" invisible="1"/>
+                        <field name="intrastack_can_create_delivery_project" invisible="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Sale order: make the contract and project traceability visible. -->
+    <record id="view_sale_order_form_intrastack_delivery" model="ir.ui.view">
+        <field name="name">sale.order.form.intrastack.delivery</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header//button[@name='action_confirm'][1]" position="before">
+                <button name="action_create_intrastack_delivery_project"
+                        string="Create Delivery Project"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="not intrastack_can_create_delivery_project"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_intrastack_delivery_project"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-cubes"
+                        invisible="not intrastack_delivery_project_id">
+                    <span class="o_stat_text">Delivery Project</span>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='other_information']/group" position="inside">
+                <group string="IntraStack Contract" name="intrastack_contract">
+                    <field name="opportunity_id" options="{'no_create': True}"/>
+                    <field name="sale_order_template_id"/>
+                    <field name="intrastack_contract_start_date" readonly="state == 'cancel'"/>
+                    <field name="intrastack_contract_end_date" readonly="state == 'cancel'"/>
+                    <field name="intrastack_contract_renewal_date" readonly="state == 'cancel'"/>
+                    <field name="intrastack_delivery_project_id" readonly="1" options="{'no_create': True}"/>
+                    <field name="intrastack_can_create_delivery_project" invisible="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Project: expose the origin links for delivery and renewal follow-up. -->
+    <record id="view_project_form_intrastack_delivery" model="ir.ui.view">
+        <field name="name">project.project.form.intrastack.delivery</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_intrastack_opportunity"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-handshake-o"
+                        invisible="not intrastack_opportunity_id">
+                    <span class="o_stat_text">Opportunity</span>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="before">
+                <group string="CRM &amp; Commercial Origin" name="intrastack_origin">
+                    <field name="intrastack_opportunity_id" options="{'no_create': True}"/>
+                    <field name="intrastack_sale_order_id" options="{'no_create': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

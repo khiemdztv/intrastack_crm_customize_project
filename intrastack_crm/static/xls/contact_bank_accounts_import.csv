@@ -1,0 +1,2 @@
+External ID,Account Number,Account Holder/External ID,Bank/External ID,Currency/Name,Account Holder Name
+intrastack_import.bank_account_acme_eur,BE00 0000 0000 0000,intrastack_import.customer_acme,intrastack_import.bank_bnp_paribas_fortis,EUR,ACME Manufacturing

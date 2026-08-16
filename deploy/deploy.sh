@@ -1,133 +1,111 @@
-#!/bin/bash
-# ══════════════════════════════════════════════════════════════════════════════
-# IntraStack CRM Module — Auto Deploy Script
-# Deploys the intrastack_crm module to Odoo 17 running in Docker
-# ══════════════════════════════════════════════════════════════════════════════
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-set -e
+ODOO_WAS_STOPPED=0
+BACKUP_READY=0
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Invoked indirectly by the ERR trap below.
+# shellcheck disable=SC2329
+on_error() {
+    local line="${1:-unknown}"
+    echo "Deployment failed near line ${line}." >&2
+    if [[ "${ODOO_WAS_STOPPED}" == "1" ]]; then
+        echo "Odoo was left stopped to protect the database." >&2
+    fi
+    if [[ "${BACKUP_READY}" == "1" ]]; then
+        echo "Restore from deploy/backups/ only after checking the target DB and filestore." >&2
+    fi
+}
+trap 'on_error $LINENO' ERR
 
-echo -e "${BLUE}══════════════════════════════════════════════════════════════${NC}"
-echo -e "${BLUE}  IntraStack CRM Module — Deploy Script${NC}"
-echo -e "${BLUE}══════════════════════════════════════════════════════════════${NC}"
-echo ""
+# Production-safe IntraStack CRM deployment.
+# Run from deploy/ after copying .env.example to .env and editing secrets.
+# The module is bind-mounted by docker-compose; this script never deletes the
+# live addon directory and always takes a PostgreSQL + filestore backup first.
 
-# ── Step 0: Detect Docker container ──────────────────────────────────────────
-echo -e "${YELLOW}[1/5] Detecting Odoo Docker container...${NC}"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DEPLOY_DIR="${ROOT_DIR}/deploy"
+cd "${DEPLOY_DIR}"
 
-# Try to find the Odoo container automatically
-ODOO_CONTAINER=$(sudo docker ps --filter "ancestor=odoo:17" --format "{{.Names}}" 2>/dev/null | head -1)
-
-if [ -z "$ODOO_CONTAINER" ]; then
-    # Try broader search
-    ODOO_CONTAINER=$(sudo docker ps --format "{{.Names}}" 2>/dev/null | grep -i "odoo" | head -1)
-fi
-
-if [ -z "$ODOO_CONTAINER" ]; then
-    echo -e "${RED}ERROR: Could not find Odoo Docker container.${NC}"
-    echo "Available containers:"
-    sudo docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
-    echo ""
-    echo "Please set the container name manually:"
-    echo "  export ODOO_CONTAINER=your_container_name"
-    echo "  bash deploy.sh"
+if [[ ! -f .env ]]; then
+    echo "Missing deploy/.env. Copy .env.example to .env and set production values." >&2
     exit 1
 fi
 
-echo -e "${GREEN}  ✓ Found Odoo container: ${ODOO_CONTAINER}${NC}"
-
-# ── Step 1: Detect addons path inside container ─────────────────────────────
-echo -e "${YELLOW}[2/5] Detecting addons path...${NC}"
-
-# Check common addons paths
-ADDONS_PATH=""
-for path in "/mnt/extra-addons" "/opt/odoo/custom-addons" "/opt/odoo/addons" "/var/lib/odoo/addons"; do
-    if sudo docker exec "$ODOO_CONTAINER" test -d "$path" 2>/dev/null; then
-        ADDONS_PATH="$path"
-        break
-    fi
-done
-
-if [ -z "$ADDONS_PATH" ]; then
-    # Try to get from odoo.conf
-    ADDONS_PATH=$(sudo docker exec "$ODOO_CONTAINER" grep -oP 'addons_path\s*=\s*\K.*' /etc/odoo/odoo.conf 2>/dev/null | tr ',' '\n' | grep -v '/usr/lib' | head -1 | tr -d '[:space:]')
+# shellcheck disable=SC1091
+source .env
+: "${ODOO_DB:?ODOO_DB is required}"
+: "${POSTGRES_USER:?POSTGRES_USER is required}"
+: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+: "${ODOO_MASTER_PASSWORD:?ODOO_MASTER_PASSWORD is required}"
+if [[ ! "${ODOO_DB}" =~ ^[A-Za-z0-9_]+$ ]]; then
+    echo "ODOO_DB may contain only letters, numbers and underscores." >&2
+    exit 1
+fi
+if [[ "${POSTGRES_PASSWORD}" == replace-with-* || "${ODOO_MASTER_PASSWORD}" == replace-with-* ]]; then
+    echo "Replace example secrets in deploy/.env before running deployment." >&2
+    exit 1
 fi
 
-if [ -z "$ADDONS_PATH" ]; then
-    ADDONS_PATH="/mnt/extra-addons"
-    echo -e "${YELLOW}  ⚠ Could not detect addons path, using default: ${ADDONS_PATH}${NC}"
+mkdir -p backups
+STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+DB_BACKUP="backups/${ODOO_DB}_${STAMP}.dump"
+FILESTORE_BACKUP="backups/${ODOO_DB}_${STAMP}_filestore.tar.gz"
+
+echo "[1/6] Validating Docker Compose configuration"
+docker compose config >/dev/null
+
+echo "[2/6] Starting PostgreSQL"
+docker compose up -d db
+until docker compose exec -T db pg_isready -U "${POSTGRES_USER}" >/dev/null 2>&1; do
+    sleep 2
+done
+
+echo "[3/6] Backing up database and filestore"
+docker compose stop odoo >/dev/null 2>&1 || true
+ODOO_WAS_STOPPED=1
+DB_EXISTS="$(docker compose exec -T db psql -U "${POSTGRES_USER}" -d postgres -tAc \
+    "SELECT 1 FROM pg_database WHERE datname='${ODOO_DB}'")"
+if [[ "${DB_EXISTS}" == "1" ]]; then
+    docker compose exec -T db pg_dump -Fc -U "${POSTGRES_USER}" "${ODOO_DB}" > "${DB_BACKUP}"
+    if docker compose run --rm --no-deps --entrypoint sh odoo -c "test -d /var/lib/odoo/filestore/${ODOO_DB}"; then
+        docker compose run --rm --no-deps --entrypoint sh odoo -c \
+            "tar -C /var/lib/odoo/filestore -czf /backups/$(basename "${FILESTORE_BACKUP}") ${ODOO_DB}"
+    fi
+    chmod 600 "${DB_BACKUP}" "${FILESTORE_BACKUP}" 2>/dev/null || true
+    BACKUP_READY=1
 else
-    echo -e "${GREEN}  ✓ Addons path: ${ADDONS_PATH}${NC}"
+    docker compose exec -T db createdb -U "${POSTGRES_USER}" "${ODOO_DB}"
 fi
 
-# ── Step 2: Copy module to container ─────────────────────────────────────────
-echo -e "${YELLOW}[3/5] Copying module to container...${NC}"
-
-MODULE_DIR="$(cd "$(dirname "$0")/.." && pwd)/intrastack_crm"
-
-if [ ! -d "$MODULE_DIR" ]; then
-    # Try current directory
-    MODULE_DIR="$(pwd)/intrastack_crm"
+MODULE_STATE="$(docker compose exec -T db psql -U "${POSTGRES_USER}" -d "${ODOO_DB}" -tAc \
+    "SELECT state FROM ir_module_module WHERE name='intrastack_crm'" 2>/dev/null || true)"
+if [[ "${MODULE_STATE}" == *"installed"* ]]; then
+    MODULE_ACTION="-u"
+else
+    MODULE_ACTION="-i"
 fi
 
-if [ ! -d "$MODULE_DIR" ]; then
-    echo -e "${RED}ERROR: Cannot find intrastack_crm module directory.${NC}"
-    echo "Expected at: $MODULE_DIR"
-    exit 1
-fi
+echo "[4/6] Installing or upgrading intrastack_crm without demo data"
+docker compose run --rm --no-deps odoo odoo \
+    -d "${ODOO_DB}" \
+    "${MODULE_ACTION}" intrastack_crm \
+    --without-demo=all \
+    --stop-after-init \
+    --log-level=info
 
-# Remove old version if exists
-sudo docker exec "$ODOO_CONTAINER" rm -rf "${ADDONS_PATH}/intrastack_crm" 2>/dev/null || true
+echo "[5/6] Starting Odoo"
+docker compose up -d odoo
+ODOO_WAS_STOPPED=0
 
-# Copy new version
-sudo docker cp "$MODULE_DIR" "${ODOO_CONTAINER}:${ADDONS_PATH}/intrastack_crm"
-echo -e "${GREEN}  ✓ Module copied to ${ADDONS_PATH}/intrastack_crm${NC}"
-
-# ── Step 3: Set permissions ──────────────────────────────────────────────────
-echo -e "${YELLOW}[4/5] Setting file permissions...${NC}"
-sudo docker exec "$ODOO_CONTAINER" chown -R odoo:odoo "${ADDONS_PATH}/intrastack_crm" 2>/dev/null || true
-echo -e "${GREEN}  ✓ Permissions set${NC}"
-
-# ── Step 4: Restart Odoo ─────────────────────────────────────────────────────
-echo -e "${YELLOW}[5/5] Restarting Odoo container...${NC}"
-sudo docker restart "$ODOO_CONTAINER"
-echo -e "${GREEN}  ✓ Odoo restarted${NC}"
-
-# Wait for Odoo to be ready
-echo -e "${YELLOW}  Waiting for Odoo to start...${NC}"
-sleep 10
-
-# Check if Odoo is responding
-for i in {1..12}; do
-    if curl -s -o /dev/null -w "%{http_code}" http://localhost:8069/ | grep -q "200\|303"; then
-        echo -e "${GREEN}  ✓ Odoo is ready!${NC}"
-        break
+echo "[6/6] Waiting for health endpoint"
+for _ in $(seq 1 30); do
+    if curl -fsS "http://127.0.0.1:${ODOO_PORT:-8069}/web/health" >/dev/null 2>&1; then
+        echo "Deployment complete: Odoo is healthy."
+        exit 0
     fi
-    if [ $i -eq 12 ]; then
-        echo -e "${YELLOW}  ⚠ Odoo may still be starting. Check manually at http://crm.intrastack.com${NC}"
-    fi
-    sleep 5
+    sleep 3
 done
 
-echo ""
-echo -e "${BLUE}══════════════════════════════════════════════════════════════${NC}"
-echo -e "${GREEN}  Deploy complete!${NC}"
-echo -e "${BLUE}══════════════════════════════════════════════════════════════${NC}"
-echo ""
-echo -e "Next steps:"
-echo -e "  1. Go to ${BLUE}https://crm.intrastack.com${NC}"
-echo -e "  2. Login as admin"
-echo -e "  3. Go to ${YELLOW}Settings → Activate Developer Mode${NC}"
-echo -e "  4. Go to ${YELLOW}Apps → Update Apps List${NC} (top menu)"
-echo -e "  5. Search for ${GREEN}\"IntraStack\"${NC}"
-echo -e "  6. Click ${GREEN}Install${NC}"
-echo -e ""
-echo -e "  To install with demo data, make sure ${YELLOW}Demo Data${NC} is enabled"
-echo -e "  in Settings → General Settings before installing the module."
-echo ""
+echo "Odoo did not become healthy. Inspect: docker compose logs --tail=200 odoo" >&2
+exit 1

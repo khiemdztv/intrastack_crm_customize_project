@@ -1,62 +1,192 @@
-# IntraStack CRM Customization (Odoo 17)
+# IntraStack CRM Platform for Odoo 17 Community
 
-## Overview.
-This repository contains a comprehensive custom Odoo 17 Enterprise Resource Planning (ERP) and Customer Relationship Management (CRM) module developed for IntraStack Solutions. The module extends standard Odoo functionalities to support complex, multi-faceted business operations including staffing, consulting, subcontracting, and managed services.
+IntraStack CRM Platform is a custom Odoo 17 Community module that connects the
+customer database, four CRM service pipelines, Sales, staffing operations,
+employee access and project delivery in one controlled workflow.
 
-## Core Capabilities
-- Pipeline Management: Configures 4 distinct CRM pipelines with 26 specialized stages tailored for different service delivery models.
-- Data Modeling: Introduces custom fields on opportunity records (Deal Classification, Service Category, Urgency, Source, Value, Decision Maker) and implements relationship categorization tags.
-- Automated Workflows: Incorporates automated activity rules to streamline business processes and enforce sales protocols.
-- Templates Integration: Pre-configures project templates (Staffing, Consulting, Managed Service) and sales quotation templates (Rate Card, Statement of Work, Managed Service Contract) to standardize service delivery.
-- Analytics & Reporting: Includes saved filter views for executive dashboard reporting and system monitoring.
-- Demo Data Initialization: Pre-packaged with realistic demo data for seamless environment testing and validation.
+Current module release: `17.0.2.2.0`
 
-## System Workflow
+## Capabilities
 
-```mermaid
-graph TD
-    A[Lead Capture] --> B[Opportunity Qualification]
-    B --> C{Pipeline Routing}
-    C -->|Staffing Model| D[Staffing Pipeline]
-    C -->|Consulting Model| E[Consulting Pipeline]
-    C -->|Subcontracting Model| F[Subcontracting Pipeline]
-    C -->|Managed Services Model| G[Managed Services Pipeline]
-    
-    D --> H[Quotation & Proposal Generation]
-    E --> H
-    F --> H
-    G --> H
-    
-    H --> I[Contract Execution]
-    I --> J[Project Initialization]
-    
-    J --> K{Project Template Application}
-    K -->|Consulting| L[Architecture & Planning Tasks]
-    K -->|Staffing| M[Resource Allocation Tasks]
-    K -->|Managed Service| N[SLA Monitoring Setup]
-    
-    L --> O[Service Delivery & Time Tracking]
-    M --> O
-    N --> O
+- Shared customer, company, contact, candidate and recruiter/vendor database.
+- CSV/XLSX imports with downloadable IntraStack templates on Odoo Import screens.
+- Four server-routed CRM pipelines: Staffing, Consulting, Subcontracting and Managed Services.
+- Opportunity classification, service category, urgency, source, expected value and decision-maker fields.
+- Contract start, end and renewal-review dates with validation.
+- Classification-based quotation templates and service products.
+- CRM to quotation to confirmed Sales Order to delivery-project traceability.
+- Staffing Requirements, Candidate Submissions, Interview Schedule and Placements.
+- Resume, availability, bill/cost rate and gross-margin tracking.
+- Role-driven internal employee activation for Sales, Recruitment, Projects and Timesheets.
+- Automated follow-up activities and management filters.
+- Production-safe Docker Compose deployment with database and filestore backup.
+
+## End-To-End Workflows
+
+### Consulting and Cloud Transformation
+
+```text
+Customer and Contacts
+  -> Consulting Opportunity
+  -> Discovery
+  -> Qualification
+  -> Solution Design
+  -> SOW Quotation
+  -> Confirmed Sales Order
+  -> Delivery Project
+  -> Tasks and Timesheets
 ```
 
-## Technical Stack
-- Framework: Odoo 17 Community Edition
-- Backend Core: Python 3
-- Data Structures & User Interface: XML
-- Automation: Shell Scripting (Bash) for deployment pipelines
+### Staffing
 
-## Deployment Guide
-1. Navigate to your Odoo custom addons directory.
-2. Clone this repository into the addons directory:
-   ```bash
-   git clone https://github.com/khiemdztv/intrastack_crm_customize_project.git intrastack_crm
-   ```
-3. Restart the Odoo service environment to detect the new module.
-4. Access the Odoo instance with Administrator privileges.
-5. Activate "Developer Mode" in the settings.
-6. Navigate to the Apps menu and select "Update Apps List".
-7. Search for "IntraStack CRM Platform" and execute the installation.
+```text
+Customer and Staffing Opportunity
+  -> Staffing Requirement
+  -> Candidate Submission
+  -> Interview
+  -> Offer
+  -> Placement Approval
+  -> Active Placement
+  -> Project and Billing Operations
+```
+
+## CRM Pipelines
+
+| Pipeline | Stages |
+|---|---|
+| P1 Staffing | New Requirement, Sourcing, Submitted, Interviews, Offer, Closed Won, Active Billing, Renewal |
+| P2 Consulting | Discovery, Qualification, Solution Design, Proposal, Negotiation, Closed Won, Delivery |
+| P3 Subcontracting | Outreach, Vendor Qualification, Capability Review, Approved Vendor, Active Engagement |
+| P4 Managed Services | Qualified Lead, Assessment, Proposal, Contract, Active Service, Renewal |
+
+Changing `Deal Classification` automatically routes an opportunity to the
+matching team and first stage. Server validations prevent a deal from remaining
+in a stage belonging to another pipeline.
+
+## Import Templates
+
+The module adds downloadable templates to the `Need Help?` area of relevant
+Odoo Import screens:
+
+- Customer Companies
+- Company Contacts
+- Candidates
+- Recruiter Vendors
+- CRM Opportunities
+- Employees and Roles
+- Staffing Requirements
+- Candidate Submissions
+- Interview Schedule
+- Staffing Placements
+- Banks
+- Contact Bank Accounts
+
+Standalone copies and import-order guidance are available in [`templates/`](templates/)
+and [`docs/CSV_IMPORT_GUIDE.md`](docs/CSV_IMPORT_GUIDE.md).
+
+## Requirements
+
+- Odoo 17 Community
+- PostgreSQL 15 or another PostgreSQL version supported by Odoo 17
+- Docker Engine with Docker Compose for the provided production deployment
+
+The module depends on standard Community modules including CRM, Sales,
+Projects, Timesheets, Employees, Contacts, Base Automation and Authentication
+Signup. See [`intrastack_crm/__manifest__.py`](intrastack_crm/__manifest__.py)
+for the authoritative dependency list.
+
+## Install or Upgrade
+
+Production installations must not load demo data.
+
+```bash
+odoo -d YOUR_DATABASE \
+  -i intrastack_crm \
+  --without-demo=all \
+  --stop-after-init
+```
+
+Upgrade an existing database with:
+
+```bash
+odoo -d YOUR_DATABASE \
+  -u intrastack_crm \
+  --without-demo=all \
+  --stop-after-init
+```
+
+Always back up both PostgreSQL and the Odoo filestore before an upgrade.
+
+## Docker Deployment
+
+The repository includes a Compose deployment and a guarded deployment script:
+
+```bash
+cd deploy
+cp .env.example .env
+chmod 600 .env
+# Edit .env and replace every example secret.
+docker compose pull
+docker compose up -d db
+./deploy.sh
+```
+
+The deployment script validates configuration, starts PostgreSQL, stops Odoo,
+backs up the database and filestore, upgrades the module without demo data,
+restarts Odoo and verifies the health endpoint.
+
+See [`deploy/README.md`](deploy/README.md) for reverse proxy, TLS, websocket,
+SMTP and backup requirements.
+
+## Testing
+
+Run module tests against a disposable Odoo database:
+
+```bash
+odoo -d intrastack_tests \
+  -u intrastack_crm \
+  --test-enable \
+  --test-tags /intrastack_crm \
+  --stop-after-init
+```
+
+The automated suite covers CRM routing and readiness, quotation/project
+creation, Staffing workflows, employee access synchronization and downloadable
+import templates. The current local validation completed with 30 tests and no
+failures or errors.
+
+## Documentation
+
+- [End User and Workflow Guide v2.1](docs/IntraStack_CRM_End_User_Workflow_Guide_v2.1.pdf)
+- [Guide HTML source](docs/IntraStack_CRM_End_User_Workflow_Guide.html)
+- [CSV/XLSX Import Guide](docs/CSV_IMPORT_GUIDE.md)
+- [BRD Traceability](docs/BRD_TRACEABILITY.md)
+- [User Acceptance Test Checklist](docs/UAT_CHECKLIST.md)
+- [Go-Live Checklist](docs/GO_LIVE_CHECKLIST.md)
+
+The v2.1 guide contains current production screenshots, field-by-field operating
+instructions and complete fictional Consulting and Staffing training scenarios.
+
+## Repository Structure
+
+```text
+intrastack_crm/   Odoo addon, security, views, data, migrations and tests
+deploy/           Docker Compose deployment and backup-aware upgrade script
+docs/             BRD traceability, operations, UAT and end-user documentation
+templates/        Clean CSV import templates and template pack
+screenshots/      Images used by the end-user guide
+```
+
+## Production Boundaries
+
+- Odoo 17 Community does not provide unattended subscription billing by default.
+  Managed Services recurring invoices require an approved manual process or an
+  evaluated OCA subscription module.
+- Quotations, Sales Orders and Delivery Projects should be created through the
+  integrated CRM workflow rather than imported as disconnected records.
+- Never commit `.env`, database dumps, filestore archives, API tokens or real
+  customer/candidate exports.
 
 ## License
-This project is released under the LGPL-3 License.
+
+LGPL-3. See the module manifest for license metadata.

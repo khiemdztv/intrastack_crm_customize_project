@@ -1,0 +1,3 @@
+External ID,Name,Bank Identifier Code,Street,City,Zip,Country/Code,Phone,Email
+intrastack_import.bank_bnp_paribas_fortis,BNP Paribas Fortis,GEBABEBB,Montagne du Parc 3,Brussels,1000,BE,+32 2 565 11 11,contact@example-bank.com
+intrastack_import.bank_belfius,Belfius Bank,BEBABEBB,Place Charles Rogier 11,Brussels,1210,BE,+32 2 222 11 11,contact@example-belfius.com

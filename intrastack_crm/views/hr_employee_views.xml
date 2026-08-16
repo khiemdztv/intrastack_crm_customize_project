@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_intrastack_access" model="ir.ui.view">
+        <field name="name">hr.employee.form.intrastack.access</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_user" type="object" string="Create Internal User"
+                        class="oe_highlight" groups="hr.group_hr_user"
+                        invisible="user_id or not intrastack_role or not work_email"/>
+                <button name="action_sync_intrastack_access" type="object" string="Sync IntraStack Access"
+                        groups="hr.group_hr_manager" invisible="not user_id"/>
+                <button name="action_resend_intrastack_invitation" type="object" string="Resend Invitation"
+                        groups="hr.group_hr_manager" invisible="not user_id"/>
+            </xpath>
+            <xpath expr="//field[@name='job_title']" position="after">
+                <field name="intrastack_role" placeholder="Select operational role"/>
+            </xpath>
+            <xpath expr="//group[.//field[@name='work_email']][1]" position="inside">
+                <field name="intrastack_user_active" invisible="1"/>
+                <field name="intrastack_invitation_pending" readonly="1"
+                       invisible="not user_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

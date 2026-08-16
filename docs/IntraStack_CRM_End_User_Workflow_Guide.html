@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IntraStack CRM Platform — End User & Workflow Guide</title>
+<style>
+  :root {
+    --navy: #183153;
+    --blue: #245b9e;
+    --teal: #087f8c;
+    --green: #2f855a;
+    --amber: #b7791f;
+    --red: #c53030;
+    --ink: #243142;
+    --muted: #64748b;
+    --line: #dbe3ec;
+    --soft: #f4f7fb;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 10.4pt;
+    line-height: 1.55;
+    background: white;
+  }
+  @page { size: A4; margin: 15mm 14mm 16mm; }
+  .document { max-width: 980px; margin: 0 auto; }
+  .cover {
+    min-height: 265mm;
+    padding: 38mm 20mm 20mm;
+    color: white;
+    background: linear-gradient(145deg, #132943 0%, #245b9e 58%, #087f8c 100%);
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::after {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border: 50px solid rgba(255,255,255,.08);
+    border-radius: 50%;
+    right: -115px;
+    bottom: -90px;
+  }
+  .brand { letter-spacing: 5px; text-transform: uppercase; font-weight: 700; font-size: 13px; opacity: .9; }
+  .cover h1 { font-size: 37px; line-height: 1.14; margin: 35mm 0 10px; color: white; border: 0; }
+  .cover h2 { font-size: 21px; font-weight: 400; margin: 0 0 25px; color: #d9f3f5; }
+  .cover .rule { width: 85px; height: 5px; background: #7de0e5; margin: 25px 0; }
+  .cover .meta { margin-top: 32mm; font-size: 11px; line-height: 1.8; opacity: .94; }
+  .cover .confidential { position: absolute; left: 20mm; bottom: 16mm; font-size: 9px; opacity: .75; }
+  main { padding: 0 2mm; }
+  h1 {
+    color: var(--navy);
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 28px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--teal);
+    page-break-after: avoid;
+  }
+  h2 { color: var(--blue); font-size: 16px; margin: 23px 0 9px; page-break-after: avoid; }
+  h3 { color: var(--navy); font-size: 12.5px; margin: 17px 0 7px; page-break-after: avoid; }
+  h4 { color: var(--teal); font-size: 11px; margin: 13px 0 5px; page-break-after: avoid; }
+  p { margin: 0 0 9px; }
+  ul, ol { margin: 6px 0 12px 22px; padding: 0; }
+  li { margin: 3px 0; }
+  a { color: var(--blue); text-decoration: none; }
+  .page-break { page-break-before: always; }
+  .avoid { page-break-inside: avoid; }
+  .small { font-size: 9px; color: var(--muted); }
+  .lead { font-size: 12px; color: #40546d; }
+  .toc { page-break-after: always; }
+  .toc-grid { columns: 2; column-gap: 30px; }
+  .toc a { display: block; padding: 6px 0; border-bottom: 1px dotted var(--line); break-inside: avoid; }
+  .toc .num { display: inline-block; width: 25px; color: var(--teal); font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 9.2px; }
+  thead { display: table-header-group; }
+  tr { page-break-inside: avoid; }
+  th { background: var(--navy); color: white; text-align: left; padding: 7px 8px; vertical-align: top; }
+  td { border: 1px solid var(--line); padding: 6px 8px; vertical-align: top; }
+  tbody tr:nth-child(even) td { background: #f8fafc; }
+  code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; font-size: 9px; }
+  .callout { border-left: 4px solid var(--blue); background: #edf5ff; padding: 10px 13px; margin: 11px 0; page-break-inside: avoid; }
+  .callout strong { color: var(--navy); display: block; margin-bottom: 2px; }
+  .warning { border-color: var(--amber); background: #fff8e8; }
+  .danger { border-color: var(--red); background: #fff1f1; }
+  .success { border-color: var(--green); background: #effaf3; }
+  .role-card, .step, .card { border: 1px solid var(--line); border-radius: 7px; padding: 11px 13px; margin: 9px 0; page-break-inside: avoid; }
+  .step { border-left: 5px solid var(--teal); }
+  .step .step-title { font-weight: 700; color: var(--navy); }
+  .step .step-no { display: inline-block; background: var(--teal); color: white; border-radius: 12px; min-width: 23px; padding: 1px 7px; text-align: center; margin-right: 6px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0 13px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 13px; }
+  .flow { display: flex; align-items: stretch; gap: 4px; margin: 13px 0; page-break-inside: avoid; }
+  .flow .box { flex: 1; background: var(--navy); color: white; border-radius: 5px; padding: 8px 6px; text-align: center; font-size: 8.8px; font-weight: 600; }
+  .flow .arrow { align-self: center; color: var(--teal); font-size: 18px; font-weight: 700; }
+  .pill { display: inline-block; border-radius: 12px; padding: 2px 8px; margin: 1px 2px; background: #e8f1fb; color: var(--blue); font-size: 8.5px; font-weight: 600; }
+  .screenshot { margin: 14px auto 18px; text-align: center; page-break-inside: avoid; }
+  .screenshot img { max-width: 100%; max-height: 185mm; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 3px 10px rgba(15, 35, 60, .12); }
+  .caption { color: var(--muted); font-size: 8.5px; font-style: italic; margin-top: 5px; }
+  .checklist { list-style: none; margin-left: 0; }
+  .checklist li::before { content: "☐"; color: var(--teal); font-weight: 700; margin-right: 7px; }
+  .footer-note { margin-top: 25px; border-top: 1px solid var(--line); padding-top: 8px; color: var(--muted); font-size: 8.5px; }
+  @media print {
+    .document { max-width: none; }
+    a { color: inherit; }
+    .grid-2, .grid-3 { display: grid; }
+  }
+</style>
+</head>
+<body>
+<div class="document">
+  <section class="cover">
+    <div class="brand">IntraStack Solutions</div>
+    <h1>CRM Platform<br>End User &amp; Workflow Guide</h1>
+    <h2>Odoo 17 Community Edition</h2>
+    <div class="rule"></div>
+    <p>Customer Database · CRM Pipelines · Sales Contracts · Staffing Operations · Project Delivery · Timesheets · Employee Access · Reporting</p>
+    <div class="meta">
+      <div><strong>Platform module:</strong> intrastack_crm</div>
+      <div><strong>Document version:</strong> 2.1</div>
+      <div><strong>Platform release:</strong> 17.0.2.2.0</div>
+      <div><strong>Prepared:</strong> August 2026</div>
+      <div><strong>Audience:</strong> Sales, Recruitment, Project Delivery, Consultants, HR and Management</div>
+    </div>
+    <div class="confidential">Internal operating guide. Customer and candidate information must be handled according to company policy.</div>
+  </section>
+
+  <main>
+    <section class="toc">
+      <h1>Table of Contents</h1>
+      <div class="toc-grid">
+        <a href="#s1"><span class="num">01</span>Purpose, scope and operating model</a>
+        <a href="#s2"><span class="num">02</span>Access, roles and login</a>
+        <a href="#s3"><span class="num">03</span>Navigation and record conventions</a>
+        <a href="#s4"><span class="num">04</span>Customer and contact database</a>
+        <a href="#s5"><span class="num">05</span>CSV/XLSX import and export</a>
+        <a href="#s6"><span class="num">06</span>CRM opportunity data model</a>
+        <a href="#s7"><span class="num">07</span>The four CRM pipelines</a>
+        <a href="#s8"><span class="num">08</span>Opportunity operating procedure</a>
+        <a href="#s9"><span class="num">09</span>Activities and automation</a>
+        <a href="#s10"><span class="num">10</span>Quotation, contract and Sales Order</a>
+        <a href="#s11"><span class="num">11</span>Delivery projects and timesheets</a>
+        <a href="#s12"><span class="num">12</span>Staffing workflow overview</a>
+        <a href="#s13"><span class="num">13</span>Staffing requirements</a>
+        <a href="#s14"><span class="num">14</span>Candidate submissions</a>
+        <a href="#s15"><span class="num">15</span>Interviews and feedback</a>
+        <a href="#s16"><span class="num">16</span>Placements and margin control</a>
+        <a href="#s17"><span class="num">17</span>Cloud transformation workflow</a>
+        <a href="#s18"><span class="num">18</span>Other service workflows</a>
+        <a href="#s19"><span class="num">19</span>Employee activation administration</a>
+        <a href="#s20"><span class="num">20</span>Reporting and CEO controls</a>
+        <a href="#s21"><span class="num">21</span>Daily playbooks by role</a>
+        <a href="#s22"><span class="num">22</span>Data governance and security</a>
+        <a href="#s23"><span class="num">23</span>Troubleshooting and FAQ</a>
+        <a href="#s24"><span class="num">24</span>Training simulation scripts</a>
+        <a href="#appendix"><span class="num">A</span>Quick reference and glossary</a>
+      </div>
+      <div class="callout warning"><strong>Important operating rule</strong>Do not mark a deal Won or confirm a quotation merely to move the workflow forward. The system intentionally validates customer, commercial, classification and contract information before delivery begins.</div>
+    </section>
+
+    <section id="s1">
+      <h1>01 | Purpose, Scope and Operating Model</h1>
+      <p class="lead">The IntraStack CRM Platform is the operational system of record from the first customer interaction through commercial approval, staffing or consulting delivery, project execution and renewal.</p>
+      <h2>What the platform controls</h2>
+      <div class="grid-2">
+        <div class="card"><h3>Customer truth</h3><p>Companies, decision makers, operational contacts, candidates, vendors, communication details and relationship tags.</p></div>
+        <div class="card"><h3>Commercial truth</h3><p>Opportunity owner, pipeline, stage, expected value, source, urgency, quotation, contract dates and confirmed Sales Order.</p></div>
+        <div class="card"><h3>Staffing truth</h3><p>Requirements, recruiters, candidate submissions, interviews, placement approvals, rates and gross margin.</p></div>
+        <div class="card"><h3>Delivery truth</h3><p>Delivery project, template tasks, owners, deadlines, timesheets, commercial traceability and renewal dates.</p></div>
+      </div>
+      <h2>End-to-end record flow</h2>
+      <div class="flow">
+        <div class="box">Customer / Contact</div><div class="arrow">→</div>
+        <div class="box">CRM Opportunity</div><div class="arrow">→</div>
+        <div class="box">Quotation / SOW</div><div class="arrow">→</div>
+        <div class="box">Confirmed Order</div><div class="arrow">→</div>
+        <div class="box">Delivery Project</div><div class="arrow">→</div>
+        <div class="box">Timesheet / Renewal</div>
+      </div>
+      <p>Staffing adds an operational branch between opportunity and delivery:</p>
+      <div class="flow">
+        <div class="box">Staffing Requirement</div><div class="arrow">→</div>
+        <div class="box">Candidate Submission</div><div class="arrow">→</div>
+        <div class="box">Interview</div><div class="arrow">→</div>
+        <div class="box">Offer</div><div class="arrow">→</div>
+        <div class="box">Placement</div>
+      </div>
+      <div class="callout"><strong>One record, one purpose</strong>A CRM opportunity represents the commercial deal. A staffing requirement represents a specific role to fill. A candidate submission represents one candidate against one requirement. A project represents delivery after the commercial commitment is confirmed.</div>
+    </section>
+
+    <section id="s2" class="page-break">
+      <h1>02 | Access, Roles and Login</h1>
+      <p>Employees must use an <strong>internal Odoo user</strong>. Portal users cannot operate the CRM, Sales, Staffing and Project back office. Access is assigned from the Employee record by an HR Manager or System Administrator.</p>
+      <table>
+        <thead><tr><th>Role</th><th>Primary responsibilities</th><th>Included application access</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sales Manager</strong></td><td>Manage teams, all opportunities, forecasts, quotations and approvals.</td><td>CRM/Sales management, quotation templates, Projects, timesheet approval.</td></tr>
+          <tr><td><strong>Sales Executive</strong></td><td>Manage assigned customer relationships, opportunities, activities and quotations.</td><td>CRM/Sales user, quotation templates, Projects, personal timesheets.</td></tr>
+          <tr><td><strong>Recruiter</strong></td><td>Operate requirements, candidate submissions, interviews and recruitment activities.</td><td>All CRM leads required for staffing, Staffing Operations and Project user access.</td></tr>
+          <tr><td><strong>Project Manager</strong></td><td>Plan delivery, assign tasks, monitor project execution and approve time.</td><td>All CRM leads, Project management and timesheet approval.</td></tr>
+          <tr><td><strong>Consultant</strong></td><td>Execute assigned work and record time.</td><td>Assigned Projects and personal timesheets.</td></tr>
+        </tbody>
+      </table>
+      <h2>First login</h2>
+      <ol>
+        <li>Open the company CRM URL using HTTPS.</li>
+        <li>Use the invitation email to set a personal password. Do not share accounts.</li>
+        <li>Confirm the correct company, timezone and language in Preferences.</li>
+        <li>Open the application selector and verify that the applications required for the assigned role are visible.</li>
+        <li>Configure notification preferences and review the Activities menu.</li>
+      </ol>
+      <div class="screenshot"><img src="../screenshots/production_current/01_app_selector.png" alt="Current Odoo application selector"><div class="caption">Current production application selector. Visible applications depend on the employee's assigned role.</div></div>
+      <div class="callout danger"><strong>Never share credentials</strong>All changes are recorded against the logged-in user. Shared accounts remove accountability and can expose customer, candidate and commercial data.</div>
+    </section>
+
+    <section id="s3">
+      <h1>03 | Navigation and Record Conventions</h1>
+      <h2>Common Odoo controls</h2>
+      <table>
+        <thead><tr><th>Control</th><th>How to use it</th></tr></thead>
+        <tbody>
+          <tr><td>Search bar</td><td>Search a value, add filters, group records and save frequently used searches.</td></tr>
+          <tr><td>Kanban</td><td>Visual pipeline. Drag records only when the operational exit criteria for the destination stage are met.</td></tr>
+          <tr><td>List</td><td>Bulk review, export and import. Use optional columns to expose owner, stage, activity and dates.</td></tr>
+          <tr><td>Chatter</td><td>Record internal notes, log messages, upload supporting files and review field changes.</td></tr>
+          <tr><td>Activities</td><td>Schedule calls, emails, meetings and to-dos with an owner and deadline.</td></tr>
+          <tr><td>Smart buttons</td><td>Open related quotations, staffing requirements, projects, submissions, interviews or placements.</td></tr>
+          <tr><td>Archive</td><td>Hide obsolete master data without breaking historical links. Prefer Archive over Delete.</td></tr>
+        </tbody>
+      </table>
+      <h2>Record naming conventions</h2>
+      <ul>
+        <li><strong>Company:</strong> legal or commonly recognized customer name.</li>
+        <li><strong>Opportunity:</strong> <code>Customer – Service / Requirement – Period</code>.</li>
+        <li><strong>Staffing requirement:</strong> <code>Customer – Role – Location</code>.</li>
+        <li><strong>Project:</strong> generated from the opportunity/order; retain the commercial reference.</li>
+        <li><strong>Activities:</strong> begin with an action verb and state the expected result.</li>
+      </ul>
+      <div class="callout"><strong>Save information on the correct record</strong>Customer facts belong on Contacts, deal facts on Opportunities, candidate facts on candidate Contacts/Submissions, and delivery execution on Projects/Tasks.</div>
+    </section>
+
+    <section id="s4" class="page-break">
+      <h1>04 | Customer and Contact Database</h1>
+      <p>The Contacts application is the shared customer database. A company is stored once and its people are created as related contacts. Candidates and recruiter vendors are also contacts, distinguished by relationship and tags.</p>
+      <h2>Create a customer company</h2>
+      <div class="step"><span class="step-no">1</span><span class="step-title">Open Contacts and select New</span><p>Select Company. Search first to confirm that the organization does not already exist.</p></div>
+      <div class="step"><span class="step-no">2</span><span class="step-title">Enter reliable identity data</span><p>Complete company name, website, phone, address, country, Tax ID where applicable and the responsible salesperson.</p></div>
+      <div class="step"><span class="step-no">3</span><span class="step-title">Add people under the company</span><p>Use the Contacts &amp; Addresses area to create decision makers, procurement, technical and operational contacts. Add job title, direct email and mobile number.</p></div>
+      <div class="step"><span class="step-no">4</span><span class="step-title">Apply relationship tags</span><p>Tags enable filtering and management reporting. Use only approved tags and avoid creating spelling variants.</p></div>
+      <div class="screenshot"><img src="../screenshots/production_current/03_contacts_list.png" alt="Current Contacts list"><div class="caption">Current production Contacts list: use search, filters and grouping to locate customers and relationship types.</div></div>
+      <h2>Contact quality checklist</h2>
+      <ul class="checklist">
+        <li>Company record exists only once.</li>
+        <li>Individual contact is linked to the correct company.</li>
+        <li>Email and telephone formats are valid.</li>
+        <li>Job title and relationship role are current.</li>
+        <li>Decision maker status on the opportunity reflects the primary deal contact.</li>
+        <li>Internal notes do not contain unnecessary sensitive personal information.</li>
+      </ul>
+      <div class="screenshot"><img src="../screenshots/production_current/04_contact_new_form.png" alt="Current contact form"><div class="caption">Current contact form. Company and individual records together form the customer history.</div></div>
+      <h2>Contact types used by IntraStack</h2>
+      <table><thead><tr><th>Record type</th><th>How to create</th><th>Required operating convention</th></tr></thead><tbody>
+        <tr><td>Customer company</td><td>Contacts → New → Company</td><td>One legal/customer organization per record; add approved customer tags.</td></tr>
+        <tr><td>Company contact</td><td>Open company → Contacts &amp; Addresses → Add</td><td>Set the related company, job position, direct email/mobile and decision-maker relevance.</td></tr>
+        <tr><td>Candidate</td><td>Contacts → New → Individual</td><td>Use the Candidate tag; store general profile information on the contact and requirement-specific facts on the Submission.</td></tr>
+        <tr><td>Recruiter/vendor</td><td>Contacts → New → Company</td><td>Use Vendor and Recruiter Partner tags; keep commercial partner notes separate from candidate records.</td></tr>
+      </tbody></table>
+      <h2>How to find a customer's contact information</h2>
+      <ol>
+        <li>Open <strong>Contacts</strong> from the application selector.</li>
+        <li>Use the search field for company name, person name, email or phone.</li>
+        <li>Use filters such as <strong>Companies</strong>, <strong>Individuals</strong> or a relationship tag.</li>
+        <li>Open the company record and review the Contacts &amp; Addresses section for stakeholders.</li>
+        <li>From an opportunity, click the Customer field or contact link to return to the shared customer database.</li>
+      </ol>
+    </section>
+
+    <section id="s5">
+      <h1>05 | CSV/XLSX Import and Export</h1>
+      <p>Odoo 17 Community supports CSV and XLSX import. The controlled templates shipped with the platform use External IDs so the same file can update existing records without creating duplicates.</p>
+      <h2>Download a template from the Import screen</h2>
+      <p>After opening <strong>Import records</strong>, use the <strong>Need Help?</strong> panel to download the relevant <strong>IntraStack Template</strong>. Replace the example rows, preserve the header row, and upload the completed file on the same screen. Contacts provides separate templates for companies, people, candidates and recruiter vendors; CRM, Employees and each Staffing Operations record type provide their own template. Odoo's standard templates remain available, but the IntraStack templates are recommended because they include the platform's custom BRD fields and External ID relationships.</p>
+      <div class="screenshot"><img src="../screenshots/production_current/05_contacts_import_templates.png" alt="Current Contacts import template downloads"><div class="caption">Current production Import screen. The Need Help? panel exposes the standard Odoo template and four IntraStack templates.</div></div>
+      <h3>Exact import procedure</h3>
+      <ol>
+        <li>Open the target application and switch to <strong>List view</strong>. Import is not normally available from Kanban or Form view.</li>
+        <li>Open the list action menu (the small dropdown beside the list controls) and select <strong>Import records</strong>.</li>
+        <li>In <strong>Need Help?</strong>, click the template for the record type. For a customer load, download <code>Customer Companies</code> first, then <code>Company Contacts</code>.</li>
+        <li>Open the downloaded CSV/XLSX and replace only the example values. Keep the header names, External IDs, date format and selection values controlled.</li>
+        <li>Upload the file, inspect every automatic field mapping, and manually correct any field with a warning or no match.</li>
+        <li>Select <strong>Test</strong>. Do not select Import until the test reports no errors and the expected row count is correct.</li>
+        <li>After importing, search by External ID, open a sample record and verify relational links before loading the next dependent file.</li>
+      </ol>
+      <div class="callout warning"><strong>Production safety</strong>Use a staging database for the first rehearsal. The production screen contains real customer and employee information; never use a real customer export as a training file.</div>
+      <h2>Required import order</h2>
+      <ol>
+        <li>Customer companies.</li>
+        <li>Individual contacts linked through <code>Related Company/External ID</code>.</li>
+        <li>CRM opportunities linked through <code>Customer/External ID</code>.</li>
+        <li>Staffing requirements linked through CRM Opportunity and Customer External IDs.</li>
+      </ol>
+      <h2>Import steps</h2>
+      <div class="step"><span class="step-no">1</span><span class="step-title">Prepare and validate the file</span><p>Use one header row, ISO dates <code>YYYY-MM-DD</code>, numeric amounts without currency symbols and approved selection labels.</p></div>
+      <div class="step"><span class="step-no">2</span><span class="step-title">Open the target list and select Import records</span><p>Upload the file and inspect the preview. If the UI language differs from English, manually map each field.</p></div>
+      <div class="step"><span class="step-no">3</span><span class="step-title">Map relational fields by External ID</span><p>Do not match customers by approximate names when a stable External ID is available.</p></div>
+      <div class="step"><span class="step-no">4</span><span class="step-title">Select Test</span><p>Resolve every error before Import. Never ignore a row-count mismatch.</p></div>
+      <div class="step"><span class="step-no">5</span><span class="step-title">Import and reconcile</span><p>Record the file name, operator, import date and expected row count. Search/export the imported batch and compare totals.</p></div>
+      <table>
+        <thead><tr><th>Template</th><th>Purpose</th><th>Important dependencies</th></tr></thead>
+        <tbody>
+          <tr><td><code>crm_companies_import.csv</code></td><td>Customer company master data.</td><td>Seed companies before related contacts/opportunities.</td></tr>
+          <tr><td><code>crm_contacts_import.csv</code></td><td>People related to customer companies.</td><td>Company External IDs must already exist.</td></tr>
+          <tr><td><code>crm_candidates_import.csv</code></td><td>Candidate Contact master data.</td><td>Use the Candidate tag; attach resumes after import.</td></tr>
+          <tr><td><code>crm_recruiter_vendors_import.csv</code></td><td>Recruiter/vendor companies.</td><td>Use Vendor and Recruiter Partner tags.</td></tr>
+          <tr><td><code>employees_import.csv</code></td><td>Employee master data and operational role.</td><td>HR must create internal users and sync access afterward.</td></tr>
+          <tr><td><code>crm_opportunities_import.csv</code></td><td>Commercial opportunities with routing fields and contract dates.</td><td>Customer External ID must already exist.</td></tr>
+          <tr><td><code>staffing_requirements_import.csv</code></td><td>Role-level staffing requirements.</td><td>Opportunity must exist and be classified Staffing.</td></tr>
+          <tr><td><code>staffing_candidate_submissions_import.csv</code></td><td>Candidates proposed against requirements.</td><td>Requirement, candidate and recruiter login must exist.</td></tr>
+          <tr><td><code>staffing_interviews_import.csv</code></td><td>Interview schedule and client/internal interviewers.</td><td>Submission must exist; complete outcome manually.</td></tr>
+          <tr><td><code>staffing_placements_import.csv</code></td><td>Draft placements and commercial rates.</td><td>Use workflow buttons for approval, confirmation and activation.</td></tr>
+        </tbody>
+      </table>
+      <h2>Where to find Import</h2>
+      <ol>
+        <li>Open the target application and switch to <strong>List view</strong>. Import is normally not shown in Kanban or Form view.</li>
+        <li>Open the small <strong>gear / Action</strong> menu beside the list title. Depending on the Odoo theme, it may appear under <strong>Favorites</strong>.</li>
+        <li>Select <strong>Import records</strong>, upload CSV/XLSX, map fields, select <strong>Test</strong>, then select <strong>Import</strong>.</li>
+      </ol>
+      <h2>Template-to-screen map</h2>
+      <table><thead><tr><th>Screen</th><th>Template button</th><th>When to use</th></tr></thead><tbody>
+        <tr><td>Contacts</td><td>Customer Companies / Company Contacts / Candidates / Recruiter Vendors</td><td>Master customer, stakeholder, candidate and vendor data.</td></tr>
+        <tr><td>CRM Opportunities</td><td>CRM Opportunities</td><td>Load commercial opportunities with IntraStack routing and contract fields.</td></tr>
+        <tr><td>Employees</td><td>Employees and Roles</td><td>Load employee master data. HR still creates internal users and synchronizes access.</td></tr>
+        <tr><td>Staffing Requirements</td><td>Staffing Requirements</td><td>Load role-level requirements after the opportunity and customer exist.</td></tr>
+        <tr><td>Candidate Submissions</td><td>Candidate Submissions</td><td>Load one candidate against one requirement.</td></tr>
+        <tr><td>Interview Schedule</td><td>Interview Schedule</td><td>Load planned interviews after submission and interviewers exist.</td></tr>
+        <tr><td>Placements</td><td>Staffing Placements</td><td>Load draft placements only; use workflow buttons for approval and activation.</td></tr>
+        <tr><td>Banks / Bank Accounts</td><td>Banks / Contact Bank Accounts</td><td>Optional accounting master data. Import banks first, then accounts.</td></tr>
+      </tbody></table>
+      <h2>Export records</h2>
+      <div class="step"><span class="step-no">1</span><span class="step-title">Open List view</span><p>Apply filters first so the list contains only the intended customers, opportunities or staffing records.</p></div>
+      <div class="step"><span class="step-no">2</span><span class="step-title">Select records</span><p>Select individual checkboxes or the header checkbox. If Odoo offers “Select all records”, use it only after confirming the filter and total count.</p></div>
+      <div class="step"><span class="step-no">3</span><span class="step-title">Choose Action → Export</span><p>The Action menu appears after at least one record is selected. If Export is absent, ask an administrator to verify the user's Export permission.</p></div>
+      <div class="step"><span class="step-no">4</span><span class="step-title">Choose fields</span><p>Select only necessary fields. For a file intended for later re-import, include <strong>External ID</strong> and select the import-compatible export option.</p></div>
+      <div class="step"><span class="step-no">5</span><span class="step-title">Choose format and export</span><p>Use XLSX for business review and CSV for controlled system exchange. Store exported customer/candidate data only in approved locations.</p></div>
+      <h2>Recommended export field sets</h2>
+      <table><thead><tr><th>Record type</th><th>Recommended fields</th></tr></thead><tbody>
+        <tr><td>Contacts</td><td>External ID, Name, Is a Company, Related Company, Email, Phone, Mobile, Website, Country, Job Position, Tags.</td></tr>
+        <tr><td>Opportunities</td><td>External ID, Opportunity, Customer, Salesperson, Team, Stage, Classification, Service Category, Urgency, Source, Expected Value, Contract dates, Next Activity.</td></tr>
+        <tr><td>Staffing Requirements</td><td>External ID, Requirement, CRM Opportunity, Customer, Role, Status, Positions, Recruiter, target dates, bill/cost rates and margin.</td></tr>
+        <tr><td>Placements</td><td>Requirement, Candidate, Customer, Status, Contract/SOW, Order, Project, dates, rates, weekly revenue and margin.</td></tr>
+      </tbody></table>
+      <div class="callout warning"><strong>External ID discipline</strong>Keep an External ID unchanged when updating a record. Assigning a new ID to an existing customer creates a duplicate; reusing one ID for a different entity can overwrite the wrong record.</div>
+    </section>
+
+    <section id="s6" class="page-break">
+      <h1>06 | CRM Opportunity Data Model</h1>
+      <p>An opportunity combines Odoo's standard CRM information with IntraStack fields that drive pipeline routing, quotation templates, commercial validation and delivery creation.</p>
+      <table>
+        <thead><tr><th>Field</th><th>Allowed values / meaning</th><th>Operating guidance</th></tr></thead>
+        <tbody>
+          <tr><td>Opportunity</td><td>Short commercial description.</td><td>Include customer and service/requirement.</td></tr>
+          <tr><td>Customer</td><td>Company or commercial contact.</td><td>Required before quotation and Won.</td></tr>
+          <tr><td>Salesperson</td><td>Commercial owner.</td><td>Automation activities are assigned to this user.</td></tr>
+          <tr><td>Deal Classification</td><td>Staffing, Consulting, Subcontracting, Managed Services.</td><td>Controls team, first stage, quotation and project template.</td></tr>
+          <tr><td>Service Category</td><td>Cloud, AI/ML, Cybersecurity, DevOps, Data Engineering, App Modernization.</td><td>Select the dominant technology domain.</td></tr>
+          <tr><td>Urgency Flag</td><td>Immediate 0–30 days, Short-term 30–90 days, Long-term 90+ days.</td><td>Use the customer's decision/need timeline.</td></tr>
+          <tr><td>Source Tracking</td><td>LinkedIn, MSP Outreach, Prime Contractor, Referral, Vendor Portal, Website, Email, Other.</td><td>Use the original acquisition channel.</td></tr>
+          <tr><td>Expected Value</td><td>Estimated deal revenue.</td><td>Stored in Odoo's native expected revenue for forecasting.</td></tr>
+          <tr><td>Decision Maker?</td><td>Boolean.</td><td>Indicates whether the primary contact has decision authority.</td></tr>
+          <tr><td>Contract Start/End</td><td>Service delivery dates.</td><td>End cannot precede Start.</td></tr>
+          <tr><td>Renewal Review Date</td><td>Date to begin renewal planning.</td><td>Cannot be after Contract End.</td></tr>
+        </tbody>
+      </table>
+      <div class="screenshot"><img src="../screenshots/production_current/12_opportunity_demo_form.png" alt="Current CRM opportunity form"><div class="caption">Current opportunity form: routing fields, commercial controls, contract dates, smart buttons and Chatter activities.</div></div>
+      <div class="callout success"><strong>Automatic routing</strong>When Deal Classification is set or changed, the server routes the opportunity to the matching Sales Team and its first stage. This also applies to API and import-created opportunities.</div>
+    </section>
+
+    <section id="s7">
+      <h1>07 | The Four CRM Pipelines</h1>
+      <h2>P1 — Staffing</h2>
+      <p><span class="pill">New Requirement</span><span class="pill">Sourcing</span><span class="pill">Submitted</span><span class="pill">Interviews</span><span class="pill">Offer</span><span class="pill">Closed Won</span><span class="pill">Active Billing</span><span class="pill">Renewal</span></p>
+      <table><thead><tr><th>Stage</th><th>Exit criteria</th></tr></thead><tbody>
+        <tr><td>New Requirement</td><td>Customer, role, skills, volume, dates, rate target and contact understood.</td></tr>
+        <tr><td>Sourcing</td><td>Recruiter assigned and candidates actively identified/screened.</td></tr>
+        <tr><td>Submitted</td><td>Qualified profiles and commercial rates sent to customer.</td></tr>
+        <tr><td>Interviews</td><td>At least one customer interview scheduled or completed with feedback.</td></tr>
+        <tr><td>Offer</td><td>Preferred candidate selected and terms under agreement.</td></tr>
+        <tr><td>Closed Won</td><td>Commercial readiness complete and Sales Order confirmed.</td></tr>
+        <tr><td>Active Billing</td><td>Placement active; time/billing process operating.</td></tr>
+        <tr><td>Renewal</td><td>Extension/renewal decision actively managed.</td></tr>
+      </tbody></table>
+      <h2>P2 — Consulting</h2>
+      <p><span class="pill">Discovery</span><span class="pill">Qualification</span><span class="pill">Solution Design</span><span class="pill">Proposal</span><span class="pill">Negotiation</span><span class="pill">Closed Won</span><span class="pill">Delivery</span></p>
+      <h2>P3 — Subcontracting</h2>
+      <p><span class="pill">Outreach</span><span class="pill">Vendor Qualification</span><span class="pill">Capability Review</span><span class="pill">Approved Vendor</span><span class="pill">Active Engagement</span></p>
+      <h2>P4 — Managed Services</h2>
+      <p><span class="pill">Qualified Lead</span><span class="pill">Assessment</span><span class="pill">Proposal</span><span class="pill">Contract</span><span class="pill">Active Service</span><span class="pill">Renewal</span></p>
+      <div class="screenshot"><img src="../screenshots/production_current/06_crm_pipeline.png" alt="Current CRM pipeline Kanban"><div class="caption">Current production CRM pipeline Kanban. Dragging a card changes stage, but users remain responsible for meeting exit criteria.</div></div>
+      <h2>Current production pipeline screens</h2>
+      <div class="grid-2">
+        <div class="screenshot"><img src="../screenshots/production_current/07_pipeline_staffing.png" alt="Current Staffing pipeline"><div class="caption">P1 — Staffing</div></div>
+        <div class="screenshot"><img src="../screenshots/production_current/08_pipeline_consulting.png" alt="Current Consulting pipeline"><div class="caption">P2 — Consulting</div></div>
+        <div class="screenshot"><img src="../screenshots/production_current/09_pipeline_subcontracting.png" alt="Current Subcontracting pipeline"><div class="caption">P3 — Subcontracting</div></div>
+        <div class="screenshot"><img src="../screenshots/production_current/10_pipeline_managed_services.png" alt="Current Managed Services pipeline"><div class="caption">P4 — Managed Services</div></div>
+      </div>
+      <h2>How to use the Kanban screen</h2>
+      <ol>
+        <li>Use the search bar to filter My Pipeline, owner, customer, tag or stage.</li>
+        <li>Use the view switchers at the top-right to change between Kanban, List, Calendar, Pivot, Graph and Activities where available.</li>
+        <li>Use the plus icon on a stage only for a quick opportunity capture; open the full form immediately afterward.</li>
+        <li>Click a card to open the opportunity and use smart buttons rather than creating disconnected quotations, requirements or projects.</li>
+        <li>Drag a card only when the stage exit criteria are satisfied. Server-side routing still protects team/stage consistency.</li>
+      </ol>
+      <div class="screenshot"><img src="../screenshots/production_current/13_crm_import_templates.png" alt="Current CRM import template downloads"><div class="caption">Current CRM Import screen with the IntraStack Opportunities template available under Need Help?.</div></div>
+      <div class="callout warning"><strong>Do not manually mix pipelines</strong>Each stage belongs to one team. The server checks classification/team/stage consistency so a Staffing deal cannot remain in a Consulting stage.</div>
+    </section>
+
+    <section id="s8" class="page-break">
+      <h1>08 | Opportunity Operating Procedure</h1>
+      <h2>Create and qualify</h2>
+      <div class="step"><span class="step-no">1</span><span class="step-title">Search Contacts first</span><p>Create or update the customer and primary contact before creating the deal.</p></div>
+      <div class="step"><span class="step-no">2</span><span class="step-title">Create the opportunity</span><p>Use the appropriate pipeline menu or the general Pipeline. Enter customer, salesperson and opportunity name.</p></div>
+      <div class="step"><span class="step-no">3</span><span class="step-title">Classify the deal</span><p>Complete classification, service category, urgency, source, expected value and decision maker status. The team/stage will route automatically.</p></div>
+      <div class="step"><span class="step-no">4</span><span class="step-title">Record the next action</span><p>Schedule an activity with an owner and deadline. Add discovery notes and files in the Chatter.</p></div>
+      <div class="step"><span class="step-no">5</span><span class="step-title">Progress using evidence</span><p>Move stages only when the required customer action, deliverable or approval exists.</p></div>
+      <h2>Quick create versus full form</h2>
+      <div class="screenshot"><img src="../screenshots/production_current/11_opportunity_new_form.png" alt="Current opportunity quick-create card"><div class="caption">Current quick-create card. Use it only for initial capture, then select Edit/open the opportunity to complete all IntraStack fields.</div></div>
+      <ol>
+        <li>Select <strong>New</strong> in Kanban to open the quick-create card.</li>
+        <li>Enter Organization/Contact, Opportunity, Email, Phone and initial Expected Revenue.</li>
+        <li>Select <strong>Edit</strong> when the record requires classification, service, urgency, source, decision-maker, contract or delivery fields.</li>
+        <li>After saving, verify the opportunity moved to the team and first stage matching Deal Classification.</li>
+      </ol>
+      <h2>Opportunity header and smart buttons</h2>
+      <table><thead><tr><th>Control</th><th>Purpose</th></tr></thead><tbody>
+        <tr><td>New Quotation / Quotations</td><td>Create or review linked quotations and Sales Orders.</td></tr>
+        <tr><td>Won / Lost</td><td>Close the commercial outcome. Won is validated against mandatory commercial data.</td></tr>
+        <tr><td>Staffing</td><td>Open Staffing Requirements related to a Staffing opportunity.</td></tr>
+        <tr><td>Delivery Project</td><td>Open the project generated from a confirmed order. It appears only when a project exists.</td></tr>
+        <tr><td>Activities</td><td>Schedule the next call, email, meeting or to-do with a deadline.</td></tr>
+        <tr><td>Send message / Log note</td><td>Communicate with followers or record internal-only operational context.</td></tr>
+      </tbody></table>
+      <h2>Commercial readiness before confirmation</h2>
+      <p>The Sales Order cannot be confirmed until all of the following are complete:</p>
+      <ul class="checklist">
+        <li>Customer.</li><li>Deal Classification.</li><li>Service Category.</li><li>Urgency Flag.</li><li>Source Tracking.</li><li>Expected Value greater than zero.</li><li>Contract Start and Contract End.</li><li>At least one service product order line.</li><li>Quotation customer matches the opportunity customer.</li>
+      </ul>
+      <p>Moving an opportunity directly to a Won stage also invokes readiness validation. This prevents incomplete contracts from entering delivery.</p>
+      <h2>Lost opportunities</h2>
+      <p>When a deal is no longer viable, mark it Lost and choose a meaningful reason. Add a concise internal note describing the decision, competitor or timing issue. Do not leave dead opportunities indefinitely in an active stage.</p>
+    </section>
+
+    <section id="s9">
+      <h1>09 | Activities and Automation</h1>
+      <p>Activities make ownership and deadlines visible. Automated activities supplement—not replace—the salesperson's own follow-up plan.</p>
+      <table>
+        <thead><tr><th>Rule</th><th>Trigger</th><th>System action</th><th>Expected user response</th></tr></thead>
+        <tbody>
+          <tr><td>R1</td><td>New lead/opportunity created.</td><td>Qualify Lead within 24 hours.</td><td>Verify contact, source, classification, service, urgency and discovery action.</td></tr>
+          <tr><td>R2</td><td>Staffing opportunity enters New Requirement.</td><td>Submit 5 candidates within 48 hours.</td><td>Review requirement, source/screen and submit qualified profiles with rates.</td></tr>
+          <tr><td>R3</td><td>Consulting opportunity enters Discovery.</td><td>Prepare discovery checklist and schedule call.</td><td>Research customer, prepare questions, schedule stakeholders and document outcomes.</td></tr>
+          <tr><td>R4</td><td>Open deal has no stage update for 5+ days.</td><td>Re-engage prospect alert.</td><td>Contact customer, update next step, progress or close Lost.</td></tr>
+        </tbody>
+      </table>
+      <div class="screenshot"><img src="../screenshots/production_current/12_opportunity_demo_form.png" alt="Current opportunity activities and Chatter"><div class="caption">Current opportunity activities and Chatter provide the audit trail for ownership, deadlines and follow-up.</div></div>
+      <h2>Activity hygiene</h2>
+      <ul>
+        <li>Complete an activity only after performing the action.</li>
+        <li>Schedule the next activity before leaving an active opportunity.</li>
+        <li>Use a meeting activity for scheduled discovery/interview events and record the outcome.</li>
+        <li>Do not assign activities to inactive users or generic administrator accounts.</li>
+      </ul>
+    </section>
+
+    <section id="s10" class="page-break">
+      <h1>10 | Quotation, Contract and Sales Order</h1>
+      <h2>Automatic quotation template mapping</h2>
+      <table><thead><tr><th>Classification</th><th>Commercial template</th><th>Typical content</th></tr></thead><tbody>
+        <tr><td>Staffing</td><td>Staffing Rate Card</td><td>Engineer, Senior Engineer and Tech Lead hourly service lines.</td></tr>
+        <tr><td>Consulting</td><td>Consulting SOW</td><td>Discovery/Assessment, implementation engineering and project management.</td></tr>
+        <tr><td>Subcontracting</td><td>Staffing Rate Card</td><td>Rate-based service structure until a dedicated subcontractor SOW is approved.</td></tr>
+        <tr><td>Managed Services</td><td>Managed Services Contract</td><td>Onboarding, monthly managed service and additional hours.</td></tr>
+      </tbody></table>
+      <h2>Create and confirm a quotation</h2>
+      <div class="step"><span class="step-no">1</span><span class="step-title">Complete opportunity data</span><p>Confirm customer, classification, service, urgency, source, value and contract dates.</p></div>
+      <div class="step"><span class="step-no">2</span><span class="step-title">Select Create Ready Quotation / New Quotation</span><p>The system selects the commercial template and links the quotation to the opportunity.</p></div>
+      <div class="step"><span class="step-no">3</span><span class="step-title">Review scope and price</span><p>Adjust quantities, descriptions and prices according to the approved proposal. Never confirm placeholder pricing.</p></div>
+      <div class="step"><span class="step-no">4</span><span class="step-title">Send for customer acceptance</span><p>Use the approved email/quotation process and capture required commercial approval.</p></div>
+      <div class="step"><span class="step-no">5</span><span class="step-title">Confirm</span><p>Confirmation validates commercial readiness, marks the opportunity Won and creates or reuses exactly one delivery project.</p></div>
+      <div class="screenshot"><img src="../screenshots/production_current/24_quotation_new_form.png" alt="Current Sales quotation form"><div class="caption">Current Sales quotation form. Contract dates remain synchronized with the originating opportunity.</div></div>
+      <div class="callout success"><strong>Traceability is automatic</strong>The opportunity, Sales Order and delivery project contain links back to one another. Use these smart buttons rather than creating disconnected projects manually.</div>
+    </section>
+
+    <section id="s11">
+      <h1>11 | Delivery Projects and Timesheets</h1>
+      <p>Confirming a qualifying Sales Order creates one delivery project. If Odoo's standard service-product project already exists, the integration reuses it instead of creating a duplicate.</p>
+      <h2>Project templates</h2>
+      <table><thead><tr><th>Service line</th><th>Template</th><th>Operating intent</th></tr></thead><tbody>
+        <tr><td>Staffing</td><td>Staffing Delivery</td><td>Onboarding, assignment readiness, ongoing coordination and closeout.</td></tr>
+        <tr><td>Consulting</td><td>Consulting Delivery</td><td>Discovery, design, implementation, acceptance and handover tasks.</td></tr>
+        <tr><td>Managed Services</td><td>Managed Service Engagement</td><td>Onboarding, service transition, SLA operation and review tasks.</td></tr>
+        <tr><td>Subcontracting</td><td>Standard project</td><td>Project created without a dedicated BRD template; PM defines tasks for the engagement.</td></tr>
+      </tbody></table>
+      <div class="screenshot"><img src="../screenshots/production_current/26_project_template_tasks.png" alt="Current project template tasks"><div class="caption">Current project template task board. Owners, deadlines and stages should show the true delivery state.</div></div>
+      <h2>Project Manager procedure</h2>
+      <ol>
+        <li>Open the project from the CRM opportunity or confirmed Sales Order.</li>
+        <li>Verify customer, opportunity and order links.</li>
+        <li>Review template tasks, remove only tasks that are truly out of scope and add project-specific deliverables.</li>
+        <li>Assign every active task to an accountable user with a deadline.</li>
+        <li>Record risks, decisions and acceptance evidence in task/project Chatter.</li>
+        <li>Review timesheets, overdue tasks and milestones at least weekly.</li>
+      </ol>
+      <h2>Timesheet procedure</h2>
+      <ul>
+        <li>Record time against the correct project and task, preferably daily.</li>
+        <li>Use a clear description of the work performed, not a generic label such as “work”.</li>
+        <li>Do not record time before the authorized contract/project start.</li>
+        <li>Project Managers approve or correct time before billing/reporting cutoffs.</li>
+      </ul>
+      <div class="screenshot"><img src="../screenshots/production_current/25_projects.png" alt="Current Projects screen"><div class="caption">Current Projects screen. Open the linked delivery project to manage tasks and record timesheets.</div></div>
+    </section>
+
+    <section id="s12" class="page-break">
+      <h1>12 | Staffing Workflow Overview</h1>
+      <p>The CRM Staffing pipeline reports the commercial status. Staffing Operations holds the operational detail for roles, candidates, interviews and placements.</p>
+      <div class="flow">
+        <div class="box">Opportunity<br>P1 Staffing</div><div class="arrow">→</div>
+        <div class="box">Requirement</div><div class="arrow">→</div>
+        <div class="box">Submission</div><div class="arrow">→</div>
+        <div class="box">Interview</div><div class="arrow">→</div>
+        <div class="box">Placement</div><div class="arrow">→</div>
+        <div class="box">Project / Billing</div>
+      </div>
+      <h2>Staffing Operations menus</h2>
+      <ul>
+        <li><strong>Requirements:</strong> roles or slots requested by customers.</li>
+        <li><strong>Candidate Submissions:</strong> candidates sourced for each requirement.</li>
+        <li><strong>Interview Schedule:</strong> recruiter, technical, client, managerial and final interviews.</li>
+        <li><strong>Placements:</strong> approved candidate engagements with rate, contract and project links.</li>
+      </ul>
+      <h2>Responsibility split</h2>
+      <table><thead><tr><th>Role</th><th>Accountability</th></tr></thead><tbody>
+        <tr><td>Sales Executive/Manager</td><td>Customer relationship, commercial opportunity, expected value, rate agreement and contract.</td></tr>
+        <tr><td>Recruiter</td><td>Requirement detail, sourcing, screening, candidate submission and interview coordination.</td></tr>
+        <tr><td>Sales/Operations approver</td><td>Placement commercial approval, contract reference and margin.</td></tr>
+        <tr><td>Project Manager</td><td>Onboarding, delivery coordination, time approval and customer execution.</td></tr>
+      </tbody></table>
+      <h2>Current Staffing Operations navigation</h2>
+      <div class="screenshot"><img src="../screenshots/production_current/14_staffing_requirements.png" alt="Current Staffing Requirements screen"><div class="caption">Current Requirements screen. The Staffing Operations menu also opens Candidate Submissions, Interview Schedule and Placements.</div></div>
+    </section>
+
+    <section id="s13">
+      <h1>13 | Staffing Requirements</h1>
+      <h2>Requirement states</h2>
+      <p><span class="pill">Draft</span><span class="pill">Open</span><span class="pill">Sourcing</span><span class="pill">Interview</span><span class="pill">Offer</span><span class="pill">Filled</span><span class="pill">On Hold</span><span class="pill">Cancelled</span></p>
+      <h2>Create a requirement</h2>
+      <ol>
+        <li>Open a Staffing-classified opportunity and use the Staffing smart button, or open CRM → Staffing Operations → Requirements.</li>
+        <li>Select the CRM Opportunity. The customer and contract dates may default from the opportunity.</li>
+        <li>Enter Requirement name, Role / Job Title, required skills, positions and recruiter.</li>
+        <li>Enter location, work arrangement (On-site/Hybrid/Remote) and engagement type (Contract/Contract to Hire/Permanent).</li>
+        <li>Enter expected start/end and target fill date.</li>
+        <li>Enter target bill rate, target cost rate and rate unit. Review calculated Target Margin and Target Margin %.</li>
+        <li>Add acceptance criteria and job description; attach supporting requirement documents where appropriate.</li>
+        <li>Select Open, then Start Sourcing when recruitment begins.</li>
+      </ol>
+      <div class="screenshot"><img src="../screenshots/production_current/15_staffing_requirement_form.png" alt="Current Staffing Requirement form"><div class="caption">Current Requirement form with status buttons, smart buttons, customer linkage, role and commercial target sections.</div></div>
+      <h3>Requirement field instructions</h3>
+      <table><thead><tr><th>Field/group</th><th>Operator instruction</th></tr></thead><tbody>
+        <tr><td>CRM Opportunity</td><td>Select the Staffing opportunity that originated this role. The server rejects non-Staffing opportunities.</td></tr>
+        <tr><td>Customer / Contact</td><td>Select the customer company and operational stakeholder. The contact must belong to that customer.</td></tr>
+        <tr><td>Recruiter / Positions</td><td>Assign an active internal recruiter and enter the actual number of openings.</td></tr>
+        <tr><td>Role &amp; Engagement</td><td>Complete job title, skills, work arrangement, engagement type, location and dates.</td></tr>
+        <tr><td>Commercial Targets</td><td>Enter bill and cost rates, select the rate unit and review calculated margin before sourcing.</td></tr>
+        <tr><td>Status controls</td><td>Use the workflow buttons; do not edit status through imports merely to skip approvals.</td></tr>
+      </tbody></table>
+      <h2>Requirement controls</h2>
+      <ul>
+        <li>Positions must be greater than zero.</li>
+        <li>Target cost must not exceed target bill rate.</li>
+        <li>Expected End and target dates must be logically consistent with Expected Start.</li>
+        <li>The linked opportunity must be an opportunity classified as Staffing.</li>
+        <li>Filled/open positions are computed from active confirmed placements.</li>
+      </ul>
+      <div class="callout"><strong>Requirement versus opportunity</strong>Create multiple requirements under one customer opportunity when the customer requests different roles, locations or rate structures. Do not overload one requirement with unrelated jobs.</div>
+    </section>
+
+    <section id="s14" class="page-break">
+      <h1>14 | Candidate Submissions</h1>
+      <h2>Submission states</h2>
+      <p><span class="pill">Sourcing</span><span class="pill">Screening</span><span class="pill">Submitted</span><span class="pill">Interview</span><span class="pill">Offer</span><span class="pill">Accepted</span><span class="pill">Rejected</span><span class="pill">Withdrawn</span></p>
+      <h2>Create and progress a submission</h2>
+      <ol>
+        <li>Create or locate the candidate as an individual Contact. Search by email before creating a new candidate.</li>
+        <li>From the Requirement, add a Candidate Submission.</li>
+        <li>Select source: Internal Talent Pool, Referral, Recruiter/Vendor, LinkedIn, Job Board or Other.</li>
+        <li>If sourced through a vendor, select the Recruiter Vendor.</li>
+        <li>Upload Resume/CV and enter availability, screening summary and internal notes.</li>
+        <li>Enter proposed bill and cost rates. Verify positive margin.</li>
+        <li>Select Start Screening and document screening results.</li>
+        <li>Select Submit when the profile has been sent to the customer; the submitted date is recorded.</li>
+        <li>Move to Interview or Offer based on customer progression. Use Reject/Withdraw with a clear note when appropriate.</li>
+      </ol>
+      <h2>Submission quality standard</h2>
+      <ul class="checklist">
+        <li>Candidate identity and contact details are verified.</li>
+        <li>Current resume is attached.</li>
+        <li>Availability and location/work arrangement fit the requirement.</li>
+        <li>Screening summary addresses mandatory skills.</li>
+        <li>Bill/cost rates are commercially viable.</li>
+        <li>Duplicate active submission for the same candidate/requirement is avoided.</li>
+      </ul>
+      <div class="screenshot"><img src="../screenshots/production_current/17_candidate_submission_form.png" alt="Current Candidate Submission form"><div class="caption">Current Candidate Submission form with source, recruiter/vendor, resume, screening, proposed rates, margin and workflow controls.</div></div>
+    </section>
+
+    <section id="s15">
+      <h1>15 | Interviews and Feedback</h1>
+      <p>Interview records create an auditable schedule and outcome history linked to the requirement and candidate submission.</p>
+      <table><thead><tr><th>Field</th><th>Values / use</th></tr></thead><tbody>
+        <tr><td>Interview Round</td><td>Recruiter Screening, Technical, Client, Managerial or Final.</td></tr>
+        <tr><td>Mode</td><td>Video Call, Phone or On-site.</td></tr>
+        <tr><td>Internal Interviewers</td><td>Responsible IntraStack users.</td></tr>
+        <tr><td>Client Interviewer</td><td>Customer contact linked to the requirement customer.</td></tr>
+        <tr><td>Start / Duration</td><td>Scheduled datetime and duration; End is calculated.</td></tr>
+        <tr><td>Outcome</td><td>Pending, Strong Yes, Yes, No or Strong No.</td></tr>
+        <tr><td>Feedback</td><td>Evidence-based assessment and next recommendation.</td></tr>
+      </tbody></table>
+      <h2>Interview procedure</h2>
+      <ol>
+        <li>Create the interview from the candidate submission.</li>
+        <li>Set round, mode, date/time, interviewers, location or meeting link.</li>
+        <li>Confirm details with candidate and customer outside the system using the approved channel.</li>
+        <li>After the interview, select an outcome and enter feedback.</li>
+        <li>Select Complete. The system will not allow completion while the outcome remains Pending.</li>
+        <li>Use No Show, Cancel or Reschedule when required so pipeline statistics remain accurate.</li>
+      </ol>
+      <div class="screenshot"><img src="../screenshots/production_current/18_interview_schedule.png" alt="Current interview calendar"><div class="caption">Current Interview Schedule calendar for upcoming recruiter, technical, client, managerial and final interviews.</div></div>
+      <div class="screenshot"><img src="../screenshots/production_current/19_interview_form.png" alt="Current Interview form"><div class="caption">Current Interview form with round, mode, schedule, participants, feedback and outcome controls.</div></div>
+      <div class="callout warning"><strong>Feedback standard</strong>Record job-relevant, objective observations. Do not enter discriminatory, speculative or unnecessary sensitive personal comments.</div>
+    </section>
+
+    <section id="s16" class="page-break">
+      <h1>16 | Placements and Margin Control</h1>
+      <h2>Placement states</h2>
+      <p><span class="pill">Draft</span><span class="pill">Pending Approval</span><span class="pill">Confirmed</span><span class="pill">Active</span><span class="pill">Completed</span><span class="pill">Cancelled</span></p>
+      <h2>Create a placement</h2>
+      <ol>
+        <li>Use an accepted/offered Candidate Submission from the correct Requirement.</li>
+        <li>Enter Placement Start/End, bill rate, cost rate, rate unit and hours per week.</li>
+        <li>Link the confirmed Sales Order or enter a signed Contract/SOW reference.</li>
+        <li>Verify the customer on the order/project matches the requirement customer.</li>
+        <li>Review Gross Margin, Gross Margin %, Weekly Revenue and Weekly Margin.</li>
+        <li>Select Submit for Approval, then Confirm after commercial approval.</li>
+        <li>Select Activate only on or after the contract start date.</li>
+        <li>Select Complete at the end of service; the system records an end date if one is missing.</li>
+      </ol>
+      <h2>Placement validation rules</h2>
+      <ul>
+        <li>Bill and cost rates cannot be negative.</li>
+        <li>Bill rate must exceed or equal cost rate.</li>
+        <li>A confirmed Sales Order is required when an order is linked.</li>
+        <li>A contract/SOW reference or Sales Order is required before confirmation.</li>
+        <li>Candidate submission and placement must belong to the same requirement.</li>
+        <li>Placement cannot become Active before Placement Start.</li>
+        <li>Customer must match across requirement, quotation and project.</li>
+      </ul>
+      <div class="screenshot"><img src="../screenshots/production_current/21_placement_form.png" alt="Current Staffing Placement form"><div class="caption">Current Placement form. Use Draft → Submit for Approval → Confirm Placement → Start Placement.</div></div>
+      <div class="callout success"><strong>Automatic operational synchronization</strong>Confirming a placement marks the candidate submission Accepted and updates the requirement's filled/open position counts.</div>
+    </section>
+
+    <section id="s17">
+      <h1>17 | Cloud Transformation Workflow</h1>
+      <p>This is the primary Consulting end-to-end example requested for platform readiness.</p>
+      <div class="flow">
+        <div class="box">Discovery</div><div class="arrow">→</div>
+        <div class="box">Qualification</div><div class="arrow">→</div>
+        <div class="box">Solution Design</div><div class="arrow">→</div>
+        <div class="box">SOW Proposal</div><div class="arrow">→</div>
+        <div class="box">Contract</div><div class="arrow">→</div>
+        <div class="box">Delivery Project</div>
+      </div>
+      <h2>Detailed operating steps</h2>
+      <ol>
+        <li>Create/update the customer and stakeholder contacts.</li>
+        <li>Create an opportunity with Deal Classification <strong>Consulting</strong> and Service Category <strong>Cloud</strong>.</li>
+        <li>During Discovery, document business objectives, current-state environment, stakeholders, constraints and target outcomes.</li>
+        <li>During Qualification, validate budget, authority, need, timeline, data/security constraints and procurement path.</li>
+        <li>During Solution Design, define assessment outputs, target architecture, migration waves, assumptions, dependencies and acceptance criteria.</li>
+        <li>Create the Consulting SOW quotation. Review Discovery/Assessment, Implementation and Project Management lines.</li>
+        <li>Enter contract dates and expected value; negotiate scope, price and terms.</li>
+        <li>Confirm the accepted Sales Order. The opportunity becomes Won and the Consulting delivery project is created.</li>
+        <li>The Project Manager assigns cloned template tasks, delivery owners and deadlines.</li>
+        <li>Consultants record time and evidence against the correct project tasks.</li>
+        <li>At completion, capture acceptance, handover and follow-up/renewal opportunities.</li>
+      </ol>
+      <div class="callout"><strong>Assessment evidence</strong>Store meeting notes, architecture documents and proposal artefacts in the appropriate opportunity/project Chatter. Avoid storing confidential credentials or secrets in Odoo attachments.</div>
+    </section>
+
+    <section id="s18" class="page-break">
+      <h1>18 | Other Service Workflows</h1>
+      <h2>Subcontracting</h2>
+      <ol>
+        <li>Create a company Contact for the partner/vendor and apply approved vendor-related tags.</li>
+        <li>Create a Subcontracting opportunity and assign the relationship owner.</li>
+        <li>Progress Outreach → Vendor Qualification → Capability Review.</li>
+        <li>Document certifications, capability, commercial constraints, references and risk.</li>
+        <li>Move to Approved Vendor only after required business approval.</li>
+        <li>For a live engagement, create/confirm the commercial document and use the generated standard project for delivery coordination.</li>
+      </ol>
+      <h2>Managed Services</h2>
+      <ol>
+        <li>Qualify customer fit and perform the infrastructure/service assessment.</li>
+        <li>Define service scope, coverage hours, response targets, exclusions, onboarding and reporting cadence.</li>
+        <li>Create the Managed Services quotation containing onboarding, monthly service and additional-hours lines.</li>
+        <li>Enter contract and renewal review dates before confirmation.</li>
+        <li>Confirm the Sales Order and execute onboarding through the generated Managed Service project.</li>
+        <li>Move to Active Service only when service transition is complete.</li>
+        <li>Use Renewal before expiry to review scope, satisfaction, usage and pricing.</li>
+      </ol>
+      <div class="callout warning"><strong>Community edition billing boundary</strong>The platform stores contract dates, monthly service lines and delivery projects, but unattended recurring subscription invoicing is not provided by standard Odoo 17 Community. Follow the approved manual invoice calendar or deploy an approved OCA subscription module.</div>
+    </section>
+
+    <section id="s19">
+      <h1>19 | Employee Activation Administration</h1>
+      <p>This section is intended for HR Managers and System Administrators.</p>
+      <h2>Create and invite an internal user</h2>
+      <ol>
+        <li>Create/open the Employee record.</li>
+        <li>Enter a unique Work Email.</li>
+        <li>Select the IntraStack Role.</li>
+        <li>Select <strong>Create Internal User</strong>. Confirm login and create the user.</li>
+        <li>Select <strong>Sync IntraStack Access</strong> to apply the complete managed role bundle.</li>
+        <li>If necessary, select <strong>Resend Invitation</strong>.</li>
+        <li>Ask the employee to set a password and verify required applications.</li>
+      </ol>
+      <div class="screenshot"><img src="../screenshots/production_current/28_employee_new_form.png" alt="Current Employee form"><div class="caption">Current Employee form. Enter the employee identity and work email, then select the operational role before user activation.</div></div>
+      <h2>Operational role bundles</h2>
+      <table><thead><tr><th>Role</th><th>Use this role when</th><th>Core managed access</th></tr></thead><tbody>
+        <tr><td>Sales Manager</td><td>The employee owns team pipeline, forecasting and commercial governance.</td><td>CRM/Sales management, Projects and timesheet approval.</td></tr>
+        <tr><td>Sales Executive</td><td>The employee owns assigned customers, deals, activities and quotations.</td><td>CRM/Sales user, Projects and personal timesheets.</td></tr>
+        <tr><td>Recruiter</td><td>The employee runs requirements, candidates and interviews.</td><td>CRM access needed for staffing, Staffing Operations and Project user.</td></tr>
+        <tr><td>Project Manager</td><td>The employee plans delivery and approves execution/time.</td><td>CRM visibility, Project management and timesheet approval.</td></tr>
+        <tr><td>Consultant</td><td>The employee performs assigned delivery tasks.</td><td>Project user and personal timesheets.</td></tr>
+      </tbody></table>
+      <h2>Change a role</h2>
+      <ol>
+        <li>Change IntraStack Role on the Employee.</li>
+        <li>Select Sync IntraStack Access.</li>
+        <li>The system removes the old managed bundle, applies the new one and preserves unrelated approved groups.</li>
+        <li>Test access using the employee account or a controlled UAT user.</li>
+      </ol>
+      <div class="callout danger"><strong>Portal users are not valid employees for this workflow</strong>If an employee is linked to a portal/share user, convert or recreate the account as an internal user before syncing access.</div>
+      <div class="callout"><strong>Email dependency</strong>Invitation and password-reset delivery require a working outgoing SMTP server. If the Invitation Pending indicator remains active, verify mail configuration and resend.</div>
+    </section>
+
+    <section id="s20" class="page-break">
+      <h1>20 | Reporting and CEO Controls</h1>
+      <p>Odoo's CRM reporting views combine the native forecast fields with IntraStack classifications, teams and activities.</p>
+      <h2>Management review areas</h2>
+      <ul>
+        <li>Pipeline value and expected revenue by classification/team.</li>
+        <li>Opportunity count and value by stage.</li>
+        <li>Overdue and upcoming activities by owner.</li>
+        <li>Stalled opportunities and deals without a next action.</li>
+        <li>Won/lost conversion and loss reasons.</li>
+        <li>Staffing requirement fill progress and active placements.</li>
+        <li>Gross margin at requirement/submission/placement level.</li>
+        <li>Projects, overdue tasks and timesheet utilization.</li>
+      </ul>
+      <h2>Saved CEO filters</h2>
+      <p>The module installs seven saved filters for recurring executive review. Managers can combine these filters with Group By for salesperson, stage, customer, classification or service category.</p>
+      <div class="screenshot"><img src="../screenshots/production_current/22_crm_reporting.png" alt="Current CRM reporting"><div class="caption">Current CRM reporting supports graph, pivot and list analysis using the same opportunity records.</div></div>
+      <h2>Weekly pipeline review questions</h2>
+      <ul>
+        <li>Does every active deal have a real next action and owner?</li>
+        <li>Are stage, expected value, probability and close timing evidence-based?</li>
+        <li>Which deals have been stationary for more than five days?</li>
+        <li>Which Staffing requirements are at risk against target fill date?</li>
+        <li>Which placements or services approach renewal?</li>
+        <li>Are confirmed commercial records linked to exactly one delivery project?</li>
+      </ul>
+    </section>
+
+    <section id="s21">
+      <h1>21 | Daily Playbooks by Role</h1>
+      <div class="role-card"><h3>Sales Executive — daily</h3><ul><li>Review My Activities and overdue items.</li><li>Update customer/contact details from new interactions.</li><li>Progress opportunities using evidence and schedule the next action.</li><li>Review quotations awaiting response.</li><li>Close dead deals Lost with a reason.</li></ul></div>
+      <div class="role-card"><h3>Sales Manager — daily/weekly</h3><ul><li>Review team pipeline, stalled deals and forecast quality.</li><li>Validate commercial readiness before major confirmations.</li><li>Review rate/margin exceptions and upcoming renewals.</li><li>Coach owners on incomplete records and overdue actions.</li></ul></div>
+      <div class="role-card"><h3>Recruiter — daily</h3><ul><li>Review open requirements and target fill dates.</li><li>Progress sourcing/screening and update candidate records.</li><li>Schedule interviews and chase outstanding feedback.</li><li>Maintain submission rates, availability and resume currency.</li></ul></div>
+      <div class="role-card"><h3>Project Manager — daily/weekly</h3><ul><li>Review project tasks, blockers and deadlines.</li><li>Confirm owners and customer acceptance criteria.</li><li>Review submitted timesheets and delivery risks.</li><li>Keep opportunity/order/project traceability intact.</li></ul></div>
+      <div class="role-card"><h3>Consultant — daily</h3><ul><li>Review assigned tasks and priorities.</li><li>Update task progress and blockers.</li><li>Record accurate time with meaningful descriptions.</li><li>Upload deliverables to the approved project/task location.</li></ul></div>
+    </section>
+
+    <section id="s22" class="page-break">
+      <h1>22 | Data Governance and Security</h1>
+      <h2>Minimum governance rules</h2>
+      <ul>
+        <li>Search before creating customers, contacts, candidates, opportunities and requirements.</li>
+        <li>Use approved tags, selections and naming standards.</li>
+        <li>Do not delete records that are referenced by quotations, projects, staffing records or timesheets.</li>
+        <li>Use Archive for obsolete master data and Lost/Cancelled for terminated workflows.</li>
+        <li>Do not export customer/candidate data without a legitimate business purpose.</li>
+        <li>Keep passwords, API keys, infrastructure secrets and private credentials outside Odoo records and attachments.</li>
+        <li>Do not grant access manually when the Employee role workflow can be used.</li>
+      </ul>
+      <h2>Chatter guidance</h2>
+      <table><thead><tr><th>Use Chatter for</th><th>Do not use Chatter for</th></tr></thead><tbody>
+        <tr><td>Customer decisions, meeting outcomes, approved assumptions, delivery evidence, internal handoff notes.</td><td>Passwords, secrets, unverified allegations, excessive personal data or off-topic conversation.</td></tr>
+      </tbody></table>
+      <h2>Audit readiness</h2>
+      <p>A complete business record should show who created/changed it, the customer context, current owner, next action, stage history, commercial document, contract dates and downstream delivery record.</p>
+    </section>
+
+    <section id="s23">
+      <h1>23 | Troubleshooting and FAQ</h1>
+      <table>
+        <thead><tr><th>Problem</th><th>Likely cause</th><th>Resolution</th></tr></thead>
+        <tbody>
+          <tr><td>Opportunity moves to another team/stage after saving.</td><td>Classification routing corrected an inconsistent manual selection.</td><td>Confirm the Deal Classification. Use stages belonging to that pipeline.</td></tr>
+          <tr><td>Cannot mark Won.</td><td>Commercial readiness fields are missing.</td><td>Complete customer, classification, service, urgency, source, positive value and contract information.</td></tr>
+          <tr><td>Cannot confirm quotation.</td><td>Missing readiness fields, no service line or customer mismatch.</td><td>Read the validation message and correct the opportunity/order rather than bypassing it.</td></tr>
+          <tr><td>Wrong quotation template.</td><td>Deal Classification is incorrect or was changed after quotation creation.</td><td>Correct classification and recreate/review the quotation before confirmation.</td></tr>
+          <tr><td>Duplicate delivery project.</td><td>A project was created manually outside the integrated flow.</td><td>Use the project linked from CRM/Sales Order; ask an administrator to reconcile duplicates.</td></tr>
+          <tr><td>Cannot create Staffing Requirement.</td><td>Opportunity is not classified Staffing or required fields are missing.</td><td>Correct the CRM opportunity and enter customer, role, positions and recruiter.</td></tr>
+          <tr><td>Cannot complete interview.</td><td>Outcome is still Pending.</td><td>Select an outcome and enter feedback.</td></tr>
+          <tr><td>Cannot confirm placement.</td><td>No contract/order, unconfirmed quotation, invalid rates or mismatched customer.</td><td>Correct the commercial link and margin data.</td></tr>
+          <tr><td>Cannot activate placement.</td><td>Placement is not Confirmed or start date is in the future.</td><td>Confirm approval and wait until the authorized start date.</td></tr>
+          <tr><td>Employee cannot see CRM/Sales/Project.</td><td>Role not synced, user is portal, or invitation incomplete.</td><td>HR Manager verifies Work Email/Internal User, selects role and Sync IntraStack Access.</td></tr>
+          <tr><td>Invitation email not received.</td><td>SMTP, spam filtering or invalid work email.</td><td>Verify email, mail server/logs and use Resend Invitation.</td></tr>
+          <tr><td>Import creates duplicates.</td><td>External IDs changed or customer names used as unstable keys.</td><td>Restore correct External IDs, deduplicate under administrator control and rerun Test.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout danger"><strong>Do not self-fix production data with SQL</strong>End users must report errors with the record URL, steps, exact message and timestamp. Database changes are restricted to authorized administrators with backup and change control.</div>
+    </section>
+
+    <section id="s24" class="page-break">
+      <h1>24 | Complete Worked Example and Training Simulation</h1>
+      <p class="lead">This chapter is the recommended classroom “golden path”. All names, addresses and commercial values below are fictional. Use a training/staging database or records clearly prefixed <strong>TRAINING</strong>; do not create these examples in production without authorization.</p>
+      <h2>Scenario and actors</h2>
+      <table><thead><tr><th>Item</th><th>Training value</th></tr></thead><tbody>
+        <tr><td>Customer</td><td>TRAINING — Atlas Manufacturing</td></tr>
+        <tr><td>Customer contact</td><td>Emily Carter, Head of Technology, emily.carter@example.test</td></tr>
+        <tr><td>Sales owner</td><td>Training Sales Manager</td></tr>
+        <tr><td>Recruiter</td><td>Training Recruiter</td></tr>
+        <tr><td>Project Manager</td><td>Training Project Manager</td></tr>
+        <tr><td>Consulting deal</td><td>TRAINING — Atlas Cloud Transformation 2026</td></tr>
+        <tr><td>Staffing deal</td><td>TRAINING — Atlas Senior Cloud Architect Staffing</td></tr>
+        <tr><td>Candidate</td><td>TRAINING — Maria Santos</td></tr>
+      </tbody></table>
+
+      <h2>Part 1 — Create the customer database</h2>
+      <div class="step"><span class="step-no">1</span><span class="step-title">Create the customer company</span><p>Open Contacts → New → Company. Enter <strong>TRAINING — Atlas Manufacturing</strong>, a fictional address, country, website and telephone. Add the Staffing Buyer tag if the scenario includes staffing.</p></div>
+      <div class="step"><span class="step-no">2</span><span class="step-title">Add the decision maker</span><p>Inside the company, add Emily Carter as an individual contact. Enter job position Head of Technology, fictional email/mobile and link her to Atlas Manufacturing.</p></div>
+      <div class="step"><span class="step-no">3</span><span class="step-title">Validate search</span><p>Return to Contacts, search Atlas and Emily, and confirm company/person are connected rather than duplicated.</p></div>
+      <p><strong>Expected result:</strong> one company, one related stakeholder, searchable contact information and correct relationship tags.</p>
+
+      <h2>Part 2 — Run a Cloud Transformation deal from discovery to delivery</h2>
+      <h3>2.1 Create and classify the opportunity</h3>
+      <table><thead><tr><th>Field</th><th>Training value</th></tr></thead><tbody>
+        <tr><td>Opportunity</td><td>TRAINING — Atlas Cloud Transformation 2026</td></tr>
+        <tr><td>Customer</td><td>TRAINING — Atlas Manufacturing</td></tr>
+        <tr><td>Deal Classification</td><td>Consulting</td></tr>
+        <tr><td>Service Category</td><td>Cloud</td></tr>
+        <tr><td>Urgency Flag</td><td>Short-term (30–90 days)</td></tr>
+        <tr><td>Source Tracking</td><td>Referral</td></tr>
+        <tr><td>Expected Value</td><td>75,000</td></tr>
+        <tr><td>Decision Maker?</td><td>Enabled</td></tr>
+        <tr><td>Contract Start / End</td><td>2026-09-01 / 2026-12-31</td></tr>
+        <tr><td>Renewal Review Date</td><td>2026-11-01</td></tr>
+      </tbody></table>
+      <ol>
+        <li>Open CRM → P2 — Consulting and select New.</li>
+        <li>Use quick create for the name/customer, then select Edit to complete all fields above.</li>
+        <li>Save and confirm Sales Team is P2 — Consulting and the first stage is Discovery.</li>
+        <li>Open Activities. Review the automatic Qualify Lead and discovery-preparation activities.</li>
+        <li>Log a note: current environment, stakeholders, objective, known constraints and agreed next meeting.</li>
+      </ol>
+      <p><strong>Expected result:</strong> correctly routed Consulting opportunity with an accountable salesperson, a next activity and complete commercial metadata.</p>
+
+      <h3>2.2 Progress discovery and qualification</h3>
+      <ol>
+        <li>In Discovery, record current-state systems, workloads, security constraints, business outcomes and stakeholders.</li>
+        <li>Complete the discovery activity only after the call is held; immediately schedule the next action.</li>
+        <li>Move to Qualification after confirming budget, authority, need, timeline and procurement path.</li>
+        <li>Move to Solution Design after technical owners and acceptance criteria are agreed.</li>
+        <li>Upload only approved non-secret architecture/proposal artefacts to Chatter.</li>
+      </ol>
+
+      <h3>2.3 Create the SOW quotation</h3>
+      <ol>
+        <li>Select <strong>New Quotation</strong> from the opportunity.</li>
+        <li>Verify the customer and opportunity linkage.</li>
+        <li>Verify the Consulting SOW template and review Discovery/Assessment, Implementation and Project Management service lines.</li>
+        <li>Adjust descriptions, quantities and prices to match the approved proposal. Ensure the order total and Expected Value are commercially consistent.</li>
+        <li>Move the CRM stage to Proposal, send the quotation through the approved channel and record customer feedback.</li>
+        <li>Move to Negotiation when scope/price/terms are under final review.</li>
+      </ol>
+
+      <h3>2.4 Confirm and verify integrated delivery</h3>
+      <ol>
+        <li>Before confirmation, recheck Customer, Classification, Service Category, Urgency, Source, positive Expected Value, contract dates and at least one service line.</li>
+        <li>Confirm the Sales Order only after customer acceptance.</li>
+        <li>Return to the opportunity and verify it is Won/Closed Won and shows one linked Delivery Project.</li>
+        <li>Open the project and verify the opportunity and Sales Order links.</li>
+        <li>Review the five Consulting template tasks; assign owners, deadlines and acceptance evidence.</li>
+        <li>As a Consultant, open the correct task and record a training timesheet with a meaningful description.</li>
+      </ol>
+      <p><strong>Expected result:</strong> one chain of traceability: Customer → Consulting Opportunity → SOW/Sales Order → one Delivery Project → tasks/timesheets.</p>
+
+      <h2>Part 3 — Run the Staffing branch end to end</h2>
+      <h3>3.1 Create the Staffing opportunity and requirement</h3>
+      <ol>
+        <li>Create <strong>TRAINING — Atlas Senior Cloud Architect Staffing</strong> with Classification Staffing, Service Cloud, Expected Value 40,000 and suitable contract dates.</li>
+        <li>Verify automatic routing to P1 — Staffing / New Requirement.</li>
+        <li>Use the Staffing smart button or CRM → Staffing Operations → Requirements.</li>
+        <li>Create requirement <strong>TRAINING — Atlas Senior Cloud Architect — HCMC</strong>.</li>
+        <li>Select the Staffing opportunity, Atlas customer, Emily as contact and Training Recruiter.</li>
+        <li>Enter one position, Hybrid, Contract, expected start/end and target fill date.</li>
+        <li>Enter required skills: AWS, Terraform and Kubernetes.</li>
+        <li>Enter Target Bill Rate 65/hour and Target Cost Rate 45/hour; verify positive Target Margin.</li>
+        <li>Select Open, then Start Sourcing.</li>
+      </ol>
+
+      <h3>3.2 Create and submit a candidate</h3>
+      <ol>
+        <li>Create candidate contact <strong>TRAINING — Maria Santos</strong>, Individual, with the Candidate tag and fictional contact details.</li>
+        <li>From the requirement, create a Candidate Submission for Maria.</li>
+        <li>Select source LinkedIn, availability date, proposed bill 65 and cost 45.</li>
+        <li>Attach a non-sensitive training resume and record a screening summary covering the mandatory skills.</li>
+        <li>Select Start Screening. After the mock screening, select Submit to Client.</li>
+        <li>Verify Submitted On is populated and requirement/submission links are correct.</li>
+      </ol>
+
+      <h3>3.3 Schedule and complete the interview</h3>
+      <ol>
+        <li>Open Candidate Submission → Interviews and create a Client interview.</li>
+        <li>Select Video Call, date/time, duration, Training Project Manager as internal interviewer and Emily as client interviewer.</li>
+        <li>Enter a fictional meeting link. Review the event in Interview Schedule calendar.</li>
+        <li>After the simulation, select outcome Strong Yes and enter job-relevant feedback.</li>
+        <li>Select Complete Interview. Confirm the submission moves to Interview, then move it to Offer.</li>
+      </ol>
+
+      <h3>3.4 Create, approve and activate the placement</h3>
+      <ol>
+        <li>Create a Placement from the accepted/offered submission.</li>
+        <li>Enter a fictional SOW reference, start/end dates, 65 bill rate, 45 cost rate and 40 hours/week.</li>
+        <li>Link the confirmed Staffing Sales Order or Delivery Project when available.</li>
+        <li>Review Gross Margin, Margin %, Weekly Revenue and Weekly Margin.</li>
+        <li>Select Submit for Approval and then Confirm Placement after commercial review.</li>
+        <li>Attempt Start Placement before the start date during training and observe the validation; do not bypass it.</li>
+        <li>On/after start date, select Start Placement. Verify placement Active, submission Accepted and requirement Filled Positions/Open Positions updated.</li>
+      </ol>
+      <p><strong>Expected result:</strong> Staffing Opportunity → Requirement → Candidate Submission → Interview → confirmed Placement, with commercial and operational links intact.</p>
+
+      <h2>Part 4 — Employee onboarding simulation</h2>
+      <ol>
+        <li>As HR Manager, create <strong>TRAINING — Sales Executive</strong> with a controlled training email.</li>
+        <li>Select IntraStack Role Sales Executive.</li>
+        <li>Select Create Internal User, then Sync IntraStack Access.</li>
+        <li>Resend Invitation only if required and SMTP is configured.</li>
+        <li>Log in as the training user and verify Contacts, CRM, Sales, Projects and Timesheets according to the assigned role.</li>
+        <li>Change the role only as a separate access-control exercise, synchronize again and verify old managed permissions are removed.</li>
+      </ol>
+
+      <h2>Trainer evidence and sign-off</h2>
+      <h2>Trainer sign-off checklist</h2>
+      <ul class="checklist">
+        <li>Participant can find a customer and review contact information.</li>
+        <li>Participant can create/classify an opportunity and explain automatic routing.</li>
+        <li>Participant understands Won/confirmation readiness.</li>
+        <li>Participant can explain CRM → quotation → project traceability.</li>
+        <li>Recruitment users can complete Requirement → Submission → Interview → Placement.</li>
+        <li>Delivery users can update tasks and timesheets.</li>
+        <li>Managers can use activities, saved filters and reports.</li>
+        <li>The complete fictional record chain can be followed through smart buttons without disconnected duplicates.</li>
+      </ul>
+    </section>
+
+    <section id="appendix" class="page-break">
+      <h1>Appendix A | Quick Reference and Glossary</h1>
+      <h2>Quick process references</h2>
+      <table><thead><tr><th>Objective</th><th>Recommended path</th></tr></thead><tbody>
+        <tr><td>Find customer details</td><td>Contacts → search company/person → open record.</td></tr>
+        <tr><td>Create a deal</td><td>CRM → appropriate P1/P2/P3/P4 pipeline → New.</td></tr>
+        <tr><td>Import opportunities</td><td>CRM list → Import records → Test → Import.</td></tr>
+        <tr><td>Create a quotation</td><td>Opportunity → Create Ready Quotation/New Quotation.</td></tr>
+        <tr><td>Open delivery</td><td>Opportunity or Sales Order → Delivery Project smart button.</td></tr>
+        <tr><td>Create staffing requirement</td><td>Staffing opportunity → Staffing smart button, or CRM → Staffing Operations → Requirements.</td></tr>
+        <tr><td>Review interviews</td><td>CRM → Staffing Operations → Interview Schedule.</td></tr>
+        <tr><td>Review placements</td><td>CRM → Staffing Operations → Placements.</td></tr>
+        <tr><td>Activate employee access</td><td>Employees → Employee → role → Create Internal User → Sync IntraStack Access.</td></tr>
+      </tbody></table>
+      <h2>Glossary</h2>
+      <table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody>
+        <tr><td>CRM Opportunity</td><td>A potential commercial engagement tracked through a service-specific pipeline.</td></tr>
+        <tr><td>External ID</td><td>A stable import/integration key used to create or update the same record safely.</td></tr>
+        <tr><td>SOW</td><td>Statement of Work defining scope, deliverables, assumptions, price and acceptance.</td></tr>
+        <tr><td>Requirement</td><td>A specific customer staffing need, role or position set.</td></tr>
+        <tr><td>Submission</td><td>One candidate proposed against one staffing requirement.</td></tr>
+        <tr><td>Placement</td><td>The approved commercial engagement of a selected candidate.</td></tr>
+        <tr><td>Bill Rate</td><td>Amount charged to the customer per rate unit.</td></tr>
+        <tr><td>Cost Rate</td><td>Direct consultant/vendor cost per rate unit.</td></tr>
+        <tr><td>Gross Margin</td><td>Bill Rate minus Cost Rate; percentage is margin divided by bill rate.</td></tr>
+        <tr><td>Delivery Project</td><td>Project record generated from a confirmed commercial engagement.</td></tr>
+        <tr><td>Activity</td><td>A scheduled action with an owner and deadline attached to a business record.</td></tr>
+        <tr><td>Chatter</td><td>Odoo's record-level communication, attachment and change-history area.</td></tr>
+      </tbody></table>
+      <h2>Support request information</h2>
+      <p>When requesting support, provide: user name, date/time and timezone, record URL, exact error text, steps immediately before the error, expected result and a screenshot that does not expose passwords or secrets.</p>
+      <div class="footer-note">End of guide · IntraStack CRM Platform · Odoo 17 Community · Platform release 17.0.2.2.0 · Guide version 2.0</div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

@@ -6,3 +6,11 @@ __pycache__/
 .vscode/
 *.swp
 *.bak
+node_modules/
+.env
+deploy/.env
+deploy/backups/
+.tmp_*
+
+# Local customer export/workbook; commit only the sanitized import template.
+templates/crm_contacts_import.csv

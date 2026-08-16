@@ -1,0 +1,2 @@
+External ID,Name,Is a Company,Email,Phone,Mobile,Website Link,Street,City,Zip,Country/Code,Tax ID,Tags/External ID
+intrastack_import.customer_acme,ACME Manufacturing,TRUE,procurement@example.com,+84 28 5555 0101,,https://example.com,1 Example Street,Ho Chi Minh City,700000,VN,,intrastack_crm.tag_staffing_buyer

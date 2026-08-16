@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             7 CEO Dashboard Saved Filter Views (Favorites)
+             These filters will appear in the Favorites menu for the CRM Lead view.
+             ══════════════════════════════════════════════════════════════════ -->
+
+        <!-- 1. Total Pipeline Value (Group by stage) -->
+        <record id="filter_total_pipeline_value" model="ir.filters">
+            <field name="name">CEO: Total Pipeline Value</field>
+            <field name="model_id">crm.lead</field>
+            <field name="user_id" eval="False"/>
+            <field name="domain">[('type','=','opportunity'), ('active','=',True)]</field>
+            <field name="context">{'group_by': ['stage_id']}</field>
+            <field name="sort">[]</field>
+            <field name="action_id" ref="crm.crm_lead_action_pipeline"/>
+        </record>
+
+        <!-- 2. Open Proposals -->
+        <record id="filter_open_proposals" model="ir.filters">
+            <field name="name">CEO: Open Proposals</field>
+            <field name="model_id">crm.lead</field>
+            <field name="user_id" eval="False"/>
+            <field name="domain">[('type','=','opportunity'), ('active','=',True), ('stage_id.name', '=', 'Proposal')]</field>
+            <field name="context">{}</field>
+            <field name="sort">[]</field>
+            <field name="action_id" ref="crm.crm_lead_action_pipeline"/>
+        </record>
+
+        <!-- 3. Active Placements -->
+        <record id="filter_active_placements" model="ir.filters">
+            <field name="name">CEO: Active Placements</field>
+            <field name="model_id">crm.lead</field>
+            <field name="user_id" eval="False"/>
+            <field name="domain">[('type','=','opportunity'), ('active','=',True), ('stage_id.name', '=', 'Active Billing')]</field>
+            <field name="context">{}</field>
+            <field name="sort">[]</field>
+            <field name="action_id" ref="crm.crm_lead_action_pipeline"/>
+        </record>
+
+        <!-- 4. Revenue Forecast (>50% probability) -->
+        <record id="filter_revenue_forecast" model="ir.filters">
+            <field name="name">CEO: Revenue Forecast (>50% Win)</field>
+            <field name="model_id">crm.lead</field>
+            <field name="user_id" eval="False"/>
+            <field name="domain">[('type','=','opportunity'), ('active','=',True), ('probability', '&gt;=', 50)]</field>
+            <field name="context">{}</field>
+            <field name="sort">[]</field>
+            <field name="action_id" ref="crm.crm_lead_action_pipeline"/>
+        </record>
+
+        <!-- 5. Pipeline by Deal Type -->
+        <record id="filter_pipeline_by_deal_type" model="ir.filters">
+            <field name="name">CEO: Pipeline by Deal Type</field>
+            <field name="model_id">crm.lead</field>
+            <field name="user_id" eval="False"/>
+            <field name="domain">[('type','=','opportunity'), ('active','=',True)]</field>
+            <field name="context">{'group_by': ['x_deal_classification']}</field>
+            <field name="sort">[]</field>
+            <field name="action_id" ref="crm.crm_lead_action_pipeline"/>
+        </record>
+
+        <!-- 6. Subcontracting Pipeline Status -->
+        <record id="filter_subcontracting_pipeline" model="ir.filters">
+            <field name="name">CEO: Subcontracting Pipeline</field>
+            <field name="model_id">crm.lead</field>
+            <field name="user_id" eval="False"/>
+            <field name="domain">[('type','=','opportunity'), ('active','=',True), ('x_deal_classification', '=', 'subcontracting')]</field>
+            <field name="context">{'group_by': ['stage_id']}</field>
+            <field name="sort">[]</field>
+            <field name="action_id" ref="crm.crm_lead_action_pipeline"/>
+        </record>
+
+        <!-- 7. Stalled Deals (>7 days without update) -->
+        <record id="filter_stalled_deals" model="ir.filters">
+            <field name="name">CEO: Stalled Deals (>7 Days)</field>
+            <field name="model_id">crm.lead</field>
+            <field name="user_id" eval="False"/>
+            <!-- Uses a context variable for dynamic date filtering, but for ir.filters domain, we can use a relative date domain using datetime -->
+            <field name="domain">[('type','=','opportunity'), ('active','=',True), ('stage_id.is_won','=',False), ('date_last_stage_update', '&lt;', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S'))]</field>
+            <field name="context">{}</field>
+            <field name="sort">[]</field>
+            <field name="action_id" ref="crm.crm_lead_action_pipeline"/>
+        </record>
+
+    </data>
+</odoo>

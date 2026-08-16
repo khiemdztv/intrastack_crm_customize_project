@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  odoo:
+    image: odoo:17.0
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${ODOO_PORT:-8069}:8069"
+      - "127.0.0.1:${ODOO_GEVENT_PORT:-8072}:8072"
+    environment:
+      HOST: db
+      PORT: 5432
+      USER: ${POSTGRES_USER}
+      PASSWORD: ${POSTGRES_PASSWORD}
+    command:
+      - odoo
+      - --database=${ODOO_DB}
+      - --db-filter=^${ODOO_DB}$
+      - --admin-passwd=${ODOO_MASTER_PASSWORD}
+      - --proxy-mode
+      - --no-database-list
+      - --gevent-port=${ODOO_GEVENT_PORT:-8072}
+      - --workers=${ODOO_WORKERS:-4}
+      - --max-cron-threads=1
+      - --limit-time-cpu=120
+      - --limit-time-real=240
+      - --without-demo=all
+    volumes:
+      - odoo_data:/var/lib/odoo
+      - ../intrastack_crm:/mnt/extra-addons/intrastack_crm:ro
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8069/web/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  db_data:
+  odoo_data:

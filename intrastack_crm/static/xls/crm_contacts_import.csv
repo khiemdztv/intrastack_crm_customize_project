@@ -1,0 +1,2 @@
+External ID,Name,Is a Company,Related Company/External ID,Email,Phone,Mobile,Street,City,Zip,Country/Code,Job Position,Tax ID
+intrastack_import.contact_acme_pm,Nguyen Van An,FALSE,intrastack_import.customer_acme,an.nguyen@example.com,+84 28 5555 0102,+84 90 555 0102,1 Example Street,Ho Chi Minh City,700000,VN,Procurement Manager,

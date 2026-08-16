@@ -1,2 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_crm_lead_intrastack,crm.lead.intrastack,crm.model_crm_lead,sales_team.group_sale_salesman,1,1,1,0
+access_staffing_requirement_user,intrastack.staffing.requirement.user,model_intrastack_staffing_requirement,sales_team.group_sale_salesman,1,1,1,0
+access_staffing_requirement_manager,intrastack.staffing.requirement.manager,model_intrastack_staffing_requirement,sales_team.group_sale_manager,1,1,1,1
+access_staffing_submission_user,intrastack.staffing.submission.user,model_intrastack_staffing_submission,sales_team.group_sale_salesman,1,1,1,0
+access_staffing_submission_manager,intrastack.staffing.submission.manager,model_intrastack_staffing_submission,sales_team.group_sale_manager,1,1,1,1
+access_staffing_interview_user,intrastack.staffing.interview.user,model_intrastack_staffing_interview,sales_team.group_sale_salesman,1,1,1,0
+access_staffing_interview_manager,intrastack.staffing.interview.manager,model_intrastack_staffing_interview,sales_team.group_sale_manager,1,1,1,1
+access_staffing_placement_user,intrastack.staffing.placement.user,model_intrastack_staffing_placement,sales_team.group_sale_salesman,1,1,1,0
+access_staffing_placement_manager,intrastack.staffing.placement.manager,model_intrastack_staffing_placement,sales_team.group_sale_manager,1,1,1,1

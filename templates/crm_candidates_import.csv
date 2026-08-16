@@ -1,0 +1,3 @@
+External ID,Name,Is a Company,Email,Phone,Mobile,Street,City,Zip,Country/Code,Job Position,Tags/External ID
+intrastack_import.candidate_maria_santos,Maria Santos,FALSE,maria.santos@example.net,,+84 90 555 0201,25 Candidate Street,Ho Chi Minh City,700000,VN,Senior Cloud Architect,intrastack_crm.tag_candidate
+intrastack_import.candidate_david_chen,David Chen,FALSE,david.chen@example.net,,+1 555 010 3001,88 Engineer Avenue,Seattle,98101,US,DevOps Engineer,intrastack_crm.tag_candidate
